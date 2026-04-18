@@ -35,6 +35,7 @@ export async function createOutboundCall({
   phoneNumber,
   userName,
   briefing,
+  voice,
 }) {
   const body = {
     assistantId: process.env.VAPI_ASSISTANT_ID,
@@ -48,6 +49,7 @@ export async function createOutboundCall({
         briefing_content: briefing || "",
         attachment_summaries: "None",
       },
+      ...(voice ? { voice: { provider: "vapi", voiceId: voice } } : {}),
     },
   };
 
