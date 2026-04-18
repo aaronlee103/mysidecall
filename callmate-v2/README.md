@@ -1,4 +1,4 @@
-# Callmate 웹 (랜딩 + MVP 앱)
+# My Side Call 웹 (랜딩 + MVP 앱)
 
 재미 한인을 위한 영어 전화 대행 AI. 이 저장소 한 곳에 **랜딩페이지**와 **실제 웹 앱 MVP**가 함께 있습니다.
 
@@ -19,7 +19,7 @@
 ### 1단계. GitHub 레포지토리 만들기 (5분)
 
 1. [github.com](https://github.com) 로그인 → 우상단 **+** → **New repository**
-2. Repository name: `callmate` (원하는 이름)
+2. Repository name: `mysidecall` (원하는 이름)
 3. **Private** 선택
 4. 이 폴더의 모든 파일을 업로드 (Upload files 버튼 or 드래그)
 5. 커밋 메시지: `v0.1 랜딩 + 웹 MVP`
@@ -201,4 +201,4 @@ landing-page/
 
 ---
 
-*© 2026 Callmate. Built with Cowork.*
+*© 2026 My Side Call. Built with Cowork.*
