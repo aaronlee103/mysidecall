@@ -123,7 +123,7 @@ function NewCallForm() {
               className="mt-1"
             />
             <span className="text-sm text-amber-900">
-              <strong>AI 공개 및 녹음 동의</strong> — Callmate가 통화 시작
+              <strong>AI 공개 및 녹음 동의</strong> — My Side Call가 통화 시작
               시 <em>"This call is handled by an AI assistant and may be
               recorded"</em>라고 자동 고지합니다. 미국 FCC 및 주별 녹음법
               (CA·IL·FL 등 12개 주 양방 동의)에 따른 법적 보호 조치입니다.
