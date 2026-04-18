@@ -1,25 +1,22 @@
 import { NextResponse } from "next/server";
 import { injectMessage } from "@/lib/vapi";
+import { clearPending } from "@/lib/pendingStore";
 
+// 사용자가 대시보드에서 답변을 입력하면 호출됨. Vapi에 system 메시지로
+// 주입하고 pendingStore 에서 해당 통화의 질문 스냅샷을 지워서 질문 박스가
+// 사라지게 함.
 export async function POST(req, { params }) {
   try {
     const { callId } = params;
     const { message } = await req.json();
-
     if (!message || typeof message !== "string") {
-      return NextResponse.json(
-        { error: "메시지가 비어있어요" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "메시지가 비어있어요" }, { status: 400 });
     }
-
     await injectMessage(callId, message);
+    clearPending(callId);
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Message inject failed:", err);
-    return NextResponse.json(
-      { error: err.message || "메시지 전달 실패" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err.message || "메시지 전달 실패" }, { status: 500 });
   }
 }
