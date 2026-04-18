@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCall } from "@/lib/vapi";
+import { getPending } from "@/lib/pendingStore";
 
 // 메시지 배열에서 "지금 클라이언트(=Aaron님) 답변을 기다리는 중인 질문" 추출.
 // 로직: 마지막 ask_client_question 툴 콜을 찾고, 그 뒤에
@@ -75,7 +76,17 @@ export async function GET(req, { params }) {
 
     // 프론트엔드가 필요한 필드만 추출
     const messages = call.messages || [];
-    const pendingQuestion = extractPendingQuestion(messages);
+
+    // 1순위: 웹훅이 실시간으로 저장한 스냅샷 (가장 빠름, 가장 정확함)
+    // 2순위: Vapi call.messages 에서 추출 (fallback; 웹훅 세션이 끊어져서 스토어가 비어있을 때)
+    const snapshot = getPending(callId);
+    const pendingQuestion = snapshot
+      ? {
+          question: snapshot.question,
+          context: snapshot.context,
+          askedAt: snapshot.askedAt,
+        }
+      : extractPendingQuestion(messages);
 
     const response = {
       id: call.id,
@@ -89,7 +100,7 @@ export async function GET(req, { params }) {
       summary: call.summary || null,
       customer: call.customer,
       recordingUrl: call.recordingUrl,
-      pendingQuestion, // ← NEW: AI가 지금 클라이언트에게 물어보고 있는 질문
+      pendingQuestion, // ← AI가 지금 클라이언트에게 물어보고 있는 질문
     };
 
     return NextResponse.json(response);
