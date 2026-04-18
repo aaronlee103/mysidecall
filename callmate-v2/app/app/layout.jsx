@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Callmate App",
+  title: "My Side Call App",
   description: "영어 전화, 대신 걸어드려요",
 };
 
@@ -12,7 +12,7 @@ export default function AppLayout({ children }) {
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/app" className="flex items-center gap-2">
             <span className="text-2xl">📞</span>
-            <span className="font-bold text-lg">Callmate</span>
+            <span className="font-bold text-lg">My Side Call</span>
           </Link>
           <Link
             href="/"
