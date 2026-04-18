@@ -1,11 +1,11 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Callmate — 영어 전화, 대신 걸어드려요",
+  title: "My Side Call — 영어 전화, 대신 걸어드려요",
   description:
     "고객센터·집주인·보험사에 한국어로 상황만 말하면, AI가 자연스러운 영어로 대신 전화합니다. 재미 한인을 위한 영어 전화 대행 앱.",
   openGraph: {
-    title: "Callmate — 영어 전화, 대신 걸어드려요",
+    title: "My Side Call — 영어 전화, 대신 걸어드려요",
     description:
       "고객센터·집주인·보험사에 한국어로 상황만 말하면, AI가 자연스러운 영어로 대신 전화합니다.",
     type: "website",
@@ -13,7 +13,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Callmate — 영어 전화, 대신 걸어드려요",
+    title: "My Side Call — 영어 전화, 대신 걸어드려요",
     description:
       "고객센터·집주인·보험사에 한국어로 상황만 말하면, AI가 자연스러운 영어로 대신 전화합니다.",
   },
