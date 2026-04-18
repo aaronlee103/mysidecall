@@ -129,7 +129,7 @@ export default function CallSummaryPage({ params }) {
                 }`}
               >
                 {m.role === "assistant" || m.role === "bot"
-                  ? "Callmate"
+                  ? "My Side Call"
                   : m.role === "user"
                   ? "상대방"
                   : "시스템"}
