@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function NewCallPage() {
+function NewCallForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const template = searchParams.get("template");
@@ -147,5 +147,13 @@ export default function NewCallPage() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function NewCallPage() {
+  return (
+    <Suspense fallback={<div className="text-gray-500">로딩 중...</div>}>
+      <NewCallForm />
+    </Suspense>
   );
 }
