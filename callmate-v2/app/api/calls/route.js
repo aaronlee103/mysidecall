@@ -3,7 +3,7 @@ import { createOutboundCall } from "@/lib/vapi";
 
 export async function POST(req) {
   try {
-    const { phoneNumber, userName, briefing } = await req.json();
+    const { phoneNumber, userName, briefing, voiceId } = await req.json();
 
     if (!phoneNumber || !briefing) {
       return NextResponse.json(
@@ -22,6 +22,7 @@ export async function POST(req) {
       phoneNumber: normalized,
       userName: userName || "my client",
       briefing,
+      voice: voiceId,
     });
 
     return NextResponse.json({ callId: call.id });
