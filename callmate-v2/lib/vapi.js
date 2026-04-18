@@ -14,6 +14,7 @@ function getApiKey() {
 async function vapiFetch(path, options = {}) {
   const res = await fetch(`${VAPI_BASE}${path}`, {
     ...options,
+    cache: "no-store",
     headers: {
       Authorization: `Bearer ${getApiKey()}`,
       "Content-Type": "application/json",
