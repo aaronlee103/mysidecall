@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-const POLL_INTERVAL = 2000; // 2초마다 상태 업데이트
+const POLL_INTERVAL = 1500; // 1.5초마다 상태 업데이트 (더 빠른 반응)
 
 export default function CallInProgressPage({ params }) {
   const router = useRouter();
@@ -14,9 +14,12 @@ export default function CallInProgressPage({ params }) {
   const [interjectText, setInterjectText] = useState("");
   const [interjectLoading, setInterjectLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const transcriptRef = useRef(null);
 
-  // 2초마다 통화 상태 조회
+  const transcriptRef = useRef(null);
+  const pendingInputRef = useRef(null);
+  const lastPendingKey = useRef(null);
+
+  // 폴링
   useEffect(() => {
     const poll = async () => {
       try {
@@ -26,7 +29,6 @@ export default function CallInProgressPage({ params }) {
         setCall(data);
 
         if (data.status === "ended" || data.status === "failed") {
-          // 2초 후 요약 화면으로 이동
           setTimeout(() => {
             router.push(`/app/summary/${callId}`);
           }, 2000);
@@ -35,7 +37,6 @@ export default function CallInProgressPage({ params }) {
         setError(err.message);
       }
     };
-
     poll();
     const interval = setInterval(poll, POLL_INTERVAL);
     return () => clearInterval(interval);
@@ -58,14 +59,44 @@ export default function CallInProgressPage({ params }) {
     }
   }, [call?.messages]);
 
-  const handleIntervene = async () => {
-    if (!interjectText.trim()) return;
+  // 새 pending question이 뜨면 진동·알림 + 자동 포커스
+  useEffect(() => {
+    const pq = call?.pendingQuestion;
+    if (!pq) return;
+    const key = `${pq.askedAt}-${pq.question}`;
+    if (lastPendingKey.current === key) return;
+    lastPendingKey.current = key;
+
+    // 브라우저 진동 (모바일)
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate([200, 100, 200]);
+    }
+    // 입력칸 자동 포커스
+    if (pendingInputRef.current) {
+      pendingInputRef.current.focus();
+    }
+    // 소리 (짧은 비프) — 옵션
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.value = 0.1;
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch {}
+  }, [call?.pendingQuestion]);
+  const handleIntervene = async (textOverride) => {
+    const text = (textOverride ?? interjectText).trim();
+    if (!text) return;
     setInterjectLoading(true);
     try {
       const res = await fetch(`/api/calls/${callId}/message`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: interjectText }),
+        body: JSON.stringify({ message: text }),
       });
       if (!res.ok) throw new Error("메시지 전달 실패");
       setInterjectText("");
@@ -100,12 +131,16 @@ export default function CallInProgressPage({ params }) {
   }[call?.status] || { label: "연결 중", color: "bg-gray-500" };
 
   const messages = call?.messages || [];
-  const assistantMessages = messages.filter(
-    (m) => m.role === "assistant" || m.role === "bot"
+  // 디스플레이용 메시지 필터 (툴 콜 자체는 숨기고 assistant/user만 표시)
+  const visibleMessages = messages.filter(
+    (m) => m.role === "assistant" || m.role === "bot" || m.role === "user"
   );
-  const userSideMessages = messages.filter((m) => m.role === "user");
-  const lastAssistant = assistantMessages[assistantMessages.length - 1];
-  const lastUser = userSideMessages[userSideMessages.length - 1];
+  const lastAssistant = visibleMessages
+    .filter((m) => m.role === "assistant" || m.role === "bot")
+    .slice(-1)[0];
+  const lastUser = visibleMessages.filter((m) => m.role === "user").slice(-1)[0];
+
+  const pending = call?.pendingQuestion;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -130,7 +165,68 @@ export default function CallInProgressPage({ params }) {
         </div>
       </div>
 
-      {/* 최근 발화 요약 — 한국어로 이해 */}
+      {/* ★ Pending Question 알림 배너 — 가장 눈에 띄게 */}
+      {pending && (
+        <div className="mt-6 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-400 rounded-2xl p-5 shadow-lg ring-4 ring-amber-200">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-2xl">🙋</span>
+            <h3 className="text-base font-bold text-amber-900">
+              AI가 Aaron님 확인이 필요해요
+            </h3>
+          </div>
+          {pending.context && (
+            <div className="text-xs text-gray-600 mb-2">
+              상대방 상황: <span className="italic">"{pending.context}"</span>
+            </div>
+          )}
+          <div className="bg-white rounded-xl p-4 mb-3 border border-amber-200">
+            <div className="text-sm font-semibold text-amber-900 mb-1">
+              ❓ 질문
+            </div>
+            <div className="text-base text-gray-900 leading-relaxed">
+              {pending.question}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <textarea
+              ref={pendingInputRef}
+              value={interjectText}
+              onChange={(e) => setInterjectText(e.target.value)}
+              rows={2}
+              placeholder="한국어로 다변하세요. 예: 금요일 오후 4시 좋아요 / 아니요, 토요일만 가능합니다"
+              className="w-full px-4 py-3 border border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none resize-none text-sm bg-white"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  handleIntervene();
+                }
+              }}
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleIntervene()}
+                disabled={interjectLoading || !interjectText.trim()}
+                className="flex-1 bg-amber-600 text-white font-semibold py-3 rounded-xl hover:bg-amber-700 transition disabled:opacity-50"
+              >
+                {interjectLoading ? "전달 중..." : "✉��� AI에게 닕변 전달"}
+              </button>
+              <button
+                onClick={() => handleIntervene("I don't have that information. Please ask the other party to suggest options or call back later.")}
+                disabled={interjectLoading}
+                className="px-3 py-3 bg-white text-gray-700 border border-gray-300 rounded-xl text-xs font-medium hover:bg-gray-50"
+                title="모른는 정보일 때"
+              >
+                모름
+              </button>
+            </div>
+            <p className="text-[11px] text-gray-500">
+              💡 Cmd+Enter로 빠를게 전송. AI가 즉시 자연스러우 영어로 상대방엢게 전달합니다.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* 최근 밂화 요약 */}
       <div className="mt-6 bg-white rounded-2xl p-5 border border-gray-200">
         <h3 className="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wide">
           지금 이런 대화 중이에요
@@ -141,7 +237,7 @@ export default function CallInProgressPage({ params }) {
               🤖 Callmate (AI)
             </div>
             <div className="text-sm text-gray-700 bg-brand-50 rounded-lg p-3">
-              "{lastAssistant.message}"
+              "{lastAssistant.message || lastAssistant.content}"
             </div>
           </div>
         )}
@@ -151,7 +247,7 @@ export default function CallInProgressPage({ params }) {
               👤 상대방
             </div>
             <div className="text-sm text-gray-700 bg-gray-100 rounded-lg p-3">
-              "{lastUser.message}"
+              "{lastUser.message || lastUser.content}"
             </div>
           </div>
         )}
@@ -162,42 +258,43 @@ export default function CallInProgressPage({ params }) {
         )}
       </div>
 
-      {/* 실시간 개입 */}
-      <div className="mt-6 bg-white rounded-2xl p-5 border-2 border-brand-200">
-        <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-          <span className="text-brand-600">✨</span>
-          실시간 개입 — 한국어로 정보 전달
-        </h3>
-        <p className="text-xs text-gray-500 mb-3">
-          AI가 모르는 정보를 물어보면 여기에 한국어로 입력하세요. AI가
-          자연스럽게 영어로 전달합니다.
-        </p>
-        <textarea
-          value={interjectText}
-          onChange={(e) => setInterjectText(e.target.value)}
-          rows={2}
-          placeholder="예) 계정번호는 38492837이에요. 또는 오후 3시는 안 되고 4시 이후로 부탁드려요."
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none resize-none text-sm"
-        />
-        <div className="flex gap-2 mt-3">
-          <button
-            onClick={handleIntervene}
-            disabled={interjectLoading || !interjectText.trim()}
-            className="flex-1 bg-brand-600 text-white font-semibold py-2.5 rounded-xl hover:bg-brand-700 transition disabled:opacity-50"
-          >
-            {interjectLoading ? "전달 중..." : "AI에게 전달"}
-          </button>
-          <button
-            disabled
-            className="px-4 py-2.5 bg-gray-100 text-gray-400 rounded-xl text-sm cursor-not-allowed"
-            title="v1.1에서 지원 예정"
-          >
-            📷 카메라 (예정)
-          </button>
+      {/* 실시간 개입 (수동) — pending이 없을 때도 사용 가늵 */}
+      {!pending && (
+        <div className="mt-6 bg-white rounded-2xl p-5 border-2 border-brand-200">
+          <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+            <span className="text-brand-600">✨</span>
+            실시간 개입 — 한국어로 전보 추가
+          </h3>
+          <p className="text-xs text-gray-500 mb-3">
+            AI에게 추가 정보를 주거나 방햑을 바꾎고 싶을 때. AI가 자연스럭게 영어로 반영합니다.
+          </p>
+          <textarea
+            value={interjectText}
+            onChange={(e) => setInterjectText(e.target.value)}
+            rows={2}
+            placeholder="예) 아, 그리고 창싦 자리로 부텁드릴닢핸 추가해 주세요"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none resize-none text-sm"
+          />
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => handleIntervene()}
+              disabled={interjectLoading || !interjectText.trim()}
+              className="flex-1 bg-brand-600 text-white font-semibold py-2.5 rounded-xl hover:bg-brand-700 transition disabled:opacity-50"
+            >
+              {interjectLoading ? "전달 중..." : "AI에게 전달"}
+            </button>
+            <button
+              disabled
+              className="px-4 py-2.5 bg-gray-100 text-gray-400 rounded-xl text-sm cursor-not-allowed"
+              title="v1.1에서 지원 예정"
+            >
+              📷 카멤라 (예정)
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* 전체 스크립트 */}
+      {/* 전쾴 스크립트 */}
       <div className="mt-6 bg-white rounded-2xl border border-gray-200">
         <div className="px-5 py-3 border-b border-gray-100">
           <h3 className="text-sm font-semibold text-gray-700">전체 스크립트</h3>
@@ -206,12 +303,12 @@ export default function CallInProgressPage({ params }) {
           ref={transcriptRef}
           className="p-5 max-h-80 overflow-y-auto space-y-3 text-sm"
         >
-          {messages.length === 0 && (
+          {visibleMessages.length === 0 && (
             <div className="text-gray-400 italic">
               통화가 시작되면 스크립트가 여기에 표시됩니다.
             </div>
           )}
-          {messages.map((m, i) => (
+          {visibleMessages.map((m, i) => (
             <div key={i}>
               <div
                 className={`text-xs font-semibold mb-1 ${
@@ -228,7 +325,7 @@ export default function CallInProgressPage({ params }) {
                   ? "상대방"
                   : "시스템"}
               </div>
-              <div className="text-gray-700">{m.message}</div>
+              <div className="text-gray-700">{m.message || m.content}</div>
             </div>
           ))}
         </div>
@@ -250,3 +347,4 @@ export default function CallInProgressPage({ params }) {
     </div>
   );
 }
+
