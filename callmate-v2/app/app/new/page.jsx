@@ -14,6 +14,7 @@ function NewCallForm() {
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [voiceId, setVoiceId] = useState("Elliot");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +33,7 @@ function NewCallForm() {
           userName,
           briefing,
           phoneNumber,
+          voiceId,
         }),
       });
 
@@ -93,6 +95,38 @@ function NewCallForm() {
           <p className="text-xs text-gray-500 mt-2">
             💡 누가·언제·어디·왜·결과로 뭘 원하는지 포함하면 좋아요
           </p>
+        </div>
+
+        {/* 목소리 선택 */}
+        <div>
+          <label className="block text-sm font-semibold mb-2">
+            AI 목소리
+            <span className="text-gray-400 font-normal">
+              {" "}— 전화 거는 AI 목소리를 골라보세요
+            </span>
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { id: "Clara", label: "Clara", desc: "여성 · 친근한 프로" },
+              { id: "Emma", label: "Emma", desc: "여성 · 따뜻한 톤" },
+              { id: "Elliot", label: "Elliot", desc: "남성 · 차분한 프로" },
+              { id: "Nico", label: "Nico", desc: "남성 · 캐주얼" },
+            ].map((v) => (
+              <button
+                type="button"
+                key={v.id}
+                onClick={() => setVoiceId(v.id)}
+                className={`text-left px-3 py-2 border rounded-xl transition ${
+                  voiceId === v.id
+                    ? "border-brand-500 bg-brand-50"
+                    : "border-gray-300 hover:border-gray-400"
+                }`}
+              >
+                <div className="text-sm font-semibold">{v.label}</div>
+                <div className="text-xs text-gray-500">{v.desc}</div>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* 상대 번호 */}
