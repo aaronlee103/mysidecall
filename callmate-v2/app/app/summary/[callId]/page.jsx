@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -22,9 +21,12 @@ export default function CallSummaryPage({ params }) {
     fetchCall();
   }, [callId]);
 
-  const duration = call?.startedAt && call?.endedAt
-    ? Math.floor((new Date(call.endedAt) - new Date(call.startedAt)) / 1000)
-    : 0;
+  const duration =
+    call?.startedAt && call?.endedAt
+      ? Math.floor(
+          (new Date(call.endedAt) - new Date(call.startedAt)) / 1000
+        )
+      : 0;
   const fmt = (s) => `${Math.floor(s / 60)}분 ${s % 60}초`;
 
   const outcomeLabel = {
@@ -38,105 +40,132 @@ export default function CallSummaryPage({ params }) {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3">
-        ⚠️ {error}
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-start gap-2.5 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3 text-sm text-red-200">
+          <span>⚠️</span>
+          <span>{error}</span>
+        </div>
       </div>
     );
   }
 
   if (!call) {
-    return <div className="text-gray-500">불러오는 중...</div>;
+    return (
+      <div className="max-w-2xl mx-auto flex items-center gap-2 text-sm text-ink-400">
+        <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/20 border-t-brand-400" />
+        불러오는 중...
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto space-y-5">
       <Link
         href="/app"
-        className="text-sm text-gray-500 hover:text-gray-900 mb-4 inline-block"
+        className="inline-flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-200 transition-colors animate-fade-in-down"
       >
-        ← 대시보드로
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        대시보드
       </Link>
 
-      {/* 결과 카드 */}
-      <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-3xl">✅</span>
-          <span className="text-sm font-semibold text-green-700 bg-green-50 px-3 py-1 rounded-full">
-            {outcomeLabel}
-          </span>
-        </div>
-        <h1 className="text-2xl font-bold mb-1">통화 요약</h1>
-        <p className="text-sm text-gray-500 mb-6">
-          {call.customer?.number} · {fmt(duration)}
-          {call.cost && ` · $${call.cost.toFixed(2)}`}
-        </p>
-
-        {/* AI 생성 요약 */}
-        {call.summary ? (
-          <div className="bg-brand-50 border border-brand-100 rounded-2xl p-5 mb-6">
-            <h3 className="text-xs font-semibold text-brand-700 mb-2 uppercase tracking-wide">
-              AI 요약 (영어 원문)
-            </h3>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              {call.summary}
-            </p>
-            <p className="text-xs text-gray-500 mt-3 italic">
-              ℹ️ 한국어 번역 요약은 v1.1에 추가될 예정입니다.
-            </p>
+      {/* Outcome card */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-ink-900 via-ink-850 to-ink-900 p-8 animate-fade-in-up">
+        <div aria-hidden className="aurora-bg opacity-40" />
+        <div className="relative">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-inset ring-emerald-400/30 text-emerald-300 animate-scale-in">
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <span className="eyebrow text-emerald-200 border-emerald-400/20 bg-emerald-400/10">
+              {outcomeLabel}
+            </span>
           </div>
-        ) : (
-          <div className="bg-gray-50 rounded-2xl p-5 mb-6 text-sm text-gray-500">
-            요약이 생성되는 중이에요. 잠시 후 새로고침해 주세요.
-          </div>
-        )}
-
-        {/* 액션 버튼 */}
-        <div className="grid md:grid-cols-2 gap-3">
-          {call.recordingUrl && (
-            <a
-              href={call.recordingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gray-100 text-gray-800 text-sm font-semibold py-3 rounded-xl text-center hover:bg-gray-200 transition"
-            >
-              🎧 녹음 듣기
-            </a>
-          )}
-          <Link
-            href="/app/new"
-            className="bg-brand-600 text-white text-sm font-semibold py-3 rounded-xl text-center hover:bg-brand-700 transition"
-          >
-            🔁 비슷한 통화 다시 걸기
-          </Link>
+          <h1 className="text-2xl font-bold text-ink-100 tracking-tight mb-1">
+            통화 요약
+          </h1>
+          <p className="text-sm text-ink-400">
+            {call?.customer?.number} · <span className="font-mono">{fmt(duration)}</span>
+            {call.cost && (
+              <>
+                {" "}· <span className="font-mono">${call.cost.toFixed(2)}</span>
+              </>
+            )}
+          </p>
         </div>
       </div>
 
-      {/* 전체 스크립트 */}
-      <div className="mt-6 bg-white rounded-2xl border border-gray-200">
-        <div className="px-5 py-3 border-b border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-700">전체 스크립트</h3>
+      {/* AI summary */}
+      {call.summary ? (
+        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/[0.05] p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+          <h3 className="text-[11px] font-semibold text-brand-300 mb-2 uppercase tracking-wider">
+            AI 요약 (영어 원문)
+          </h3>
+          <p className="text-sm text-ink-200 leading-relaxed whitespace-pre-wrap">
+            {call.summary}
+          </p>
+          <p className="text-[11px] text-ink-500 mt-3 italic">
+            🌐 한국어 번역 요약은 v1.1에 추가될 예정입니다.
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-sm text-ink-400 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+          요약이 생성되는 중이에요. 잠시 후 새로고침해 주세요.
+        </div>
+      )}
+
+      {/* Actions */}
+      <div className="grid md:grid-cols-2 gap-3 stagger">
+        {call.recordingUrl && (
+          <a
+            href={call.recordingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary py-3"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            녹음 듣기
+          </a>
+        )}
+        <Link href="/app/new" className="btn-primary py-3">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          비슷한 통화 다시 걸기
+        </Link>
+      </div>
+
+      {/* Full transcript */}
+      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+        <div className="px-5 py-3 border-b border-white/5 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-ink-100">전체 스크립트</h3>
+          <span className="text-[10px] font-mono text-ink-500">
+            {(call.messages || []).length} 메시지
+          </span>
         </div>
         <div className="p-5 space-y-3 text-sm max-h-96 overflow-y-auto">
-          {(call.messages || []).map((m, i) => (
-            <div key={i}>
+          {(call.messages || []).map((m, i) => {
+            const isAI = m.role === "assistant" || m.role === "bot";
+            return (
               <div
-                className={`text-xs font-semibold mb-1 ${
-                  m.role === "assistant" || m.role === "bot"
-                    ? "text-brand-600"
-                    : m.role === "user"
-                    ? "text-gray-600"
-                    : "text-gray-400"
-                }`}
+                key={i}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${Math.min(i * 0.02, 0.3)}s` }}
               >
-                {m.role === "assistant" || m.role === "bot"
-                  ? "My Side Call"
-                  : m.role === "user"
-                  ? "상대방"
-                  : "시스템"}
+                <div
+                  className={`text-[10px] font-semibold mb-1 uppercase tracking-wider ${
+                    isAI ? "text-brand-300" : m.role === "user" ? "text-ink-400" : "text-ink-500"
+                  }`}
+                >
+                  {isAI ? "My Side Call" : m.role === "user" ? "상대방" : "시스템"}
+                </div>
+                <div
+                  className={`text-[13px] leading-relaxed ${
+                    isAI ? "text-ink-100" : "text-ink-300"
+                  }`}
+                >
+                  {m.message}
+                </div>
               </div>
-              <div className="text-gray-700">{m.message}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
