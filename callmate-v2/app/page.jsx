@@ -16,7 +16,7 @@ export default function Home() {
           >
             대기자 등록
           </a>
-        </div>
+        </div>X
       </nav>
 
       {/* Hero */}
