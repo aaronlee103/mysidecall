@@ -161,7 +161,7 @@ export default function CallInProgressPage({ params }) {
           📞 {call?.customer?.number || "연결 중..."}
         </div>
         <div className="text-sm text-gray-400">
-          Callmate AI가 대신 전화를 진행 중이에요
+          My Side Call AI가 대신 전화를 진행 중이에요
         </div>
       </div>
 
@@ -234,7 +234,7 @@ export default function CallInProgressPage({ params }) {
         {lastAssistant && (
           <div className="mb-3">
             <div className="text-xs text-brand-600 font-semibold mb-1">
-              🤖 Callmate (AI)
+              🤖 My Side Call (AI)
             </div>
             <div className="text-sm text-gray-700 bg-brand-50 rounded-lg p-3">
               "{lastAssistant.message || lastAssistant.content}"
@@ -320,7 +320,7 @@ export default function CallInProgressPage({ params }) {
                 }`}
               >
                 {m.role === "assistant" || m.role === "bot"
-                  ? "Callmate"
+                  ? "My Side Call"
                   : m.role === "user"
                   ? "상대방"
                   : "시스템"}
@@ -347,4 +347,3 @@ export default function CallInProgressPage({ params }) {
     </div>
   );
 }
-
