@@ -1,21 +1,126 @@
 import Link from "next/link";
 
-// Fauna Robotics 스타일 리디자인 — 따뜻한 크림 배경, 테라코타 액센트,
-// 큰 라운드 카드, 기하학 도형 데코. /app 내부 화면은 기존 다크 테마 유지.
+// Fauna Robotics 스타일 리디자인 v2 — 로봇 픽토그램 로고타입,
+// "대신 전화해주는 로봇 친구" 마스코트(애니메이션), 스크롤 리빌 모션.
+// /app 내부 화면은 기존 다크 테마 유지.
 
 const C = {
   bg: "bg-[#F6EFE2]",
   card: "bg-[#ECE4D2]",
-  cardSoft: "bg-[#F0E9DA]",
   ink: "text-[#26211A]",
-  body: "text-[#5D564A]",
-  muted: "text-[#948C7B]",
   terra: "bg-[#DE7150]",
   terraHover: "hover:bg-[#c9603f]",
 };
 
+const MOTION_CSS = `
+@keyframes msc-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes msc-blink { 0%, 90%, 100% { transform: scaleY(1); } 94% { transform: scaleY(0.08); } }
+@keyframes msc-ring { 0%, 100% { transform: rotate(0deg); } 6% { transform: rotate(-6deg); } 12% { transform: rotate(5deg); } 18% { transform: rotate(-3deg); } 24% { transform: rotate(0deg); } }
+@keyframes msc-drift { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-16px) rotate(8deg); } }
+@keyframes msc-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes msc-shadow { 0%,100% { transform: scaleX(1); opacity: .18; } 50% { transform: scaleX(.82); opacity: .1; } }
+.msc-float { animation: msc-float 5s ease-in-out infinite; }
+.msc-blink { transform-origin: center; transform-box: fill-box; animation: msc-blink 4.5s ease-in-out infinite; }
+.msc-ring { transform-origin: 128px 150px; animation: msc-ring 3.6s ease-in-out infinite; }
+.msc-drift { animation: msc-drift 9s ease-in-out infinite; }
+.msc-shadow { transform-origin: center; transform-box: fill-box; animation: msc-shadow 5s ease-in-out infinite; }
+@supports (animation-timeline: view()) {
+  .msc-reveal { animation: msc-rise .8s cubic-bezier(.2,.7,.2,1) both; animation-timeline: view(); animation-range: entry 0% entry 35%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .msc-float, .msc-blink, .msc-ring, .msc-drift, .msc-shadow, .msc-reveal { animation: none !important; }
+}
+`;
+
+// ── 로고타입: Fauna식 로봇 픽토그램 + 소문자 워드마크 ──
+function LogoMark({ size = 34 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 34 34" fill="none" aria-hidden>
+      {/* 안테나 */}
+      <rect x="15.6" y="2" width="2.8" height="5" rx="1.4" fill="#26211A" />
+      <circle cx="17" cy="2.2" r="1.8" fill="#DE7150" />
+      {/* 머리 */}
+      <rect x="6" y="6.5" width="22" height="13" rx="5" fill="#26211A" />
+      {/* 눈 */}
+      <circle cx="13" cy="13" r="2.2" fill="#F6EFE2" />
+      <circle cx="21" cy="13" r="2.2" fill="#F6EFE2" />
+      {/* 몸통 */}
+      <rect x="9.5" y="21.5" width="15" height="8.5" rx="3.5" fill="#26211A" />
+      {/* 팔 */}
+      <rect x="2" y="21.5" width="6" height="2.8" rx="1.4" fill="#26211A" />
+      <rect x="26" y="21.5" width="6" height="2.8" rx="1.4" fill="#26211A" />
+      {/* 다리 */}
+      <rect x="12" y="30.5" width="3.4" height="3" rx="1.5" fill="#26211A" />
+      <rect x="18.6" y="30.5" width="3.4" height="3" rx="1.5" fill="#26211A" />
+    </svg>
+  );
+}
+
+function Wordmark({ className = "" }) {
+  return (
+    <span className={`font-extrabold lowercase tracking-[-0.04em] leading-none ${className}`}>
+      my side call
+    </span>
+  );
+}
+
+// ── 히어로 마스코트: 수화기 들고 대신 전화하는 로봇 (애니메이션) ──
+function HeroRobot({ className = "" }) {
+  return (
+    <div className={className} aria-hidden>
+      <svg viewBox="0 0 220 260" width="100%" height="100%" fill="none">
+        {/* 그림자 */}
+        <ellipse className="msc-shadow" cx="110" cy="246" rx="62" ry="10" fill="#26211A" opacity="0.18" />
+        <g className="msc-float">
+          {/* 안테나 (노랑) */}
+          <rect x="66" y="18" width="8" height="30" rx="4" fill="#D9C544" transform="rotate(-24 70 33)" />
+          <rect x="146" y="18" width="8" height="30" rx="4" fill="#D9C544" transform="rotate(24 150 33)" />
+          {/* 머리 */}
+          <rect x="52" y="40" width="116" height="66" rx="26" fill="#A9B7A0" />
+          {/* 바이저 */}
+          <rect x="66" y="54" width="88" height="38" rx="16" fill="#26211A" />
+          {/* 눈 (깜빡임) */}
+          <circle className="msc-blink" cx="94" cy="73" r="7" fill="#F6EFE2" />
+          <circle className="msc-blink" cx="126" cy="73" r="7" fill="#F6EFE2" />
+          {/* 목 */}
+          <rect x="100" y="106" width="20" height="10" rx="4" fill="#8B9A83" />
+          {/* 몸통 */}
+          <rect x="62" y="116" width="96" height="76" rx="24" fill="#E8E0CF" />
+          {/* 가슴 버튼 */}
+          <circle cx="110" cy="150" r="10" fill="#DE7150" />
+          <rect x="96" y="168" width="28" height="5" rx="2.5" fill="#C9C0AC" />
+          {/* 왼팔 */}
+          <rect x="46" y="124" width="18" height="52" rx="9" fill="#A9B7A0" />
+          {/* 오른팔 — 수화기 들고 귀에 (살짝 흔들림) */}
+          <g className="msc-ring">
+            <rect x="150" y="96" width="18" height="52" rx="9" fill="#A9B7A0" transform="rotate(-38 159 122)" />
+            <g transform="rotate(-24 168 74)">
+              <rect x="146" y="62" width="44" height="14" rx="7" fill="#26211A" />
+              <rect x="142" y="58" width="14" height="22" rx="7" fill="#26211A" />
+              <rect x="180" y="58" width="14" height="22" rx="7" fill="#26211A" />
+            </g>
+          </g>
+          {/* 전화선 (꼬불꼬불) */}
+          <path
+            d="M186 84 q14 10 6 22 q-8 12 4 20 q12 8 2 20 q-8 10 0 20"
+            stroke="#26211A"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            fill="none"
+          />
+          {/* 다리 */}
+          <rect x="80" y="192" width="20" height="34" rx="10" fill="#A9B7A0" />
+          <rect x="120" y="192" width="20" height="34" rx="10" fill="#A9B7A0" />
+          {/* 발 */}
+          <rect x="72" y="222" width="34" height="14" rx="7" fill="#D9C544" />
+          <rect x="114" y="222" width="34" height="14" rx="7" fill="#D9C544" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
 function Deco({ v = 0 }) {
-  // Fauna 스타일 미니 도형 클러스터
   const sets = [
     ["bg-[#4C9A8B] rounded-tl-full", "bg-[#D9A83F]", "bg-[#C39BD3] rounded-full"],
     ["bg-[#DE7150] rounded-t-full", "bg-[#7E9EBB]", "bg-[#D9A83F] rounded-br-full"],
@@ -36,15 +141,15 @@ export default function Home() {
   const tallyFormId = process.env.NEXT_PUBLIC_TALLY_FORM_ID || "XXXXXX";
 
   return (
-    <main className={`relative min-h-screen ${C.bg} ${C.ink} antialiased`}>
-      {/* Nav — Fauna 스타일 플로팅 필 */}
+    <main className={`relative min-h-screen overflow-hidden ${C.bg} ${C.ink} antialiased`}>
+      <style dangerouslySetInnerHTML={{ __html: MOTION_CSS }} />
+
+      {/* Nav — 로봇 픽토그램 로고타입 */}
       <nav className="sticky top-0 z-50 bg-[#F6EFE2]/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#26211A] text-[#F6EFE2]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </span>
-            <span className="text-[16px] font-bold tracking-tight">My Side Call</span>
+            <LogoMark />
+            <Wordmark className="text-[19px] text-[#26211A]" />
           </Link>
           <div className="flex items-center gap-2">
             <div className={`hidden sm:flex items-center gap-1 rounded-full ${C.card} px-2 py-1.5`}>
@@ -62,6 +167,14 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative pt-20 md:pt-28 pb-20 px-6">
+        {/* 떠다니는 배경 도형 */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <span className="msc-drift absolute left-[8%] top-[14%] h-8 w-8 rounded-full bg-[#D9A83F]/30" />
+          <span className="msc-drift absolute right-[10%] top-[22%] h-10 w-10 rounded-tl-full bg-[#4C9A8B]/25" style={{ animationDelay: "-3s" }} />
+          <span className="msc-drift absolute left-[16%] bottom-[18%] h-6 w-6 bg-[#C39BD3]/30" style={{ animationDelay: "-6s" }} />
+          <span className="msc-drift absolute right-[18%] bottom-[30%] h-7 w-7 rounded-t-full bg-[#DE7150]/25" style={{ animationDelay: "-1.5s" }} />
+        </div>
+
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-[#ECE4D2] px-4 py-1.5 text-[12px] font-semibold text-[#5D564A]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#4C9A8B]" />
@@ -93,40 +206,46 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Hero visual — call card */}
-        <div className="mt-16 md:mt-20 max-w-3xl mx-auto">
-          <div className="rounded-[28px] bg-[#26211A] p-6 md:p-8 shadow-[0_24px_60px_-24px_rgba(38,33,26,0.45)]">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#7CC08F]" />
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#B9B2A4]">통화 중</span>
-              </div>
-              <span className="text-sm font-mono text-[#948C7B]">01:24</span>
-            </div>
-            <div className="space-y-3 text-sm">
-              <Bubble role="ai">
-                Hi, this is Aaron&apos;s assistant calling about the internet issue reported yesterday at 1247 Ocean Blvd.
-              </Bubble>
-              <Bubble role="them">Okay, can I have the account number?</Bubble>
-              <Bubble role="ai">Sure, it&apos;s 8-0-5-5-2-2-1-4-9.</Bubble>
-            </div>
-            <div className="mt-5 rounded-2xl bg-[#F6EFE2] p-4">
-              <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#B57A22] uppercase tracking-wide mb-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#D9A83F]" />
-                AI가 확인 요청
-              </div>
-              <p className="text-[14px] text-[#26211A] leading-relaxed">
-                &quot;내일 오후 2~4시 사이 기사 방문이 가능한데, 괜찮으신가요?&quot;
-              </p>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="flex-1 rounded-xl bg-white/70 px-3 py-2 text-[13px] text-[#5D564A]">
-                  네, 3시 방문 부탁드립니다.
+        {/* Hero visual — 로봇 마스코트 + 통화 카드 */}
+        <div className="mt-16 md:mt-28 max-w-4xl mx-auto">
+          <div className="relative">
+            {/* 로봇 친구 — 카드 왼쪽에서 대신 전화 중 */}
+            <HeroRobot className="hidden md:block absolute -left-6 lg:-left-20 -top-20 w-[200px] z-10" />
+            <div className="md:ml-40 rounded-[28px] bg-[#26211A] p-6 md:p-8 shadow-[0_24px_60px_-24px_rgba(38,33,26,0.45)]">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#7CC08F]" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#B9B2A4]">통화 중</span>
                 </div>
-                <button className={`rounded-full ${C.terra} px-4 py-2 text-[12px] font-semibold text-white`}>
-                  전달
-                </button>
+                <span className="text-sm font-mono text-[#948C7B]">01:24</span>
+              </div>
+              <div className="space-y-3 text-sm">
+                <Bubble role="ai">
+                  Hi, this is Aaron&apos;s assistant calling about the internet issue reported yesterday at 1247 Ocean Blvd.
+                </Bubble>
+                <Bubble role="them">Okay, can I have the account number?</Bubble>
+                <Bubble role="ai">Sure, it&apos;s 8-0-5-5-2-2-1-4-9.</Bubble>
+              </div>
+              <div className="mt-5 rounded-2xl bg-[#F6EFE2] p-4">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#B57A22] uppercase tracking-wide mb-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#D9A83F]" />
+                  AI가 확인 요청
+                </div>
+                <p className="text-[14px] text-[#26211A] leading-relaxed">
+                  &quot;내일 오후 2~4시 사이 기사 방문이 가능한데, 괜찮으신가요?&quot;
+                </p>
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="flex-1 rounded-xl bg-white/70 px-3 py-2 text-[13px] text-[#5D564A]">
+                    네, 3시 방문 부탁드립니다.
+                  </div>
+                  <button className={`rounded-full ${C.terra} px-4 py-2 text-[12px] font-semibold text-white`}>
+                    전달
+                  </button>
+                </div>
               </div>
             </div>
+            {/* 모바일용 로봇 (카드 아래) */}
+            <HeroRobot className="md:hidden mx-auto mt-8 w-[150px]" />
           </div>
         </div>
       </section>
@@ -134,7 +253,7 @@ export default function Home() {
       {/* Problem */}
       <section className="relative py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-14 msc-reveal">
             <Deco v={0} />
             <h2 className="mt-4 text-3xl md:text-[40px] font-bold tracking-tight">
               혹시 이런 경험, 있으신가요?
@@ -147,14 +266,14 @@ export default function Home() {
               { icon: "🏠", title: "집주인 · 관리사무소", body: "“물이 천천히 빠져요”를 영어로 설명 못 해서 결국 가족 동석시켜 부탁." },
               { icon: "🏥", title: "보험사 · 병원", body: "Kaiser coverage 물어볼 때마다 한 시간. 미루다가 결국 예약 못 잡음." },
             ].map((p) => (
-              <div key={p.title} className={`rounded-[24px] ${C.card} p-7 transition-transform hover:-translate-y-1`}>
+              <div key={p.title} className={`msc-reveal rounded-[24px] ${C.card} p-7 transition-transform hover:-translate-y-1`}>
                 <div className="text-3xl mb-4">{p.icon}</div>
                 <h3 className="font-bold text-lg mb-2">{p.title}</h3>
                 <p className="text-sm text-[#5D564A] leading-relaxed">{p.body}</p>
               </div>
             ))}
           </div>
-          <p className="mt-10 text-center text-base text-[#5D564A]">
+          <p className="mt-10 text-center text-base text-[#5D564A] msc-reveal">
             <strong className="text-[#26211A]">영어는 할 줄 아는데 전화가 어려운 이유:</strong>{" "}
             <br className="hidden md:block" />
             비언어적 단서가 없고, IVR 메뉴가 빠르고, 억양도 제각각이니까요.
@@ -165,7 +284,7 @@ export default function Home() {
       {/* How it works */}
       <section id="how" className="relative py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 msc-reveal">
             <Deco v={1} />
             <h2 className="mt-4 text-3xl md:text-[40px] font-bold tracking-tight">
               한국어로 말하고,
@@ -181,7 +300,7 @@ export default function Home() {
               { n: "3", title: "중간에 막히면 카메라로 보여주기", desc: "AI가 계정 번호·서명한 번호를 물어볼 때 카메라로 서류를 비추면 자동 인식. 전화 끊지 않고 실시간 해결.", icon: "📷", color: "bg-[#D9A83F]" },
               { n: "4", title: "한국어 요약 + 캘린더 자동 등록", desc: "\"기사님 내일 오후 2시 방문 확정\" 같은 액션을 다음 액션은 한국어로 받고, 캘린더에도 자동으로 등록됩니다.", icon: "✅", color: "bg-[#7E9EBB]" },
             ].map((step) => (
-              <div key={step.n} className={`rounded-[24px] ${C.card} p-7 transition-transform hover:-translate-y-1`}>
+              <div key={step.n} className={`msc-reveal rounded-[24px] ${C.card} p-7 transition-transform hover:-translate-y-1`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`flex h-11 w-11 items-center justify-center rounded-full ${step.color} text-white font-bold`}>
                     {step.n}
@@ -198,7 +317,7 @@ export default function Home() {
 
       {/* Demo placeholder */}
       <section id="demo" className="relative py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center msc-reveal">
           <Deco v={2} />
           <h2 className="mt-4 text-3xl md:text-[40px] font-bold tracking-tight mb-3">실제 통화 데모</h2>
           <p className="text-[#948C7B] mb-10">AI가 얼마나 자연스러운지 직접 들어보세요. (1분)</p>
@@ -214,13 +333,13 @@ export default function Home() {
       {/* Differentiator */}
       <section className="relative py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-14 msc-reveal">
             <h2 className="text-3xl md:text-[40px] font-bold tracking-tight mb-3">
               다른 번역 앱과 뭐가 다른가요?
             </h2>
             <p className="text-[#948C7B] max-w-xl mx-auto">동시통역이 아니라, 전화 자체를 대신합니다.</p>
           </div>
-          <div className={`overflow-hidden rounded-[24px] ${C.card}`}>
+          <div className={`msc-reveal overflow-hidden rounded-[24px] ${C.card}`}>
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#26211A]/10">
@@ -256,7 +375,7 @@ export default function Home() {
       {/* Pricing */}
       <section id="pricing" className="relative py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-14 msc-reveal">
             <Deco v={3} />
             <h2 className="mt-4 text-3xl md:text-[40px] font-bold tracking-tight mb-3">
               요금제 <span className="text-[#948C7B] text-xl font-medium">(출시 예정)</span>
@@ -264,9 +383,9 @@ export default function Home() {
             <p className="text-[#948C7B]">베탄는 무료. 정식 출시 후 예정입니다.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-4">
-            <PricingCard tier="Free" price="$0" period="영원히" features={["월 2통화", "5분 이내", "카메라 OCR", "한국어 요약"]} cta={{ label: "무료 시작", href: "#waitlist" }} />
-            <PricingCard tier="Basic" price="$9.99" period="월" features={["월 10통화", "통화당 15분", "카메라 OCR", "캘린더 연동"]} cta={{ label: "베타 대기자 등록", href: "#waitlist" }} featured />
-            <PricingCard tier="Pro" price="$19.99" period="월" features={["월 30통화", "통화 길이 무제한", "카메라 OCR 무제한", "우선 처리 · 녹음 보관 무제한"]} cta={{ label: "베타 대기자 등록", href: "#waitlist" }} />
+            <div className="msc-reveal"><PricingCard tier="Free" price="$0" period="영원히" features={["월 2통화", "5분 이내", "카메라 OCR", "한국어 요약"]} cta={{ label: "무료 시작", href: "#waitlist" }} /></div>
+            <div className="msc-reveal"><PricingCard tier="Basic" price="$9.99" period="월" features={["월 10통화", "통화당 15분", "카메라 OCR", "캘린더 연동"]} cta={{ label: "베타 대기자 등록", href: "#waitlist" }} featured /></div>
+            <div className="msc-reveal"><PricingCard tier="Pro" price="$19.99" period="월" features={["월 30통화", "통화 길이 무제한", "카메라 OCR 무제한", "우선 처리 · 녹음 보관 무제한"]} cta={{ label: "베타 대기자 등록", href: "#waitlist" }} /></div>
           </div>
           <p className="mt-8 text-center text-sm text-[#948C7B]">종량제 옵션: 구독 없이 통화당 $2.99</p>
         </div>
@@ -275,7 +394,7 @@ export default function Home() {
       {/* FAQ */}
       <section id="faq" className="relative py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-bold tracking-tight text-center mb-12">자주 묻는 질문</h2>
+          <h2 className="text-3xl md:text-[40px] font-bold tracking-tight text-center mb-12 msc-reveal">자주 묻는 질문</h2>
           <div className="space-y-3">
             {[
               { q: "AI 음성이 부자연스러워서 상대방이 의심하지 않을까요?", a: "업계 최고 수준의 TTS(ElevenLabs)를 사용해 네이티브에 가깝습니다. 다만 미국 FCC 규정에 따라 통화 시작 시 자동으로 AI임을 고지해요. 상대방이 사람을 원하면 언제든 연결해 드립니다." },
@@ -285,7 +404,7 @@ export default function Home() {
               { q: "미국 외 지역에서도 사용 가능한가요?", a: "초기엔 미국 발신 전화만 지원해요. 한국·일룸·유럽 등은 순차 확장 예정입니다." },
               { q: "어떤 상황에서 쓰면 좋을까요?", a: "레스토랑 예약, Comcast·Spectrum 고객센터, 집주인·관리사물소 수리 요청, 항공사·AAA 변경·환불 문의 등. 의료·법률·금융은 안전을 위해 초기엔 제한합니다." },
             ].map((item, i) => (
-              <details key={i} className={`group rounded-[20px] ${C.card} overflow-hidden`}>
+              <details key={i} className={`msc-reveal group rounded-[20px] ${C.card} overflow-hidden`}>
                 <summary className="cursor-pointer px-6 py-4 text-[15px] font-semibold flex items-center justify-between list-none">
                   <span className="pr-4">{item.q}</span>
                   <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#26211A]/[0.06] text-[#5D564A] group-open:bg-[#DE7150] group-open:text-white group-open:rotate-45 transition-all duration-300">
@@ -302,7 +421,7 @@ export default function Home() {
       {/* Waitlist */}
       <section id="waitlist" className="relative py-24 px-6">
         <div className="max-w-2xl mx-auto">
-          <div className={`rounded-[28px] ${C.card} p-8 md:p-12 text-center`}>
+          <div className={`msc-reveal rounded-[28px] ${C.card} p-8 md:p-12 text-center`}>
             <Deco v={1} />
             <h2 className="mt-4 text-3xl md:text-5xl font-bold tracking-tight mb-3">베타 대기자 등록</h2>
             <p className="text-lg text-[#5D564A] mb-8">
@@ -329,10 +448,8 @@ export default function Home() {
       <footer className="relative border-t border-[#26211A]/10 py-10 px-6 text-sm text-[#948C7B]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#26211A] text-[#F6EFE2]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </span>
-            <span className="font-bold text-[#26211A]">My Side Call</span>
+            <LogoMark size={26} />
+            <Wordmark className="text-[16px] text-[#26211A]" />
           </div>
           <div className="flex gap-6">
             <a href="/terms" className="hover:text-[#26211A] transition-colors">이용약관</a>
@@ -361,7 +478,7 @@ function Bubble({ role, children }) {
         }`}
       >
         <div className={`text-[10px] font-bold uppercase tracking-wider mb-0.5 ${isAI ? "text-[#B5652F]" : "text-[#948C7B]"}`}>
-          {isAI ? "My Side Call" : "상대방"}
+          {isAI ? "my side call" : "상대방"}
         </div>
         {children}
       </div>
@@ -372,7 +489,7 @@ function Bubble({ role, children }) {
 function PricingCard({ tier, price, period, features, cta, featured }) {
   return (
     <div
-      className={`relative rounded-[24px] p-7 transition-transform hover:-translate-y-1 ${
+      className={`relative h-full rounded-[24px] p-7 transition-transform hover:-translate-y-1 ${
         featured ? "bg-[#26211A] text-[#F6EFE2]" : "bg-[#ECE4D2]"
       }`}
     >
