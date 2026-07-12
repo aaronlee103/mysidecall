@@ -13,10 +13,14 @@ export default function CallInProgressPage({ params }) {
   const [interjectText, setInterjectText] = useState("");
   const [interjectLoading, setInterjectLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  // 개입 요청 — 래치(latch): 한 번 뜨면 답하거나 닫기 전까지 유지.
+  // (서버 스냅샷이 서버리스 인스턴스 간 공유가 안 돼 폴링마다 null이 될 수 있음)
+  const [pending, setPending] = useState(null);
 
   const transcriptRef = useRef(null);
   const pendingInputRef = useRef(null);
   const lastPendingKey = useRef(null);
+  const answeredKeys = useRef(new Set());
 
   // Poll for call updates
   useEffect(() => {
@@ -26,7 +30,18 @@ export default function CallInProgressPage({ params }) {
         if (!res.ok) throw new Error("통화 조회 실패");
         const data = await res.json();
         setCall(data);
+
+        // 새 pendingQuestion이 오면 래치. null이 와도 기존 팝업 유지.
+        const pq = data.pendingQuestion;
+        if (pq) {
+          const key = `${pq.askedAt}-${pq.question}`;
+          if (!answeredKeys.current.has(key)) {
+            setPending(pq);
+          }
+        }
+
         if (data.status === "ended" || data.status === "failed") {
+          setPending(null);
           setTimeout(() => {
             router.push(`/app/summary/${callId}`);
           }, 2000);
@@ -57,11 +72,10 @@ export default function CallInProgressPage({ params }) {
     }
   }, [call?.messages]);
 
-  // Handle pending question: vibrate + focus + ding
+  // Handle pending question: vibrate + focus + ding (새 질문일 때 1회)
   useEffect(() => {
-    const pq = call?.pendingQuestion;
-    if (!pq) return;
-    const key = `${pq.askedAt}-${pq.question}`;
+    if (!pending) return;
+    const key = `${pending.askedAt}-${pending.question}`;
     if (lastPendingKey.current === key) return;
     lastPendingKey.current = key;
 
@@ -82,7 +96,14 @@ export default function CallInProgressPage({ params }) {
       osc.start();
       osc.stop(ctx.currentTime + 0.15);
     } catch {}
-  }, [call?.pendingQuestion]);
+  }, [pending]);
+
+  const dismissPending = () => {
+    if (pending) {
+      answeredKeys.current.add(`${pending.askedAt}-${pending.question}`);
+      setPending(null);
+    }
+  };
 
   const handleIntervene = async (textOverride) => {
     const text = (textOverride ?? interjectText).trim();
@@ -96,6 +117,7 @@ export default function CallInProgressPage({ params }) {
       });
       if (!res.ok) throw new Error("메시지 전달 실패");
       setInterjectText("");
+      dismissPending(); // 답변 전달 완료 → 팝업 닫기
     } catch (err) {
       setError(err.message);
     } finally {
@@ -135,7 +157,6 @@ export default function CallInProgressPage({ params }) {
     .slice(-1)[0];
   const lastUser = visibleMessages.filter((m) => m.role === "user").slice(-1)[0];
 
-  const pending = call?.pendingQuestion;
   const isLive = call?.status === "in-progress";
 
   return (
@@ -145,7 +166,7 @@ export default function CallInProgressPage({ params }) {
         {isLive && (
           <div aria-hidden className="absolute inset-0 pointer-events-none">
             <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-emerald-500/10 blur-3xl animate-aurora-drift" />
-            <div className="absolute -bottom-24 -left-16 h-60 w-60 rounded-full bg-brand-500/10 blur-3xl animate-aurora-drift" style={{ animationDelay: "-6s" }}/>
+            <div className="absolute -bottom-24 -left-16 h-60 w-60 rounded-full bg-brand-500/10 blur-3xl animate-aurora-drift" style={{ animationDelay: "-6s" }} />
           </div>
         )}
         <div className="relative flex items-center justify-between mb-4">
@@ -173,22 +194,30 @@ export default function CallInProgressPage({ params }) {
         </div>
       </div>
 
-      {/* Pending Question — most urgent */}
+      {/* Pending Question — 래치: 답하거나 닫기 전까지 유지 */}
       {pending && (
         <div
-          key={`${pending.askedAt}-${pending.question}`}
           className="mt-4 relative overflow-hidden rounded-2xl border border-amber-400/40 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-amber-500/10 p-5 animate-spring-in"
           style={{ boxShadow: "0 0 0 4px rgba(251,191,36,0.1), 0 12px 32px -12px rgba(251,191,36,0.3)" }}
         >
           <div aria-hidden className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(251,191,36,0.08)_50%,transparent_70%)] bg-[length:200%_100%] animate-shimmer pointer-events-none" />
-          <div className="relative flex items-center gap-2 mb-2">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-70 animate-pulse-ring" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-400" />
-            </span>
-            <h3 className="text-[13px] font-semibold text-amber-200 tracking-wide uppercase">
-              AI가 확인이 필요해요
-            </h3>
+          <div className="relative flex items-center justify-between gap-2 mb-2">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-70 animate-pulse-ring" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-400" />
+              </span>
+              <h3 className="text-[13px] font-semibold text-amber-200 tracking-wide uppercase">
+                AI가 확인이 필요해요
+              </h3>
+            </div>
+            <button
+              onClick={dismissPending}
+              className="text-ink-500 hover:text-ink-200 text-lg leading-none px-1"
+              title="닫기 (AI는 계속 대기)"
+            >
+              ✕
+            </button>
           </div>
           {pending.context && (
             <div className="relative text-[11px] text-ink-300 mb-2">
@@ -240,18 +269,30 @@ export default function CallInProgressPage({ params }) {
               <button
                 onClick={() =>
                   handleIntervene(
-                    "I don't have that information. Please ask the other party to suggest options or call back later."
+                    "I don't have that information right now. Please ask the other party to suggest options or continue without it."
                   )
                 }
                 disabled={interjectLoading}
                 className="btn-secondary px-3.5 py-2.5 text-xs"
-                title="모른다는 정보일 때"
+                title="모르는 정보일 때"
               >
                 모름
               </button>
+              <button
+                onClick={() =>
+                  handleIntervene(
+                    "I can't answer right now. Please tell the other party politely that you will make a note of their question and your client will get back to them soon. Then continue with any remaining agenda or wrap up the call politely."
+                  )
+                }
+                disabled={interjectLoading}
+                className="btn-secondary px-3.5 py-2.5 text-xs"
+                title="메모 남기고 자연스럽게 마무리"
+              >
+                📝 메모하고 마무리
+              </button>
             </div>
             <p className="text-[11px] text-ink-500">
-              ⌘ Cmd+Enter로 빠르게 전송. AI가 즉시 자연스러운 영어로 상대방에게 전달합니다.
+              ⌘ Cmd+Enter로 빠르게 전송. 약 40초간 답이 없으면 AI가 &quot;메모 남기고 다시 연락드리겠다&quot;고 말하고 자연스럽게 마무리해요.
             </p>
           </div>
         </div>
@@ -265,7 +306,7 @@ export default function CallInProgressPage({ params }) {
         {lastAssistant && (
           <div className="mb-3">
             <div className="text-[11px] font-medium text-brand-300 mb-1 flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-400"/>
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
               My Side Call (AI)
             </div>
             <div className="rounded-xl border border-brand-500/20 bg-brand-500/[0.06] p-3 text-sm text-ink-100 leading-relaxed">
@@ -276,7 +317,7 @@ export default function CallInProgressPage({ params }) {
         {lastUser && (
           <div>
             <div className="text-[11px] font-medium text-ink-400 mb-1 flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-ink-400"/>
+              <span className="h-1.5 w-1.5 rounded-full bg-ink-400" />
               상대방
             </div>
             <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-ink-200 leading-relaxed">
