@@ -8,17 +8,30 @@ export default function CallSummaryPage({ params }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCall = async () => {
-      try {
-        const res = await fetch(`/api/calls/${callId}`);
-        if (!res.ok) throw new Error("통화 조회 실패");
-        const data = await res.json();
-        setCall(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    fetchCall();
+        let attempts = 0;
+        let timer = null;
+        let cancelled = false;
+        const fetchCall = async () => {
+                try {
+                          const res = await fetch(`/api/calls/${callId}`);
+                          if (!res.ok) throw new Error("통화 조회 실패");
+                          const data = await res.json();
+                          if (cancelled) return;
+                          setCall(data);
+                          // 요약이 아직 생성 중이면 3초 간격으로 최대 15회 재시도
+                          if (!data.summary && attempts < 15) {
+                                      attempts += 1;
+                                      timer = setTimeout(fetchCall, 3000);
+                          }
+                } catch (err) {
+                          if (!cancelled) setError(err.message);
+                }
+        };
+        fetchCall();
+        return () => {
+                cancelled = true;
+                if (timer) clearTimeout(timer);
+        };
   }, [callId]);
 
   const duration =
