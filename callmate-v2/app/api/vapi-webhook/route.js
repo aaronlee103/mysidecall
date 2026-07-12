@@ -3,7 +3,17 @@ import { setPending } from "@/lib/pendingStore";
 
 // Vapi 서버 URL로 설정되는 웹훅. ask_client_question 툴 콜을 받으면
 // 질문 텍스트를 pendingStore에 스냅샷으로 저장해서 대시보드가 바로 볼 수 있게 함.
-// async 툴이라 AI는 응답 안 기다리고 "request-start" 메시지 말하고 묵음 대기.
+// (프론트는 pendingStore 스냅샷 + call.messages 추출 두 경로로 감지하고,
+//  한 번 뜬 팝업은 래치로 유지함)
+
+const ASK_RESULT =
+  "The client has been notified on their screen and may take a moment to reply. " +
+  "Tell the other party something natural like 'Let me check on that for you, one moment please.' " +
+  "Keep the line warm — brief small talk is fine. Do NOT hang up while waiting. " +
+  "The client's answer will arrive as a system message. " +
+  "IMPORTANT: If no answer has arrived after roughly 40 seconds of waiting, do not keep the other party waiting any longer. " +
+  "Politely say you will make a note of their question and have your client get back to them soon, " +
+  "then continue with any remaining agenda or wrap up the call politely.";
 
 export async function POST(req) {
   try {
@@ -43,8 +53,7 @@ export async function POST(req) {
 
           results.push({
             toolCallId: id,
-            result:
-              "Question forwarded to the client. Tell the other party 'One moment please' and wait silently. The client's answer will arrive as a system message shortly.",
+            result: ASK_RESULT,
           });
         }
       }
