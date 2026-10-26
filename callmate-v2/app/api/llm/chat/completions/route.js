@@ -85,6 +85,23 @@ function cleanMessages(messages) {
     });
 }
 
+// One extra system line so the model never speaks Korean to the person on the
+// phone (Korean belongs only inside ask_client_question arguments).
+const PHONE_GUARD =
+  "Voice rules: everything you say is spoken aloud to the other party on the phone, who speaks English. " +
+  "Speak English only, one or two short sentences per turn, no markdown, no lists, no emojis. " +
+  "Korean is allowed only inside the arguments of the ask_client_question tool.";
+
+function withPhoneGuard(messages) {
+  if (!messages.length) return [{ role: "system", content: PHONE_GUARD }];
+  const first = messages[0];
+  if (first.role === "system" && typeof first.content === "string") {
+    if (first.content.includes("Voice rules:")) return messages;
+    return [{ ...first, content: first.content + "\n\n" + PHONE_GUARD }, ...messages.slice(1)];
+  }
+  return [{ role: "system", content: PHONE_GUARD }, ...messages];
+}
+
 export async function POST(req) {
   if (!authorized(req)) {
     return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
@@ -103,9 +120,14 @@ export async function POST(req) {
   body.stream = body.stream !== false;             // Vapi always streams; honour explicit false for curl tests.
   const tools = cleanTools(body.tools);
   if (tools) { body.tools = tools; body.tool_choice = body.tool_choice || "auto"; } else { delete body.tools; delete body.tool_choice; }
-  if (body.max_tokens == null) body.max_tokens = 350; // phone turns are short
+  if (body.max_tokens == null) body.max_tokens = 600; // phone turns are short
   if (body.temperature == null) body.temperature = 0.4;
+  // Muse Spark reasons before it speaks. On a live call we want it to answer
+  // fast, and without this flag reasoning alone can eat the whole token budget
+  // (observed: 1,498 reasoning tokens, no words). "minimal" measured ~1.5 s.
+  if (body.reasoning_effort == null) body.reasoning_effort = process.env.META_REASONING || "minimal";
   delete body.stream_options;
+  body.messages = withPhoneGuard(body.messages);
 
   let key;
   try { key = metaKey(); }
