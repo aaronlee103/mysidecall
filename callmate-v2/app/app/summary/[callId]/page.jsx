@@ -6,6 +6,21 @@ export default function CallSummaryPage({ params }) {
   const { callId } = params;
   const [call, setCall] = useState(null);
   const [error, setError] = useState(null);
+  const [brief, setBrief] = useState(null);      // Korean brief by Muse Spark (hackathon)
+  const [briefErr, setBriefErr] = useState(null);
+
+  useEffect(() => {
+    if (!call || call.status !== "ended" || brief) return;
+    let cancelled = false;
+    fetch(`/api/calls/${callId}/brief`)
+      .then(async (r) => {
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || "한국어 요약 실패");
+        if (!cancelled) setBrief(d);
+      })
+      .catch((e) => { if (!cancelled) setBriefErr(e.message); });
+    return () => { cancelled = true; };
+  }, [call, callId, brief]);
 
   useEffect(() => {
         let attempts = 0;
@@ -107,24 +122,62 @@ export default function CallSummaryPage({ params }) {
         </div>
       </div>
 
-      {/* AI summary */}
-      {call.summary ? (
-        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/[0.05] p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-          <h3 className="text-[11px] font-semibold text-brand-300 mb-2 uppercase tracking-wider">
-            AI 요약 (영어 원문)
-          </h3>
-          <p className="text-sm text-ink-200 leading-relaxed whitespace-pre-wrap">
-            {call.summary}
-          </p>
-          <p className="text-[11px] text-ink-500 mt-3 italic">
-            🌐 한국어 번역 요약은 v1.1에 추가될 예정입니다.
-          </p>
+      {/* Korean brief — Muse Spark (Meta Model API) */}
+      <div className="rounded-2xl border border-brand-500/20 bg-brand-500/[0.05] p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-[11px] font-semibold text-brand-300 uppercase tracking-wider">한국어 요약</h3>
+          <span className="text-[10px] font-mono text-ink-500">Muse Spark</span>
         </div>
-      ) : (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-sm text-ink-400 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-          요약이 생성되는 중이에요. 잠시 후 새로고침해 주세요.
-        </div>
-      )}
+        {brief ? (
+          <div className="space-y-4">
+            <p className="text-sm text-ink-100 leading-relaxed whitespace-pre-wrap">{brief.summaryKo}</p>
+            {brief.keyFacts?.length > 0 && (
+              <div>
+                <div className="text-[11px] font-semibold text-ink-400 mb-1.5">확인된 내용</div>
+                <ul className="space-y-1">
+                  {brief.keyFacts.map((f, i) => (
+                    <li key={i} className="text-[13px] text-ink-200 flex gap-2"><span className="text-brand-400">•</span><span>{f}</span></li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {brief.actions?.length > 0 && (
+              <div>
+                <div className="text-[11px] font-semibold text-ink-400 mb-1.5">할 일</div>
+                <ul className="space-y-1.5">
+                  {brief.actions.map((a, i) => (
+                    <li key={i} className="text-[13px] text-ink-100 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+                      <div className="font-medium">{a.title}</div>
+                      {(a.when || a.note) && (
+                        <div className="text-[12px] text-ink-400 mt-0.5">
+                          {a.when && <span className="font-mono mr-2">{new Date(a.when).toLocaleString("ko-KR", { timeZone: "America/New_York", month: "long", day: "numeric", weekday: "short", hour: "numeric", minute: "2-digit" })}</span>}
+                          {a.note}
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {brief.followUp && (
+              <p className="text-[13px] text-amber-200/90"><span className="font-semibold">다음 통화:</span> {brief.followUp}</p>
+            )}
+          </div>
+        ) : briefErr ? (
+          <p className="text-sm text-ink-400">한국어 요약을 만들지 못했습니다. ({briefErr})</p>
+        ) : (
+          <p className="text-sm text-ink-400 flex items-center gap-2">
+            <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/20 border-t-brand-400" />
+            통화 내용을 한국어로 정리하는 중…
+          </p>
+        )}
+        {call.summary && (
+          <details className="mt-4">
+            <summary className="text-[11px] text-ink-500 cursor-pointer">영어 원문 요약 보기</summary>
+            <p className="text-[13px] text-ink-300 leading-relaxed whitespace-pre-wrap mt-2">{call.summary}</p>
+          </details>
+        )}
+      </div>
 
       {/* Actions */}
       <div className="grid md:grid-cols-2 gap-3 stagger">
