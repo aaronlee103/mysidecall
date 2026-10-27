@@ -14,6 +14,18 @@ export default function CallSummaryPage({ params }) {
   const [briefLang, setBriefLang] = useState(null);   // null = the language chosen when the call was made
   const [brief, setBrief] = useState(null);           // brief by Muse Spark (hackathon)
   const [briefErr, setBriefErr] = useState(null);
+  const [asr, setAsr] = useState(null);               // Muse Voice re-transcription (hackathon)
+  const [asrBusy, setAsrBusy] = useState(false);
+  const [asrErr, setAsrErr] = useState(null);
+  const retranscribe = async () => {
+    setAsrBusy(true); setAsrErr(null);
+    try {
+      const r = await fetch(`/api/calls/${callId}/transcribe`, { method: "POST" });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "failed");
+      setAsr(d);
+    } catch (e) { setAsrErr(e.message); } finally { setAsrBusy(false); }
+  };
 
   // Brief — in the call's language, or the one the user switches to here
   useEffect(() => {
@@ -167,7 +179,29 @@ export default function CallSummaryPage({ params }) {
       </div>
 
       {call.recordingUrl && (
-        <audio controls preload="none" src={`/api/calls/${callId}/recording`} className="w-full h-10 rounded-full animate-fade-in-up" />
+        <div className="space-y-3 animate-fade-in-up">
+          <audio controls preload="none" src={`/api/calls/${callId}/recording`} className="w-full h-10 rounded-full" />
+          <div className="rounded-2xl border border-line bg-paper p-4 shadow-soft">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-sm font-semibold text-ink-100">{t("sum.retranscribe")}</div>
+                <div className="text-[11px] text-ink-500 mt-0.5">{t("sum.retranscribe.sub")}</div>
+              </div>
+              {!asr && (
+                <button type="button" onClick={retranscribe} disabled={asrBusy} className="btn-secondary py-2 px-4 text-[13px] whitespace-nowrap disabled:opacity-60">
+                  {asrBusy ? <><Spinner />{t("sum.retranscribing")}</> : t("sum.retranscribe")}
+                </button>
+              )}
+            </div>
+            {asrErr && <p className="mt-2 text-[13px] text-red-800">{t("sum.retranscribe.err")} <span className="text-ink-500">({asrErr})</span></p>}
+            {asr && (
+              <div className="mt-3">
+                <p className="text-[13px] text-ink-100 leading-relaxed whitespace-pre-wrap">{asr.text || "—"}</p>
+                <div className="mt-2 text-[10px] font-mono text-ink-500">{asr.model} · {Math.round(asr.audioSeconds || asr.seconds || 0)}s · {asr.segments?.length || 0} segments</div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Full transcript */}
