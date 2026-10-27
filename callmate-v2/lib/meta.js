@@ -26,8 +26,10 @@ export function metaHeaders(extra = {}) {
  * Non-streaming chat completion against Muse Spark.
  * Returns the assistant message content (string) — or parsed JSON when `json: true`.
  */
-export async function sparkChat({ messages, model = SPARK_MODEL, temperature = 0.3, maxTokens = 1500, json = false, tools, signal }) {
-  const body = { model, messages, temperature, max_tokens: maxTokens, stream: false };
+export async function sparkChat({ messages, model = SPARK_MODEL, temperature = 0.3, maxTokens = 1500, json = false, tools, signal, reasoning }) {
+  // Muse Spark "thinks" before answering and, left alone, can spend the whole
+  // token budget on reasoning (seen on live calls). Keep it short by default.
+  const body = { model, messages, temperature, max_tokens: maxTokens, stream: false, reasoning_effort: reasoning || process.env.META_REASONING || "minimal" };
   if (json) body.response_format = { type: "json_object" };
   if (tools?.length) { body.tools = tools; body.tool_choice = "auto"; }
 
@@ -54,11 +56,13 @@ export async function sparkChat({ messages, model = SPARK_MODEL, temperature = 0
 }
 
 /** Muse Spark vision: an image (data: URL or https URL) plus a question. */
-export async function sparkVision({ imageUrl, prompt, json = false, maxTokens = 1200 }) {
+export async function sparkVision({ imageUrl, prompt, json = false, maxTokens = 1200, system, reasoning }) {
   return sparkChat({
     json,
     maxTokens,
+    reasoning,
     messages: [
+      ...(system ? [{ role: "system", content: system }] : []),
       {
         role: "user",
         content: [

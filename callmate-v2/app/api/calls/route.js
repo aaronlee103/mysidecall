@@ -17,6 +17,7 @@ export async function GET() {
       endedAt: c.endedAt || null,
       to: c.customer?.number || null,
       briefing: c.assistantOverrides?.variableValues?.briefing_content || "",
+      lang: c.metadata?.lang || null,
       summary: c.summary || null,
       cost: c.cost ?? null,
     }));
@@ -31,7 +32,8 @@ export async function POST(req) {
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
   try {
-    const { phoneNumber, userName, briefing, voiceId } = await req.json();
+    const { phoneNumber, userName, briefing, voiceId, lang } = await req.json();
+    const clientLang = ["en", "ko", "es", "ja", "zh"].includes(lang) ? lang : "en";
 
     if (!phoneNumber || !briefing) {
       return NextResponse.json(
@@ -51,7 +53,8 @@ export async function POST(req) {
       userName: userName || viewer.name || "my client",
       briefing,
       voice: voiceId,
-      metadata: { userId: viewer.id, userName: userName || viewer.name || "", app: "mysidecall" },
+      clientLang,
+      metadata: { userId: viewer.id, userName: userName || viewer.name || "", app: "mysidecall", lang: clientLang },
     });
 
     return NextResponse.json({ callId: call.id });

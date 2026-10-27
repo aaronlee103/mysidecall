@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useLang } from "@/app/components/Lang";
 
 const POLL_INTERVAL = 1500;
 
 export default function CallInProgressPage({ params }) {
   const router = useRouter();
   const { callId } = params;
+  const { t } = useLang();
 
   const [call, setCall] = useState(null);
   const [error, setError] = useState(null);
@@ -27,7 +29,7 @@ export default function CallInProgressPage({ params }) {
     const poll = async () => {
       try {
         const res = await fetch(`/api/calls/${callId}`);
-        if (!res.ok) throw new Error("통화 조회 실패");
+        if (!res.ok) throw new Error(t("call.err.fetch"));
         const data = await res.json();
         setCall(data);
 
@@ -115,7 +117,7 @@ export default function CallInProgressPage({ params }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),
       });
-      if (!res.ok) throw new Error("메시지 전달 실패");
+      if (!res.ok) throw new Error(t("call.err.send"));
       setInterjectText("");
       dismissPending(); // 답변 전달 완료 → 팝업 닫기
     } catch (err) {
@@ -126,7 +128,7 @@ export default function CallInProgressPage({ params }) {
   };
 
   const handleEnd = async () => {
-    if (!confirm("통화를 종료할까요?")) return;
+    if (!confirm(t("call.end.confirm"))) return;
     try {
       await fetch(`/api/calls/${callId}/end`, { method: "POST" });
     } catch (err) {
@@ -141,12 +143,12 @@ export default function CallInProgressPage({ params }) {
   };
 
   const statusBadge = {
-    queued: { label: "연결 대기", color: "bg-ink-500", ring: "ring-ink-400/30" },
-    ringing: { label: "신호 중", color: "bg-amber-400", ring: "ring-amber-400/30" },
-    "in-progress": { label: "통화 중", color: "bg-emerald-400", ring: "ring-emerald-400/30" },
-    ended: { label: "종료됨", color: "bg-ink-500", ring: "ring-ink-400/30" },
-    failed: { label: "실패", color: "bg-red-500", ring: "ring-red-400/30" },
-  }[call?.status] || { label: "연결 중", color: "bg-ink-500", ring: "ring-ink-400/30" };
+    queued: { label: t("call.queued"), color: "bg-ink-600" },
+    ringing: { label: t("call.ringing"), color: "bg-amber-400" },
+    "in-progress": { label: t("call.in-progress"), color: "bg-emerald-500" },
+    ended: { label: t("call.ended"), color: "bg-ink-600" },
+    failed: { label: t("call.failed"), color: "bg-red-500" },
+  }[call?.status] || { label: t("call.connecting"), color: "bg-ink-600" };
 
   const messages = call?.messages || [];
   const visibleMessages = messages.filter(
@@ -162,11 +164,11 @@ export default function CallInProgressPage({ params }) {
   return (
     <div className="max-w-2xl mx-auto">
       {/* Status header */}
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-ink-850 via-ink-900 to-ink-850 p-6 animate-fade-in-up">
+      <div className="relative overflow-hidden rounded-2xl border border-line bg-paper p-6 shadow-soft animate-fade-in-up">
         {isLive && (
           <div aria-hidden className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-emerald-500/10 blur-3xl animate-aurora-drift" />
-            <div className="absolute -bottom-24 -left-16 h-60 w-60 rounded-full bg-brand-500/10 blur-3xl animate-aurora-drift" style={{ animationDelay: "-6s" }} />
+            <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-emerald-200/50 blur-3xl animate-aurora-drift" />
+            <div className="absolute -bottom-24 -left-16 h-60 w-60 rounded-full bg-brand-200/50 blur-3xl animate-aurora-drift" style={{ animationDelay: "-6s" }} />
           </div>
         )}
         <div className="relative flex items-center justify-between mb-4">
@@ -187,47 +189,47 @@ export default function CallInProgressPage({ params }) {
         </div>
         <div className="relative text-[15px] font-medium text-ink-100 mb-0.5 flex items-center gap-2">
           <svg className="h-4 w-4 text-ink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>{call?.customer?.number || "연결 중..."}</span>
+          <span className="font-mono">{call?.customer?.number || t("call.connecting.num")}</span>
         </div>
         <div className="relative text-xs text-ink-400">
-          My Side Call AI가 대신 전화를 진행 중이에요.
+          {t("call.sub")}
         </div>
       </div>
 
       {/* Pending Question — 래치: 답하거나 닫기 전까지 유지 */}
       {pending && (
         <div
-          className="mt-4 relative overflow-hidden rounded-2xl border border-amber-400/40 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-amber-500/10 p-5 animate-spring-in"
-          style={{ boxShadow: "0 0 0 4px rgba(251,191,36,0.1), 0 12px 32px -12px rgba(251,191,36,0.3)" }}
+          className="mt-4 relative overflow-hidden rounded-2xl border border-amber-300 bg-amber-50 p-5 animate-spring-in"
+          style={{ boxShadow: "0 0 0 4px rgba(251,191,36,0.15), 0 12px 32px -12px rgba(251,191,36,0.35)" }}
         >
-          <div aria-hidden className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(251,191,36,0.08)_50%,transparent_70%)] bg-[length:200%_100%] animate-shimmer pointer-events-none" />
+          <div aria-hidden className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.5)_50%,transparent_70%)] bg-[length:200%_100%] animate-shimmer pointer-events-none" />
           <div className="relative flex items-center justify-between gap-2 mb-2">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-70 animate-pulse-ring" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-400" />
               </span>
-              <h3 className="text-[13px] font-semibold text-amber-200 tracking-wide uppercase">
-                AI가 확인이 필요해요
+              <h3 className="text-[13px] font-semibold text-amber-800 tracking-wide uppercase">
+                {t("call.ask.title")}
               </h3>
             </div>
             <button
               onClick={dismissPending}
-              className="text-ink-500 hover:text-ink-200 text-lg leading-none px-1"
-              title="닫기 (AI는 계속 대기)"
+              className="text-ink-500 hover:text-ink-100 text-lg leading-none px-1"
+              title={t("call.ask.close")}
             >
               ✕
             </button>
           </div>
           {pending.context && (
             <div className="relative text-[11px] text-ink-300 mb-2">
-              <span className="text-ink-500">상대 상황:</span>{" "}
+              <span className="text-ink-500">{t("call.ask.context")}</span>{" "}
               <span className="italic">{pending.context}</span>
             </div>
           )}
-          <div className="relative rounded-xl border border-amber-400/20 bg-ink-900/60 p-4 mb-3">
-            <div className="text-[11px] font-semibold text-amber-300/80 mb-1 uppercase tracking-wide">
-              ? 질문
+          <div className="relative rounded-xl border border-amber-200 bg-paper p-4 mb-3">
+            <div className="text-[11px] font-semibold text-amber-700 mb-1 uppercase tracking-wide">
+              {t("call.ask.q")}
             </div>
             <div className="text-[15px] text-ink-100 leading-relaxed">
               {pending.question}
@@ -239,7 +241,7 @@ export default function CallInProgressPage({ params }) {
               value={interjectText}
               onChange={(e) => setInterjectText(e.target.value)}
               rows={2}
-              placeholder="한국어로 답해주세요. 예: 금요일 오후 4시 좋아요 / 아니요, 토요일만 가능합니다"
+              placeholder={t("call.ask.ph")}
               className="input resize-none text-sm"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
@@ -257,12 +259,12 @@ export default function CallInProgressPage({ params }) {
                 {interjectLoading ? (
                   <>
                     <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                    <span>전달 중...</span>
+                    <span>{t("call.ask.sending")}</span>
                   </>
                 ) : (
                   <>
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                    <span>AI에게 답변 전달</span>
+                    <span>{t("call.ask.send")}</span>
                   </>
                 )}
               </button>
@@ -274,9 +276,9 @@ export default function CallInProgressPage({ params }) {
                 }
                 disabled={interjectLoading}
                 className="btn-secondary px-3.5 py-2.5 text-xs"
-                title="모르는 정보일 때"
+                title={t("call.ask.dontknow.title")}
               >
-                모름
+                {t("call.ask.dontknow")}
               </button>
               <button
                 onClick={() =>
@@ -286,30 +288,28 @@ export default function CallInProgressPage({ params }) {
                 }
                 disabled={interjectLoading}
                 className="btn-secondary px-3.5 py-2.5 text-xs"
-                title="메모 남기고 자연스럽게 마무리"
+                title={t("call.ask.note.title")}
               >
-                📝 메모하고 마무리
+                {t("call.ask.note")}
               </button>
             </div>
-            <p className="text-[11px] text-ink-500">
-              ⌘ Cmd+Enter로 빠르게 전송. 약 40초간 답이 없으면 AI가 &quot;메모 남기고 다시 연락드리겠다&quot;고 말하고 자연스럽게 마무리해요.
-            </p>
+            <p className="text-[11px] text-ink-500">{t("call.ask.foot")}</p>
           </div>
         </div>
       )}
 
       {/* Latest exchange summary */}
-      <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+      <div className="mt-4 rounded-2xl border border-line bg-paper p-5 shadow-soft animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
         <h3 className="text-[11px] font-semibold text-ink-500 mb-3 uppercase tracking-wider">
-          지금 대화 중이에요
+          {t("call.now")}
         </h3>
         {lastAssistant && (
           <div className="mb-3">
-            <div className="text-[11px] font-medium text-brand-300 mb-1 flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
-              My Side Call (AI)
+            <div className="text-[11px] font-medium text-brand-600 mb-1 flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+              {t("call.ai")}
             </div>
-            <div className="rounded-xl border border-brand-500/20 bg-brand-500/[0.06] p-3 text-sm text-ink-100 leading-relaxed">
+            <div className="rounded-xl border border-brand-200 bg-brand-50 p-3 text-sm text-ink-100 leading-relaxed">
               {lastAssistant.message || lastAssistant.content}
             </div>
           </div>
@@ -317,36 +317,34 @@ export default function CallInProgressPage({ params }) {
         {lastUser && (
           <div>
             <div className="text-[11px] font-medium text-ink-400 mb-1 flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-ink-400" />
-              상대방
+              <span className="h-1.5 w-1.5 rounded-full bg-ink-600" />
+              {t("call.them")}
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-ink-200 leading-relaxed">
+            <div className="rounded-xl border border-line bg-ink-950 p-3 text-sm text-ink-200 leading-relaxed">
               {lastUser.message || lastUser.content}
             </div>
           </div>
         )}
         {!lastAssistant && !lastUser && (
           <div className="text-sm text-ink-500 italic">
-            상대방과 연결을 기다리는 중...
+            {t("call.waiting")}
           </div>
         )}
       </div>
 
       {/* Manual intervene (when no pending) */}
       {!pending && (
-        <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+        <div className="mt-4 rounded-2xl border border-line bg-paper p-5 shadow-soft animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
           <h3 className="text-sm font-semibold text-ink-100 mb-1 flex items-center gap-2">
-            <span className="text-brand-400">⚡</span>
-            실시간 개입 <span className="font-normal text-ink-500">(한국어로 전달)</span>
+            <span className="text-brand-500">⚡</span>
+            {t("call.step.title")}
           </h3>
-          <p className="text-xs text-ink-500 mb-3">
-            AI에게 추가 정보를 주거나 방향을 바꿀 게 있을 때. AI가 자연스럽게 영어로 반영합니다.
-          </p>
+          <p className="text-xs text-ink-500 mb-3">{t("call.step.sub")}</p>
           <textarea
             value={interjectText}
             onChange={(e) => setInterjectText(e.target.value)}
             rows={2}
-            placeholder="예) 아, 그리고 창가 자리로 부탁드린다고 추가해주세요"
+            placeholder={t("call.step.ph")}
             className="input resize-none text-sm"
           />
           <div className="flex gap-2 mt-3">
@@ -355,25 +353,24 @@ export default function CallInProgressPage({ params }) {
               disabled={interjectLoading || !interjectText.trim()}
               className="btn-primary flex-1 py-2.5 text-sm disabled:opacity-50"
             >
-              {interjectLoading ? "전달 중..." : "AI에게 전달"}
+              {interjectLoading ? t("call.step.sending") : t("call.step.send")}
             </button>
             <button
               disabled
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2.5 text-xs text-ink-500 cursor-not-allowed"
-              title="v1.1에서 지원 예정"
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-4 py-2.5 text-xs text-ink-500 cursor-not-allowed"
             >
-              📷 카메라 <span className="text-[10px]">(예정)</span>
+              {t("call.camera")} <span className="text-[10px]">{t("call.camera.soon")}</span>
             </button>
           </div>
         </div>
       )}
 
       {/* Full transcript */}
-      <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-        <div className="px-5 py-3 border-b border-white/5 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-ink-100">전체 스크립트</h3>
+      <div className="mt-4 rounded-2xl border border-line bg-paper shadow-soft animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+        <div className="px-5 py-3 border-b border-line flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-ink-100">{t("call.transcript")}</h3>
           <span className="text-[10px] font-mono text-ink-500">
-            {visibleMessages.length} 메시지
+            {visibleMessages.length} {t("call.msgs")}
           </span>
         </div>
         <div
@@ -382,7 +379,7 @@ export default function CallInProgressPage({ params }) {
         >
           {visibleMessages.length === 0 && (
             <div className="text-ink-500 italic text-xs">
-              통화가 시작되면 스크립트가 여기에 표시됩니다.
+              {t("call.transcript.empty")}
             </div>
           )}
           {visibleMessages.map((m, i) => {
@@ -395,10 +392,10 @@ export default function CallInProgressPage({ params }) {
               >
                 <div
                   className={`text-[10px] font-semibold mb-1 uppercase tracking-wider ${
-                    isAI ? "text-brand-300" : "text-ink-400"
+                    isAI ? "text-brand-600" : "text-ink-400"
                   }`}
                 >
-                  {isAI ? "My Side Call" : "상대방"}
+                  {isAI ? "My Side Call" : t("call.them")}
                 </div>
                 <div
                   className={`text-[13px] leading-relaxed ${
@@ -416,14 +413,14 @@ export default function CallInProgressPage({ params }) {
       {/* End call */}
       <button
         onClick={handleEnd}
-        className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-300 hover:bg-red-500/20 hover:border-red-500/60 transition-all"
+        className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-100 hover:border-red-300 transition-all"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.07 4.18 2 2 0 0 1 5.06 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L9.04 9.91"/><line x1="23" y1="1" x2="1" y2="23"/></svg>
-        통화 종료
+        {t("call.end")}
       </button>
 
       {error && (
-        <div className="mt-3 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3 text-sm text-red-200">
+        <div className="mt-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           <span>⚠️</span>
           <span>{error}</span>
         </div>

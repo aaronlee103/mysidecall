@@ -90,16 +90,27 @@ function cleanMessages(messages) {
 const PHONE_GUARD =
   "Voice rules: everything you say is spoken aloud to the other party on the phone, who speaks English. " +
   "Speak English only, one or two short sentences per turn, no markdown, no lists, no emojis. " +
-  "Korean is allowed only inside the arguments of the ask_client_question tool.";
+  "The client's language is allowed only inside the arguments of the ask_client_question tool.";
 
-function withPhoneGuard(messages) {
-  if (!messages.length) return [{ role: "system", content: PHONE_GUARD }];
+const LANG_NAMES = { en: "English", ko: "Korean", es: "Spanish", ja: "Japanese", zh: "Chinese" };
+
+// The client picked "my language" when creating the call (metadata.lang). Questions
+// to the client (ask_client_question.question_ko) must be written in that language;
+// the field name says _ko for historical reasons, the content follows the client.
+function clientLangLine(lang) {
+  const name = LANG_NAMES[lang] || LANG_NAMES.ko;
+  return `Client language: ${name}. Write ask_client_question.question_ko in ${name} (not necessarily Korean despite the field name). The phone conversation itself stays in English.`;
+}
+
+function withPhoneGuard(messages, lang) {
+  const guard = PHONE_GUARD + " " + clientLangLine(lang);
+  if (!messages.length) return [{ role: "system", content: guard }];
   const first = messages[0];
   if (first.role === "system" && typeof first.content === "string") {
     if (first.content.includes("Voice rules:")) return messages;
-    return [{ ...first, content: first.content + "\n\n" + PHONE_GUARD }, ...messages.slice(1)];
+    return [{ ...first, content: first.content + "\n\n" + guard }, ...messages.slice(1)];
   }
-  return [{ role: "system", content: PHONE_GUARD }, ...messages];
+  return [{ role: "system", content: guard }, ...messages];
 }
 
 export async function POST(req) {
@@ -112,6 +123,7 @@ export async function POST(req) {
   catch { return new Response(JSON.stringify({ error: "invalid JSON" }), { status: 400 }); }
 
   const callId = payload?.call?.id || null;
+  const clientLang = payload?.call?.metadata?.lang || payload?.call?.assistantOverrides?.variableValues?.client_language || "ko";
   const body = {};
   for (const [k, v] of Object.entries(payload || {})) if (!VAPI_ONLY.has(k)) body[k] = v;
 
@@ -127,7 +139,7 @@ export async function POST(req) {
   // (observed: 1,498 reasoning tokens, no words). "minimal" measured ~1.5 s.
   if (body.reasoning_effort == null) body.reasoning_effort = process.env.META_REASONING || "minimal";
   delete body.stream_options;
-  body.messages = withPhoneGuard(body.messages);
+  body.messages = withPhoneGuard(body.messages, clientLang);
 
   let key;
   try { key = metaKey(); }

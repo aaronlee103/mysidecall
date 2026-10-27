@@ -37,6 +37,7 @@ export async function createOutboundCall({
   briefing,
   voice,
   metadata,
+  clientLang,
 }) {
   const body = {
     assistantId: process.env.VAPI_ASSISTANT_ID,
@@ -51,6 +52,7 @@ export async function createOutboundCall({
         user_name: userName || "my client",
         briefing_content: briefing || "",
         attachment_summaries: "None",
+        client_language: clientLang || "ko",
       },
       ...(voice ? { voice: { provider: "vapi", voiceId: voice } } : {}),
     },
@@ -71,7 +73,7 @@ export async function getCall(callId) {
 export async function injectMessage(callId, userMessageKo) {
   // 한국어 사용자 메시지를 시스템 메시지로 AI에게 전달
   // AI가 맥락 파악해서 영어로 상대방에게 전달
-  const content = `The user has just provided you this information (originally in Korean, translated for you): "${userMessageKo}". Please use this information naturally in your next response to the other party.`;
+  const content = `The user has just provided you this information (in their own language; use the meaning): "${userMessageKo}". Please use this information naturally in your next response to the other party.`;
 
   return vapiFetch(`/call/${callId}/control`, {
     method: "POST",

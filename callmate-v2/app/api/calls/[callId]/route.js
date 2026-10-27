@@ -104,6 +104,7 @@ export async function GET(req, { params }) {
       summary: call.summary || null,
       customer: call.customer,
       recordingUrl: call.recordingUrl,
+      metadata: { lang: call.metadata?.lang || null }, // client language chosen at creation
       pendingQuestion, // ← AI가 지금 클라이언트에게 물어보고 있는 질문
     };
 
