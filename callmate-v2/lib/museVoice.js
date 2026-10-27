@@ -1,10 +1,10 @@
 // Muse Voice Transcribe (Meta Model API) — batch transcription over the realtime socket.   [NEW — hackathon]
 //
-// Meta's ASR is realtime-only: wss://api.meta.ai/v1/asr/realtime, PCM16 mono 16 kHz,
-// base64 chunks ≤ 4 s each. To re-transcribe a finished call we decode the WAV, push
-// the audio through the socket as fast as it accepts it, collect the
-// `conversation.item.input_audio_transcription.completed` events, and return the
-// segments in order. Node ≥ 22 has a global WebSocket, so no extra dependency.
+// Meta's ASR is realtime-only: wss://api.meta.ai/v1/asr/realtime, PCM16 mono 16/24 kHz,
+// raw binary frames after a JSON handshake. To re-transcribe a finished call we decode
+// the WAV, push the audio through the socket faster than realtime, collect the
+// `speechComplete` events, and return the segments in order. Node ≥ 22 has a global
+// WebSocket, so no extra dependency.
 
 import { META_BASE, metaKey } from "@/lib/meta";
 
@@ -51,58 +51,87 @@ export function toMono16k(data, channels, sampleRate, targetRate = 16000) {
 }
 
 /**
- * Transcribe PCM16 mono 16 kHz audio. Returns { segments: [{ text, order }], text, seconds }.
- * `language` is an optional hint ("en", "ko", ...).
+ * Transcribe PCM16 mono 16 kHz audio with Muse Voice Transcribe.
+ * Native protocol (as used by Pipecat's Meta STT service):
+ *   1. open wss://api.meta.ai/v1/asr/realtime
+ *   2. first frame = JSON handshake with the key inside: {authorization:{accessToken:"Bearer …"}, audioEncoding:"PCM_16KHZ", model, mode:"ENDPOINTING", partialMode:"CUMULATIVE"}
+ *   3. server acks with {sessionId}
+ *   4. send raw PCM16 bytes as binary frames; {"type":"endStream"} when done
+ *   5. events: speechStart / transcript (partials) / speechEnd / speechComplete {transcript, turnId} / error
+ * Returns { segments: [{ text, turnId }], text, seconds }.
  */
-export function transcribePcm16({ pcm, language, timeoutMs = 50000 }) {
+export function transcribePcm16({ pcm, language, timeoutMs = 50000, diarize = false }) {
   return new Promise((resolve, reject) => {
     const key = metaKey();
-    const ws = new WebSocket(ASR_URL, { headers: { Authorization: `Bearer ${key}` } });
+    const ws = new WebSocket(ASR_URL);
+    ws.binaryType = "arraybuffer";
     const segments = [];
-    let seconds = 0, done = false, sent = false;
+    let done = false, acked = false, sentAll = false, lastPartial = "";
     const finish = (err) => {
       if (done) return; done = true; clearTimeout(timer);
       try { ws.close(); } catch {}
       if (err && !segments.length) return reject(err);
-      resolve({ segments, text: segments.map((s) => s.text).join(" ").replace(/\s+/g, " ").trim(), seconds });
+      // In ENDPOINTING mode the last turn may not be closed by VAD; keep the last partial if it adds words.
+      if (lastPartial && !segments.some((sg) => sg.text === lastPartial)) segments.push({ text: lastPartial, turnId: null, partial: true });
+      resolve({ segments, text: segments.map((sg) => sg.text).join(" ").replace(/\s+/g, " ").trim(), seconds: pcm.length / 16000 });
     };
     const timer = setTimeout(() => finish(new Error("ASR timeout")), timeoutMs);
 
+    const streamAudio = () => {
+      // 100 ms frames of PCM16 @ 16 kHz = 3,200 bytes; send back-to-back (server buffers)
+      const step = 1600;
+      let i = 0;
+      const pump = () => {
+        let n = 0;
+        while (i < pcm.length && n < 50) {
+          const chunk = pcm.subarray(i, Math.min(i + step, pcm.length));
+          ws.send(Buffer.from(chunk.buffer, chunk.byteOffset, chunk.byteLength));
+          i += step; n++;
+        }
+        if (i < pcm.length) return setTimeout(pump, 20);
+        // trailing silence so the endpointer closes the final turn
+        ws.send(Buffer.alloc(16000 * 2 * 2));
+        ws.send(JSON.stringify({ type: "endStream" }));
+        sentAll = true;
+        setTimeout(() => finish(), Math.min(timeoutMs - 500, 6000));
+      };
+      pump();
+    };
+
     ws.onopen = () => {
-      ws.send(JSON.stringify({
-        type: "session.update",
-        session: {
-          audio: { input: { format: { type: "audio/pcm", rate: 16000, channels: 1 } } },
-          transcription: { model: ASR_MODEL, ...(language ? { language } : {}) },
-          turn_detection: { type: "server_vad" },
-        },
-      }));
-      // ≤ 4 s per append → 3 s chunks of PCM16 @16k = 96,000 bytes
-      const step = 16000 * 3;
-      for (let i = 0; i < pcm.length; i += step) {
-        const chunk = pcm.subarray(i, Math.min(i + step, pcm.length));
-        ws.send(JSON.stringify({ type: "input_audio_buffer.append", audio: Buffer.from(chunk.buffer, chunk.byteOffset, chunk.byteLength).toString("base64") }));
-      }
-      // 1.5 s of silence so server VAD closes the last turn, then commit
-      ws.send(JSON.stringify({ type: "input_audio_buffer.append", audio: Buffer.alloc(16000 * 3).toString("base64") }));
-      ws.send(JSON.stringify({ type: "input_audio_buffer.commit" }));
-      sent = true;
-      // give the server time to flush the final segment(s)
-      setTimeout(() => finish(), Math.min(timeoutMs - 1000, 4000 + (pcm.length / 16000) * 150));
+      const handshake = {
+        authorization: { accessToken: `Bearer ${key}` },
+        audioEncoding: "PCM_16KHZ",
+        model: ASR_MODEL,
+        mode: diarize ? "DIARIZATION" : "ENDPOINTING",
+        partialMode: "CUMULATIVE",
+        emitAudioProgress: false,
+        ...(language ? { languageBias: [language] } : {}),
+      };
+      ws.send(JSON.stringify(handshake));
     };
     ws.onmessage = (ev) => {
-      let msg; try { msg = JSON.parse(typeof ev.data === "string" ? ev.data : Buffer.from(ev.data).toString()); } catch { return; }
-      if (msg.type === "conversation.item.input_audio_transcription.completed") {
-        if (msg.transcript?.trim()) segments.push({ text: msg.transcript.trim(), itemId: msg.item_id || null });
-        if (msg.usage?.seconds) seconds += msg.usage.seconds;
-      } else if (msg.type === "error") {
-        console.error("[museVoice] error event:", JSON.stringify(msg).slice(0, 800));
-        finish(new Error(`ASR error: ${msg.error?.message || msg.error?.code || msg.error?.type || JSON.stringify(msg).slice(0, 200)}`));
-      } else if (process.env.META_ASR_DEBUG) {
-        console.log("[museVoice] event:", JSON.stringify(msg).slice(0, 300));
+      if (typeof ev.data !== "string") return;
+      let msg; try { msg = JSON.parse(ev.data); } catch { return; }
+      if (!acked) {
+        if (msg.sessionId) { acked = true; streamAudio(); return; }
+        return finish(new Error(`Meta STT rejected the session: ${msg.message || JSON.stringify(msg).slice(0, 200)}`));
+      }
+      switch (msg.type) {
+        case "transcript": if (msg.transcript) lastPartial = String(msg.transcript).trim(); break;
+        case "speechComplete":
+          if (msg.transcript?.trim()) segments.push({ text: String(msg.transcript).trim(), turnId: msg.turnId ?? null, speaker: msg.speaker ?? msg.label ?? null });
+          lastPartial = "";
+          break;
+        case "error":
+          console.error("[museVoice] error event:", JSON.stringify(msg).slice(0, 800));
+          finish(new Error(`ASR error: ${msg.message || JSON.stringify(msg).slice(0, 200)}`));
+          break;
+        default:
+          if (process.env.META_ASR_DEBUG) console.log("[museVoice] event:", JSON.stringify(msg).slice(0, 300));
       }
     };
     ws.onerror = (e) => finish(new Error(`ASR socket error${e?.message ? ": " + e.message : ""}`));
-    ws.onclose = () => { if (sent) finish(); else finish(new Error("ASR socket closed before audio was sent")); };
+    ws.onclose = (e) => { if (sentAll || segments.length) finish(); else finish(new Error(`ASR socket closed (${e?.code || "?"}) before audio was sent`)); };
   });
 }
