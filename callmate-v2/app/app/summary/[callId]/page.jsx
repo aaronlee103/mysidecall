@@ -55,6 +55,8 @@ export default function CallSummaryPage({ params }) {
   const ok = ["ended", "assistant-ended-call", "customer-ended-call"].includes(call?.endedReason);
   const locale = uiLang === "ko" ? "ko-KR" : "en-US";
   const activeLang = brief?.lang || briefLang || call?.metadata?.lang || "ko";
+  // Only what was actually said on the line — the system prompt and tool traffic stay out of the client's view.
+  const spoken = (call?.messages || []).filter((m) => (m.role === "assistant" || m.role === "bot" || m.role === "user") && (m.message || m.content));
 
   if (error) {
     return <div className="max-w-2xl mx-auto"><div className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"><span>⚠️</span><span>{error}</span></div></div>;
@@ -153,7 +155,7 @@ export default function CallSummaryPage({ params }) {
       {/* Actions */}
       <div className="grid md:grid-cols-2 gap-3 stagger">
         {call.recordingUrl && (
-          <a href={call.recordingUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary py-3">
+          <a href={`/api/calls/${callId}/recording`} target="_blank" rel="noopener noreferrer" className="btn-secondary py-3">
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             {t("sum.listen")}
           </a>
@@ -164,21 +166,25 @@ export default function CallSummaryPage({ params }) {
         </Link>
       </div>
 
+      {call.recordingUrl && (
+        <audio controls preload="none" src={`/api/calls/${callId}/recording`} className="w-full h-10 rounded-full animate-fade-in-up" />
+      )}
+
       {/* Full transcript */}
       <div className="rounded-2xl border border-line bg-paper shadow-soft animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
         <div className="px-5 py-3 border-b border-line flex items-center justify-between">
           <h3 className="text-sm font-semibold text-ink-100">{t("sum.transcript")}</h3>
-          <span className="text-[10px] font-mono text-ink-500">{(call.messages || []).length} {t("sum.msgs")}</span>
+          <span className="text-[10px] font-mono text-ink-500">{spoken.length} {t("sum.msgs")}</span>
         </div>
         <div className="p-5 space-y-3 text-sm max-h-96 overflow-y-auto">
-          {(call.messages || []).map((m, i) => {
+          {spoken.map((m, i) => {
             const isAI = m.role === "assistant" || m.role === "bot";
             return (
               <div key={i} className="animate-fade-in-up" style={{ animationDelay: `${Math.min(i * 0.02, 0.3)}s` }}>
                 <div className={`text-[10px] font-semibold mb-1 uppercase tracking-wider ${isAI ? "text-brand-600" : m.role === "user" ? "text-ink-400" : "text-ink-500"}`}>
                   {isAI ? "My Side Call" : m.role === "user" ? t("sum.them") : t("sum.system")}
                 </div>
-                <div className={`text-[13px] leading-relaxed ${isAI ? "text-ink-100" : "text-ink-300"}`}>{m.message}</div>
+                <div className={`text-[13px] leading-relaxed ${isAI ? "text-ink-100" : "text-ink-300"}`}>{m.message || m.content}</div>
               </div>
             );
           })}
