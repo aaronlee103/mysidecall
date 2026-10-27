@@ -96,7 +96,10 @@ export function transcribePcm16({ pcm, language, timeoutMs = 50000 }) {
         if (msg.transcript?.trim()) segments.push({ text: msg.transcript.trim(), itemId: msg.item_id || null });
         if (msg.usage?.seconds) seconds += msg.usage.seconds;
       } else if (msg.type === "error") {
-        finish(new Error(`ASR error: ${msg.error?.message || msg.error?.type || "unknown"}`));
+        console.error("[museVoice] error event:", JSON.stringify(msg).slice(0, 800));
+        finish(new Error(`ASR error: ${msg.error?.message || msg.error?.code || msg.error?.type || JSON.stringify(msg).slice(0, 200)}`));
+      } else if (process.env.META_ASR_DEBUG) {
+        console.log("[museVoice] event:", JSON.stringify(msg).slice(0, 300));
       }
     };
     ws.onerror = (e) => finish(new Error(`ASR socket error${e?.message ? ": " + e.message : ""}`));
