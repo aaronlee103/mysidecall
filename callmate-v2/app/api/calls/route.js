@@ -1,7 +1,35 @@
 import { NextResponse } from "next/server";
-import { createOutboundCall } from "@/lib/vapi";
+import { createOutboundCall, listCalls } from "@/lib/vapi";
+import { getViewer } from "@/lib/viewer";
+
+export async function GET() {
+  const viewer = await getViewer();
+  if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
+  try {
+    const all = await listCalls({ limit: 100 });
+    const mine = (Array.isArray(all) ? all : []).filter((c) => viewer.isAdmin || c?.metadata?.userId === viewer.id);
+    const rows = mine.map((c) => ({
+      id: c.id,
+      status: c.status,
+      endedReason: c.endedReason || null,
+      createdAt: c.createdAt,
+      startedAt: c.startedAt || null,
+      endedAt: c.endedAt || null,
+      to: c.customer?.number || null,
+      briefing: c.assistantOverrides?.variableValues?.briefing_content || "",
+      summary: c.summary || null,
+      cost: c.cost ?? null,
+    }));
+    return NextResponse.json({ calls: rows, viewer: { id: viewer.id, name: viewer.name, isAdmin: viewer.isAdmin } });
+  } catch (err) {
+    console.error("Call list failed:", err);
+    return NextResponse.json({ error: err.message || "통화 목록 실패" }, { status: 500 });
+  }
+}
 
 export async function POST(req) {
+  const viewer = await getViewer();
+  if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
   try {
     const { phoneNumber, userName, briefing, voiceId } = await req.json();
 
@@ -20,9 +48,10 @@ export async function POST(req) {
 
     const call = await createOutboundCall({
       phoneNumber: normalized,
-      userName: userName || "my client",
+      userName: userName || viewer.name || "my client",
       briefing,
       voice: voiceId,
+      metadata: { userId: viewer.id, userName: userName || viewer.name || "", app: "mysidecall" },
     });
 
     return NextResponse.json({ callId: call.id });

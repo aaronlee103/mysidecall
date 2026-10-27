@@ -1,5 +1,6 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -26,6 +27,20 @@ function NewCallForm() {
   const [voiceId, setVoiceId] = useState("Elliot");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { data: session } = useSession();
+
+  // Landing page hands over a draft via sessionStorage; Facebook session fills the name.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("msc_draft");
+      if (raw) { const d = JSON.parse(raw); if (d?.briefing && !briefing) setBriefing(d.briefing); sessionStorage.removeItem("msc_draft"); }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    if (session?.user?.name && !userName) setUserName(session.user.name.split(" ")[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
   const canSubmit =
     userName.trim() && briefing.trim() && phoneNumber.trim() && consent && !loading;

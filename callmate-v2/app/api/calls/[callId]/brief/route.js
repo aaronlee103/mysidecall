@@ -8,6 +8,7 @@
 import { NextResponse } from "next/server";
 import { getCall } from "@/lib/vapi";
 import { sparkChat } from "@/lib/meta";
+import { getViewer, ownsCall } from "@/lib/viewer";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -42,10 +43,13 @@ function transcriptText(call) {
 export async function GET(req, { params }) {
   const { callId } = params;
   const force = new URL(req.url).searchParams.get("refresh") === "1";
-  if (!force && cache.has(callId)) return NextResponse.json({ cached: true, ...cache.get(callId) });
+  const viewer = await getViewer();
+  if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
 
   try {
     const call = await getCall(callId);
+    if (!ownsCall(viewer, call)) return NextResponse.json({ error: "not your call" }, { status: 403 });
+    if (!force && cache.has(callId)) return NextResponse.json({ cached: true, ...cache.get(callId) });
     if (call.status !== "ended") {
       return NextResponse.json({ error: "call not ended yet", status: call.status }, { status: 409 });
     }

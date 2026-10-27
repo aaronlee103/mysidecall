@@ -36,6 +36,7 @@ export async function createOutboundCall({
   userName,
   briefing,
   voice,
+  metadata,
 }) {
   const body = {
     assistantId: process.env.VAPI_ASSISTANT_ID,
@@ -43,6 +44,8 @@ export async function createOutboundCall({
     customer: {
       number: phoneNumber,
     },
+    // Who asked for this call (Facebook user id) — how the dashboard finds "my calls" without a DB.
+    ...(metadata ? { metadata } : {}),
     assistantOverrides: {
       variableValues: {
         user_name: userName || "my client",
@@ -90,4 +93,11 @@ export async function endCall(callId) {
       type: "end-call",
     }),
   });
+}
+
+// 최근 통화 목록 (이 어시스턴트 기준). 대시보드가 metadata.userId 로 "내 통화"만 거른다.
+export async function listCalls({ limit = 100 } = {}) {
+  const q = new URLSearchParams({ limit: String(limit) });
+  if (process.env.VAPI_ASSISTANT_ID) q.set("assistantId", process.env.VAPI_ASSISTANT_ID);
+  return vapiFetch(`/call?${q.toString()}`);
 }

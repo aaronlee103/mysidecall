@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Providers from "@/app/components/Providers";
+import UserMenu from "@/app/components/UserMenu";
 
 export const metadata = {
   title: "My Side Call App",
@@ -7,6 +9,7 @@ export const metadata = {
 
 export default function AppLayout({ children }) {
   return (
+    <Providers>
     <div className="relative min-h-screen bg-ink-950">
       {/* Ambient background */}
       <div
@@ -54,10 +57,12 @@ export default function AppLayout({ children }) {
             >
               새 통화
             </Link>
+            <UserMenu />
           </nav>
         </div>
       </header>
       <main className="relative mx-auto max-w-5xl px-6 py-10">{children}</main>
     </div>
+    </Providers>
   );
 }

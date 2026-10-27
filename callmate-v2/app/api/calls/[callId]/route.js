@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCall } from "@/lib/vapi";
 import { getPending } from "@/lib/pendingStore";
+import { getViewer, ownsCall } from "@/lib/viewer";
 
 // 메시지 배열에서 "지금 클라이언트(=Aaron님) 답변을 기다리는 중인 질문" 추출.
 // 로직: 마지막 ask_client_question 툴 콜을 찾고, 그 뒤에
@@ -72,7 +73,10 @@ function extractPendingQuestion(messages) {
 export async function GET(req, { params }) {
   try {
     const { callId } = params;
+    const viewer = await getViewer();
+    if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
     const call = await getCall(callId);
+    if (!ownsCall(viewer, call)) return NextResponse.json({ error: "not your call" }, { status: 403 });
 
     // 프론트엔드가 필요한 필드만 추출
     const messages = call.messages || [];

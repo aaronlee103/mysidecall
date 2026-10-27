@@ -1,4 +1,5 @@
 import Link from "next/link";
+import RecentCalls from "@/app/components/RecentCalls";
 
 const templates = [
   {
@@ -100,15 +101,7 @@ export default function Dashboard() {
         <h2 className="text-lg font-semibold tracking-tight text-ink-100 mb-4">
           최근 통화
         </h2>
-        <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.01] px-6 py-10 text-center">
-          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-ink-400">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <p className="text-[14px] text-ink-300 mb-1">아직 통화 기록이 없어요</p>
-          <p className="text-xs text-ink-500">
-            첫 통화를 시작해보세요. 녹음과 요약이 여기에 저장됩니다.
-          </p>
-        </div>
+        <RecentCalls />
       </section>
 
       {/* Beta free banner */}
