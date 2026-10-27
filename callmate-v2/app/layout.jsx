@@ -1,20 +1,20 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "My Side Call — 영어 전화, 대신 걸어드려요",
+  title: "My Side Call — Your AI. Your Call. Any Language.",
   description:
-    "AI가 당신 대신 영어로 전화합니다. 한국어로 상황만 말해주세요. 중간에 끼어들어 지시하거나 답을 전달할 수 있어요.",
+    "Your AI makes the phone call for you, in English or any language, checks back with you mid-call, and summarizes it in your language.",
   openGraph: {
     title: "My Side Call",
-    description: "AI가 대신 거는 영어 전화 — 중간에 끼어들어 조율 가능",
+    description: "Your AI. Your Call. Any Language.",
   },
   twitter: { card: "summary_large_image" },
-  themeColor: "#09090b",
+  themeColor: "#faf6ef",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className="dark">
+    <html lang="en" className="dark">
       <body className="min-h-screen bg-ink-950 text-ink-100 antialiased selection:bg-brand-500/40">
         {children}
       </body>
