@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useLang } from "@/app/components/Lang";
 import { SUMMARY_LANGS, readSummaryLang } from "@/lib/i18n";
+import DocumentPhoto from "@/app/components/DocumentPhoto";
 
 const VOICES = [
   { id: "Elliot", emoji: "👔" },
@@ -26,6 +27,7 @@ function NewCallForm() {
   const [voiceId, setVoiceId] = useState("Elliot");
   const [lang, setLang] = useState("en");          // summary / mid-call question language
   const [langTouched, setLangTouched] = useState(false);
+  const [attachments, setAttachments] = useState("");   // document summary that rides along on the call
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { data: session } = useSession();
@@ -72,7 +74,7 @@ function NewCallForm() {
       const res = await fetch("/api/calls", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName, briefing, phoneNumber, voiceId, lang }),
+        body: JSON.stringify({ userName, briefing, phoneNumber, voiceId, lang, attachments }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -105,6 +107,18 @@ function NewCallForm() {
         <Field label={t("new.brief")} hint={t("new.brief.hint")}>
           <textarea value={briefing} onChange={(e) => setBriefing(e.target.value)} rows={8} placeholder={t("new.brief.ph")} className="input font-normal leading-relaxed" required />
         </Field>
+
+        {/* Photo of a bill / letter → Muse Spark reads it → fills briefing + phone */}
+        <DocumentPhoto
+          lang={lang}
+          onResult={(doc) => {
+            const lines = [doc.suggestedBriefing, doc.questionsToAsk?.length ? "- " + doc.questionsToAsk.join("\n- ") : ""].filter(Boolean).join("\n");
+            setBriefing((b) => (b.trim() ? b.trimEnd() + "\n\n" + lines : lines));
+            if (doc.phone && !phoneNumber.trim()) setPhoneNumber(doc.phone);
+            const facts = [doc.sender && `From: ${doc.sender}`, doc.amountDue && `Amount due: ${doc.amountDue}`, doc.dueDate && `Due: ${doc.dueDate}`, doc.accountRef && `Reference: ${doc.accountRef}`].filter(Boolean).join("; ");
+            setAttachments(`Document (${doc.docType}): ${facts}. ${doc.keyPoints?.join(" ") || ""}`.trim());
+          }}
+        />
 
         <Field label={t("new.phone")} hint={t("new.phone.hint")}>
           <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="+1 415 555 1234" className="input font-mono" required />

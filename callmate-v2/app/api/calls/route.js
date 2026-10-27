@@ -32,7 +32,7 @@ export async function POST(req) {
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
   try {
-    const { phoneNumber, userName, briefing, voiceId, lang } = await req.json();
+    const { phoneNumber, userName, briefing, voiceId, lang, attachments } = await req.json();
     const clientLang = ["en", "ko", "es", "ja", "zh"].includes(lang) ? lang : "en";
 
     if (!phoneNumber || !briefing) {
@@ -54,6 +54,7 @@ export async function POST(req) {
       briefing,
       voice: voiceId,
       clientLang,
+      attachmentSummaries: typeof attachments === "string" ? attachments.slice(0, 4000) : "",
       metadata: { userId: viewer.id, userName: userName || viewer.name || "", app: "mysidecall", lang: clientLang },
     });
 
