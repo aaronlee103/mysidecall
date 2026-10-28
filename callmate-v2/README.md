@@ -22,9 +22,10 @@ The hackathon rules ask us to be explicit. Everything in the **New** column was 
 | Documents | — | **Photo of a bill / letter → Muse Spark vision** explains it in the client's language, pulls the number to call, drafts the briefing and rides along on the call as `attachment_summaries` (`app/api/documents/read`, `app/components/DocumentPhoto.jsx`) |
 | Sign-in & privacy | shared owner password | **Facebook Login** (Auth.js) — each user sees only their own calls, matched by Vapi call metadata, no database (`lib/auth.js`, `lib/viewer.js`, `middleware.js`, `/login`, `/privacy`) |
 | Landing & brand | dark template | New landing (cream/terracotta, EN/한국어), logo mark, app icons; the same design now runs through the app (`app/landing/*`, `public/brand/*`, `tailwind.config.js`) |
-| Agent connector | — | *(planned, day 4)* MCP server: `place_call`, `get_call_status`, `answer_question`, `end_call`, `call_owner` — any agent (including Muse) can make a real phone call |
-| Owner calls | — | *(planned, day 4)* `call_owner`: the agent phones its own owner — wake-up calls, check-ins, "your flight moved" |
-| Recordings | Vapi transcript only | *(planned, day 5)* re-transcription with **Muse Voice Transcribe** for a cleaner archive |
+| Agent connector | — | **MCP server** at `POST /api/mcp` (Streamable HTTP, `Authorization: Bearer msc_…`): `place_call`, `get_call`, `answer_question`, `end_call`, `call_owner`, `list_calls`. Keys are stateless HMAC tokens bound to one owner (`lib/agentKeys.js`); tools in `lib/agentTools.js`; key page `/app/agents` |
+| **Ask Muse** | — | **Muse Spark as the owner's agent with a phone** (`/app/muse`, `app/api/muse/chat`): "move my dentist appointment to 4 pm" → it places the call, polls, relays the AI's mid-call question, reports back. Same tools as the MCP server |
+| Owner calls | — | `call_owner`: the agent phones its own owner — wake-up calls, reminders, results. Future times use Vapi `schedulePlan`, no cron needed; the owner-call prompt swaps in via `assistantOverrides.model.messages` (still Muse Spark through our proxy) |
+| Recordings | Vapi transcript only; `recordingUrl` public | Recording proxy with Vapi auth (`/api/calls/:id/recording`) + **re-transcription with Muse Voice Transcribe** (`lib/museVoice.js`, `/api/calls/:id/transcribe`): WAV → PCM16 16 kHz → `wss://api.meta.ai/v1/asr/realtime` native protocol (JSON handshake, binary frames, `speechComplete`) |
 
 Commits after Oct 26 are the hackathon work; `git log --since=2026-10-26` shows exactly what was added.
 
@@ -49,6 +50,18 @@ Korean briefing ──▶ POST /api/calls ──▶ Vapi dials (Twilio)
 * `app/api/llm/chat/completions/route.js` — Vapi "custom-llm" endpoint. If Meta is unreachable it still streams one short spoken sentence so the line never goes dead.
 * `app/api/calls/[callId]/brief/route.js` — post-call brief in the client's language (JSON mode, `?lang=` override).
 * `app/api/documents/read/route.js` — bill/letter photo → Muse Spark vision → explanation, phone number, draft briefing.
+* `app/api/mcp/route.js` — MCP server (any agent). `lib/agentTools.js` — the phone as six tools. `lib/agentKeys.js` — HMAC agent keys.
+* `app/api/muse/chat/route.js` — Ask Muse: Muse Spark + tools loop (max 5 steps per turn).
+* `lib/museVoice.js` + `app/api/calls/[callId]/transcribe/route.js` — Muse Voice Transcribe re-transcription.
+
+### Connect an agent (MCP)
+
+1. Sign in → `/app/agents` → save your phone number (for owner calls) → **Create agent key**.
+2. Claude Desktop / claude.ai custom connector:
+```json
+{ "mcpServers": { "my-side-call": { "url": "https://mysidecall.com/api/mcp", "headers": { "Authorization": "Bearer msc_…" } } } }
+```
+3. Ask your agent: *"Call +1 201 555 0123 and move my dentist appointment tomorrow from 3 to 4 pm."* It calls `place_call`, polls `get_call`, answers the AI's mid-call question through you, and reads you the result. *"Wake me up at 7 am tomorrow"* → `call_owner` with `at`.
 * `app/api/admin/setup-assistant/route.js` — `?apply=meta` / `?apply=openai`.
 
 ## Run it
@@ -104,7 +117,9 @@ Next.js 14 (App Router, JS) · Tailwind · Vapi (telephony, STT/TTS) · **Meta M
 | `/app` | dashboard — my calls |
 | `/app/new` | briefing form, "my language", bill/letter photo |
 | `/app/call/[id]` | live call: transcript, the AI's questions, your answers |
-| `/app/summary/[id]` | brief in your language + English transcript + recording |
+| `/app/summary/[id]` | brief in your language + recording + Muse Voice clean transcript |
+| `/app/muse` | Ask Muse — Muse Spark with a phone |
+| `/app/agents` | agent key + MCP setup |
 | `/privacy`, `/terms` | policies |
 
 ## License
