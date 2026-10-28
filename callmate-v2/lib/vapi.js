@@ -30,6 +30,19 @@ async function vapiFetch(path, options = {}) {
   return res.json();
 }
 
+// Voice selection. Vapi's built-in voices are `vapi/<Name>`; ElevenLabs voices (more
+// natural, billed through Vapi) are referenced by id. Accepts "Elliot", "vapi:Elliot",
+// "11labs:<voiceId>" or a full voice object.   [NEW — hackathon]
+export function voiceSpec(voice) {
+  if (!voice) return undefined;
+  if (typeof voice === "object") return voice;
+  const [prov, id] = voice.includes(":") ? voice.split(":", 2) : ["vapi", voice];
+  if (prov === "11labs") return { provider: "11labs", voiceId: id, model: process.env.ELEVENLABS_MODEL || "eleven_turbo_v2_5", stability: 0.5, similarityBoost: 0.75 };
+  if (prov === "cartesia") return { provider: "cartesia", voiceId: id };
+  if (prov === "openai") return { provider: "openai", voiceId: id };
+  return { provider: "vapi", voiceId: id };
+}
+
 // 아웃바운드 전화 시작
 export async function createOutboundCall({
   phoneNumber,
@@ -39,6 +52,8 @@ export async function createOutboundCall({
   metadata,
   clientLang,
   attachmentSummaries,
+  earliestAt,          // ISO datetime → Vapi schedules the call instead of dialing now  [NEW — hackathon]
+  assistantOverridesExtra, // extra overrides merged in (e.g. a different system prompt for owner calls)
 }) {
   const body = {
     assistantId: process.env.VAPI_ASSISTANT_ID,
@@ -46,6 +61,7 @@ export async function createOutboundCall({
     customer: {
       number: phoneNumber,
     },
+    ...(earliestAt ? { schedulePlan: { earliestAt } } : {}),
     // Who asked for this call (Facebook user id) — how the dashboard finds "my calls" without a DB.
     ...(metadata ? { metadata } : {}),
     assistantOverrides: {
@@ -55,7 +71,8 @@ export async function createOutboundCall({
         attachment_summaries: attachmentSummaries || "None",
         client_language: clientLang || "ko",
       },
-      ...(voice ? { voice: { provider: "vapi", voiceId: voice } } : {}),
+      ...(voice ? { voice: voiceSpec(voice) } : {}),
+      ...(assistantOverridesExtra || {}),
     },
   };
 
@@ -103,4 +120,9 @@ export async function listCalls({ limit = 100 } = {}) {
   const q = new URLSearchParams({ limit: String(limit) });
   if (process.env.VAPI_ASSISTANT_ID) q.set("assistantId", process.env.VAPI_ASSISTANT_ID);
   return vapiFetch(`/call?${q.toString()}`);
+}
+
+// 어시스턴트 설정 조회 (owner-call 프롬프트 오버라이드에 모델 설정을 재사용)  [NEW — hackathon]
+export async function getAssistant(id = process.env.VAPI_ASSISTANT_ID) {
+  return vapiFetch(`/assistant/${id}`);
 }
