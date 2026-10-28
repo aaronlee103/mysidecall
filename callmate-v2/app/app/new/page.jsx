@@ -7,11 +7,13 @@ import { useLang } from "@/app/components/Lang";
 import { SUMMARY_LANGS, readSummaryLang } from "@/lib/i18n";
 import DocumentPhoto from "@/app/components/DocumentPhoto";
 
+// ElevenLabs voices (billed through Vapi — no extra key). Natural, conversational.
+// Ids are ElevenLabs' premade library voices; previews come from /api/voices when available.
 const VOICES = [
-  { id: "Elliot", emoji: "👔" },
-  { id: "Clara", emoji: "🎀" },
-  { id: "Emma", emoji: "💬" },
-  { id: "Nico", emoji: "🧢" },
+  { id: "11labs:nPczCjzI2devNBz1zQrb", name: "Brian", emoji: "👔" },   // male, warm, mid-40s
+  { id: "11labs:EXAVITQu4vr4xnSDxMaL", name: "Sarah", emoji: "🎀" },   // female, soft, professional
+  { id: "11labs:FGY2WhTYpPnrIDTdsKH5", name: "Laura", emoji: "💬" },   // female, upbeat
+  { id: "11labs:bIHbv24MWmeRgasZH58o", name: "Will", emoji: "🧢" },    // male, friendly, young
 ];
 
 function NewCallForm() {
@@ -24,7 +26,9 @@ function NewCallForm() {
   const [briefing, setBriefing] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [consent, setConsent] = useState(false);
-  const [voiceId, setVoiceId] = useState("Elliot");
+  const [voiceId, setVoiceId] = useState(VOICES[0].id);
+  const [previews, setPreviews] = useState({});   // voice id → preview url (from /api/voices)
+  const [playing, setPlaying] = useState(null);
   const [lang, setLang] = useState("en");          // summary / mid-call question language
   const [langTouched, setLangTouched] = useState(false);
   const [attachments, setAttachments] = useState("");   // document summary that rides along on the call
@@ -57,6 +61,21 @@ function NewCallForm() {
   }, []);
   // UI toggle follows into the summary language until the user picks one explicitly
   useEffect(() => { if (!langTouched) setLang((cur) => (cur === "en" || cur === "ko") ? uiLang : cur); }, [uiLang, langTouched]);
+  // Preview clips for the voice cards (ElevenLabs library via our server)
+  useEffect(() => {
+    fetch("/api/voices?provider=11labs").then((r) => r.json()).then((d) => {
+      const map = {};
+      for (const v of d.voices || []) if (v.previewUrl) map[`11labs:${v.id}`] = v.previewUrl;
+      setPreviews(map);
+    }).catch(() => {});
+  }, []);
+  const togglePreview = (id) => {
+    const url = previews[id]; if (!url) return;
+    if (playing?.id === id) { playing.audio.pause(); setPlaying(null); return; }
+    playing?.audio?.pause();
+    const audio = new Audio(url); audio.onended = () => setPlaying(null); audio.play().catch(() => {});
+    setPlaying({ id, audio });
+  };
   useEffect(() => {
     if (session?.user?.name && !userName) setUserName(session.user.name.split(" ")[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,9 +173,24 @@ function NewCallForm() {
                   onClick={() => setVoiceId(v.id)}
                   className={`group relative rounded-xl border p-3 text-left transition-all duration-300 ${active ? "border-brand-500 bg-brand-50 shadow-glow" : "border-line bg-paper hover:border-ink-700"}`}
                 >
-                  <div className="text-lg mb-1.5">{v.emoji}</div>
-                  <div className="text-sm font-medium text-ink-100">{v.id}</div>
-                  <div className="text-[11px] text-ink-500">{t(`voice.${v.id}`)}</div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-lg">{v.emoji}</span>
+                    {previews[v.id] && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => { e.stopPropagation(); togglePreview(v.id); }}
+                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); togglePreview(v.id); } }}
+                        className={`flex h-7 w-7 items-center justify-center rounded-full border text-[11px] transition-colors ${playing?.id === v.id ? "border-brand-500 bg-brand-500 text-white" : "border-line bg-paper text-ink-400 hover:border-brand-400 hover:text-brand-600"}`}
+                        aria-label={`Preview ${v.name}`}
+                        title={t("voice.preview")}
+                      >
+                        {playing?.id === v.id ? "■" : "▶"}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-sm font-medium text-ink-100">{v.name}</div>
+                  <div className="text-[11px] text-ink-500">{t(`voice.${v.name}`)}</div>
                   {active && (
                     <span className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-brand-500 text-white animate-scale-in">
                       <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7"/></svg>
