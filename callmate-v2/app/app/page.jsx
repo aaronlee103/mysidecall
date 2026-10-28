@@ -37,7 +37,7 @@ export default function Dashboard() {
               <span>{t("dash.cta")}</span>
               <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/" className="btn-secondary">{t("dash.home")}</Link>
+            <Link href="/#how" className="btn-secondary">{t("dash.home")}</Link>
           </div>
         </div>
       </section>

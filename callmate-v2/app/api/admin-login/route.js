@@ -53,3 +53,10 @@ export async function POST(req) {
   });
   return res;
 }
+
+// Sign out of the owner (legacy) cookie.  [NEW — hackathon]
+export async function DELETE() {
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set(ADMIN_COOKIE, "", { httpOnly: true, secure: true, sameSite: "strict", path: "/", maxAge: 0 });
+  return res;
+}

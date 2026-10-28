@@ -24,6 +24,8 @@ export const STR = {
     "nav.home": "Home",
     "nav.new": "New call",
     "nav.signout": "Sign out",
+    "nav.owner": "Owner mode",
+    "nav.owner.title": "Signed in with the owner password, not Facebook. Sign out to test the normal Facebook flow.",
     "lang.toggle": "한국어",
 
     // dashboard
@@ -32,7 +34,7 @@ export const STR = {
     "dash.title2": "You stay in your language.",
     "dash.sub": "Tell us what you need in your own words. We make the English call, check back with you mid-call, and sum it up for you.",
     "dash.cta": "Start a new call",
-    "dash.home": "Back to home",
+    "dash.home": "How it works",
     "dash.quick": "Quick start",
     "dash.quick.sub": "Common call types",
     "dash.template.cta": "Start from this",
@@ -185,6 +187,8 @@ export const STR = {
     "nav.home": "홈",
     "nav.new": "새 통화",
     "nav.signout": "로그아웃",
+    "nav.owner": "운영자 모드",
+    "nav.owner.title": "Facebook이 아니라 운영자 비밀번호로 들어와 있습니다. 일반 사용자 흐름을 보려면 로그아웃하세요.",
     "lang.toggle": "EN",
 
     "dash.eyebrow": "실시간 AI 전화",
@@ -192,7 +196,7 @@ export const STR = {
     "dash.title2": "사장님은 한국어로만.",
     "dash.sub": "한국어로 상황만 말씀해 주세요. 영어 전화는 AI가 걸고, 중간에 확인할 게 생기면 물어보고, 끝나면 한국어로 정리해 드립니다.",
     "dash.cta": "새 통화 시작",
-    "dash.home": "홈으로",
+    "dash.home": "어떻게 되나요?",
     "dash.quick": "빠른 시작",
     "dash.quick.sub": "자주 쓰는 통화",
     "dash.template.cta": "이걸로 시작",
