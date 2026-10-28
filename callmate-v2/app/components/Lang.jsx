@@ -25,10 +25,11 @@ export function LangToggle({ className = "" }) {
     <button
       type="button"
       onClick={() => setLang(lang === "ko" ? "en" : "ko")}
-      className={`rounded-full border border-line bg-paper px-3 py-1.5 text-[12px] font-semibold text-ink-500 transition-colors hover:border-ink-700 hover:text-ink-100 ${className}`}
+      className={`rounded-full border border-line bg-paper px-2.5 sm:px-3 py-1.5 text-[12px] font-semibold text-ink-500 whitespace-nowrap transition-colors hover:border-ink-700 hover:text-ink-100 ${className}`}
       aria-label="Switch language"
     >
-      {lang === "ko" ? <>EN · <span className="text-brand-500">한국어</span></> : <><span className="text-brand-500">EN</span> · 한국어</>}
+      <span className="hidden sm:inline">{lang === "ko" ? <>EN · <span className="text-brand-500">한국어</span></> : <><span className="text-brand-500">EN</span> · 한국어</>}</span>
+      <span className="sm:hidden">{lang === "ko" ? "EN" : "한국어"}</span>
     </button>
   );
 }

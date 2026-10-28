@@ -206,9 +206,9 @@ function NewCallForm() {
 function Field({ label, hint, children }) {
   return (
     <div className="space-y-2">
-      <div className="flex items-baseline justify-between gap-3">
-        <label className="text-[13px] font-medium text-ink-200">{label}</label>
-        {hint && <span className="text-[11px] text-ink-500 text-right">{hint}</span>}
+      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
+        <label className="text-[13px] font-medium text-ink-200 whitespace-nowrap">{label}</label>
+        {hint && <span className="text-[11px] text-ink-500 sm:text-right">{hint}</span>}
       </div>
       {children}
     </div>

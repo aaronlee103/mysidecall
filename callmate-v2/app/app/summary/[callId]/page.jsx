@@ -106,7 +106,7 @@ export default function CallSummaryPage({ params }) {
 
       {/* Brief — Muse Spark (Meta Model API), in the client's language */}
       <div className="rounded-2xl border border-brand-200 bg-brand-50/60 p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-        <div className="flex items-center justify-between gap-3 mb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h3 className="text-[11px] font-semibold text-brand-700 uppercase tracking-wider">{t("sum.brief")}</h3>
           <div className="flex items-center gap-2">
             <select
@@ -117,7 +117,7 @@ export default function CallSummaryPage({ params }) {
             >
               {SUMMARY_LANGS.map((l) => <option key={l.code} value={l.code}>{l.native}</option>)}
             </select>
-            <span className="text-[10px] font-mono text-ink-500">Muse Spark</span>
+            <span className="hidden sm:inline rounded-full border border-brand-200 bg-paper px-2 py-0.5 text-[10px] font-mono text-ink-500">{t("sum.madeby")} Muse Spark</span>
           </div>
         </div>
         {brief ? (

@@ -19,14 +19,14 @@ export default function Dashboard() {
   return (
     <div className="space-y-14">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl border border-line bg-paper p-8 md:p-12 shadow-soft animate-fade-in-up">
+      <section className="relative overflow-hidden rounded-3xl border border-line bg-paper p-6 sm:p-8 md:p-12 shadow-soft animate-fade-in-up">
         <div aria-hidden className="aurora-bg" />
         <div className="relative">
           <span className="eyebrow">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
             {t("dash.eyebrow")}
           </span>
-          <h1 className="mt-5 text-3xl md:text-5xl font-bold leading-[1.08] tracking-tight text-ink-100">
+          <h1 className="mt-5 text-[28px] sm:text-3xl md:text-5xl font-bold leading-[1.08] tracking-tight text-ink-100">
             {t("dash.title1")}
             <br className="hidden md:block" />
             <span className="text-brand-500"> {t("dash.title2")}</span>

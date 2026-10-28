@@ -27,6 +27,8 @@ export const STR = {
     "nav.owner": "Owner mode",
     "nav.owner.title": "Signed in with the owner password, not Facebook. Sign out to test the normal Facebook flow.",
     "lang.toggle": "한국어",
+    "foot.built": "Built on Meta Model API:",
+    "sum.madeby": "by",
 
     // dashboard
     "dash.eyebrow": "Live AI phone calls",
@@ -190,6 +192,8 @@ export const STR = {
     "nav.owner": "운영자 모드",
     "nav.owner.title": "Facebook이 아니라 운영자 비밀번호로 들어와 있습니다. 일반 사용자 흐름을 보려면 로그아웃하세요.",
     "lang.toggle": "EN",
+    "foot.built": "Meta Model API 기반:",
+    "sum.madeby": "제공",
 
     "dash.eyebrow": "실시간 AI 전화",
     "dash.title1": "AI가 대신 전화해 드릴게요.",
