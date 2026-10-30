@@ -53,7 +53,7 @@ if(location.hash==='#about')open();
   document.body.style.overflow='hidden';
 
   // size
-  var S=Math.min(Math.min(innerWidth,innerHeight)*0.42,340); stage.style.setProperty('--s',S+'px');
+  var S=Math.min(Math.min(innerWidth,innerHeight)*0.5,420); stage.style.setProperty('--s',S+'px');
   // position & drift (space): slow velocity, soft bounce off walls
   var px=innerWidth*0.6-S/2, py=innerHeight*0.5-S/2, pvx=0.35, pvy=0.22;
   // rotation: free tumble
@@ -92,7 +92,7 @@ if(location.hash==='#about')open();
   stage.addEventListener('touchstart',function(e){down(e);},{passive:true});
   window.addEventListener('touchmove',function(e){var p=pt(e);mx=p.x;my=p.y;following=true;if(drag){var dx=mx-lx,dy=my-ly;lx=mx;ly=my;ry+=dx*0.5;rx-=dy*0.5;wy=dx*0.4;wx=-dy*0.4;render();}},{passive:true});
   window.addEventListener('touchend',up);
-  window.addEventListener('resize',function(){S=Math.min(Math.min(innerWidth,innerHeight)*0.42,340);stage.style.setProperty('--s',S+'px');});
+  window.addEventListener('resize',function(){S=Math.min(Math.min(innerWidth,innerHeight)*0.5,420);stage.style.setProperty('--s',S+'px');});
 
   // greeting pops: a word bursts somewhere every ~450ms
   var HI=['Hello','안녕하세요','Hola','Bonjour','こんにちは','你好','Olá','Ciao','Hallo','नमस्ते','مرحبا','Xin chào','Привет','Merhaba','Sawubona','Hej','Halo','Γεια','שלום','Salam','สวัสดี','Jambo','Kia ora','Aloha'];

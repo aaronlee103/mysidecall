@@ -71,18 +71,24 @@ footer a:hover{color:var(--ink)}
 .stage{position:absolute;left:0;top:0;perspective:1400px;width:var(--s,300px);height:var(--s,300px);--h:calc(var(--s,300px)/2);cursor:grab;will-change:transform;z-index:1}
 .stage.grabbing{cursor:grabbing}
 .cube{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
-.face{position:absolute;inset:0;background:#FBF7EE;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:center;gap:4% 7%;padding:9%;backface-visibility:hidden;background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:5px 5px;transform-style:preserve-3d}
+.face{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:center;gap:1% 5%;padding:4%;backface-visibility:hidden;transform-style:preserve-3d;overflow:hidden;
+  background-color:#FFFDF8;
+  background-image:radial-gradient(circle at 50% 50%,#F6D468 0 17%,#DDAA22 18% 23%,transparent 24%),radial-gradient(circle at 50% 50%,#F6D468 0 17%,#DDAA22 18% 23%,transparent 24%);
+  background-size:24% 24%,24% 24%;background-position:0 0,12% 12%}
 .f1{transform:translateZ(var(--h))}.f2{transform:rotateY(90deg) translateZ(var(--h));filter:brightness(.93)}.f3{transform:rotateY(180deg) translateZ(var(--h));filter:brightness(.88)}.f4{transform:rotateY(-90deg) translateZ(var(--h));filter:brightness(.93)}.f5{transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg);filter:brightness(1.03)}.f6{transform:rotateX(-90deg) translateZ(var(--h));filter:brightness(.82)}
-.wd{display:inline-block;font-weight:600;color:var(--ink);font-size:calc(clamp(15px,3.1vmin,25px)*var(--sz,1));letter-spacing:-.01em;transform:rotate(var(--r,0deg));white-space:nowrap;line-height:1.1}
-.wd-logo{--sz:1.15;--r:-4deg}.wd-logo b{color:var(--red);font-weight:600}
-.wd-mascot{width:86%;height:auto;display:block;transform:rotate(-5deg)}
+.wd{display:inline-block;font-weight:600;color:var(--ink);font-size:calc(clamp(20px,5.2vmin,46px)*var(--sz,1));letter-spacing:-.01em;transform:rotate(var(--r,0deg));white-space:nowrap;line-height:1.05;text-shadow:0 0 6px #FFFDF8,0 0 2px #FFFDF8,0 0 2px #FFFDF8}
+.wd.k1{color:var(--ink)}.wd.k2{color:var(--red)}.wd.k3{color:#2F6FD6}.wd.k4{color:#1F9E6E}.wd.k5{color:#C04FA8}
+.plate{display:flex;align-items:center;justify-content:center;background:#FFFDF8;border-radius:999px;padding:5% 9%;box-shadow:0 0 0 2px #FFFDF8;flex:0 0 auto;max-width:94%}
+.plate-m{border-radius:50%;width:78%;aspect-ratio:1;padding:6%}
+.wd-logo{--sz:1.55;--r:-4deg;text-shadow:none}.wd-logo b{color:var(--red);font-weight:600}
+.wd-mascot{width:100%;height:auto;display:block;transform:rotate(-5deg)}
 .intro .dial.intro-go{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);background:var(--red);color:#fff;box-shadow:0 0 0 3px var(--ink),0 0 0 6px var(--paper);font-size:22px;padding:16px 28px 16px 22px;border:0;z-index:3}
 .intro .dial.intro-go:hover{transform:translateX(-50%) translateY(-2px)}
 .intro-skip{position:absolute;top:22px;right:24px;border:2px solid var(--paper);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;color:var(--paper);background:transparent;opacity:.8;z-index:3}
 .intro-skip:hover{opacity:1}
 /* greeting pops */
 .pops{position:absolute;inset:0;pointer-events:none;z-index:0}
-.pop{position:absolute;font-weight:600;font-size:calc(clamp(14px,2.6vw,34px)*var(--ps,1));letter-spacing:-.01em;color:var(--paper);opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(var(--pr,0deg));animation:pop var(--pd,1.6s) cubic-bezier(.2,.9,.2,1) forwards;white-space:nowrap}
+.pop{position:absolute;font-weight:600;font-size:calc(clamp(18px,3.2vw,44px)*var(--ps,1));letter-spacing:-.01em;color:var(--paper);opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(var(--pr,0deg));animation:pop var(--pd,1.6s) cubic-bezier(.2,.9,.2,1) forwards;white-space:nowrap}
 .pop.c1{color:#F3E34A}.pop.c2{color:#9FE4E6}.pop.c3{color:#F0A6D8}.pop.c4{color:#B6E08E}.pop.c5{color:var(--red)}
 @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5) rotate(var(--pr))}12%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(var(--pr))}22%{transform:translate(-50%,-50%) scale(1) rotate(var(--pr))}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(1) rotate(var(--pr))}}
 @media(max-width:820px){.intro-copy{left:18px;top:18px;font-size:clamp(28px,9vw,40px)}.intro .dial.intro-go{bottom:26px}}
