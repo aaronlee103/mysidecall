@@ -37,7 +37,7 @@ function LoginInner() {
       <style>{`
         .msc-auth{min-height:100vh;background:#faf6ef;color:#28211d;font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
         .msc-auth .card{width:min(420px,100%);background:#fffdf9;border:1px solid #e9ded2;border-radius:24px;padding:36px 32px;box-shadow:0 24px 60px #61412b14;text-align:center}
-        .msc-auth img{width:84px;height:auto;margin:0 auto 14px;display:block}
+        .msc-auth img{width:200px;height:auto;margin:0 auto 10px;display:block}
         .msc-auth h1{font-size:24px;letter-spacing:-.8px;margin:6px 0 8px}
         .msc-auth p{color:#746d66;font-size:14px;line-height:1.6;margin:0 0 22px}
         .msc-auth .fb{width:100%;border:0;border-radius:999px;padding:14px 20px;background:#1877F2;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
@@ -54,7 +54,7 @@ function LoginInner() {
         {lang === "ko" ? <>EN · <b>한국어</b></> : <><b>EN</b> · 한국어</>}
       </button>
       <div className="card">
-        <img src="/brand/mark-512.png" alt="My Side Call" />
+        <img src="/brand/logo-lockup.png" alt="My Side Call" />
         <h1>{t.title}</h1>
         <p>{t.sub}</p>
         {error && <div className="err">{error === "OAuthCallback" || error === "Callback" ? "Facebook sign-in was cancelled or failed. Please try again." : `Sign-in error: ${error}`}</div>}

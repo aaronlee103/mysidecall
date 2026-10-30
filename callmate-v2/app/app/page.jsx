@@ -21,7 +21,8 @@ export default function Dashboard() {
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl border border-line bg-paper p-6 sm:p-8 md:p-12 shadow-soft animate-fade-in-up">
         <div aria-hidden className="aurora-bg" />
-        <div className="relative">
+        <img src="/brand/mascot.png" alt="" aria-hidden className="pointer-events-none absolute right-4 bottom-2 hidden md:block w-[280px] lg:w-[340px] opacity-95" />
+        <div className="relative md:pr-[300px] lg:pr-[360px]">
           <span className="eyebrow">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
             {t("dash.eyebrow")}

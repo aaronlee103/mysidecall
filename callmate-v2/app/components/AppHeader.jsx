@@ -9,7 +9,7 @@ export default function AppHeader({ userMenu }) {
     <header className="sticky top-0 z-40 border-b border-line bg-ink-950/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 sm:px-6 py-2.5 sm:py-3">
         <Link href="/app" className="group flex shrink-0 items-center gap-2.5 text-ink-100">
-          <img src="/brand/logo-icon.png" alt="" className="h-8 w-8 rounded-lg transition-transform duration-300 group-hover:scale-105" />
+          <img src="/brand/logo-icon.png" alt="" className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105" />
           <span className="hidden sm:inline text-[15px] font-semibold tracking-tight whitespace-nowrap">My Side Call</span>
         </Link>
         <nav className="flex min-w-0 items-center gap-1 sm:gap-1.5 whitespace-nowrap">
