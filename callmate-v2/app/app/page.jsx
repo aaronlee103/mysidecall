@@ -2,6 +2,7 @@
 import Link from "next/link";
 import RecentCalls from "@/app/components/RecentCalls";
 import { useLang } from "@/app/components/Lang";
+import { QUICK_ICONS } from "@/app/components/ScribbleIcons";
 
 const TEMPLATES = [
   { key: "restaurant", emoji: "🍽" },
@@ -74,7 +75,9 @@ export default function Dashboard() {
                 href={`/app/new?template=${encodeURIComponent(title)}`}
                 className="group relative rounded-2xl border border-line bg-paper p-5 shadow-soft transition-all duration-500 hover:-translate-y-0.5 hover:border-ink-700 hover:shadow-card-hover"
               >
-                <div className="text-2xl mb-3">{tp.emoji}</div>
+                <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 border border-brand-100 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105">
+                  {(() => { const Icon = QUICK_ICONS[tp.key]; return <Icon size={40} />; })()}
+                </div>
                 <div className="font-medium text-[15px] text-ink-100 mb-1">{title}</div>
                 <div className="text-[13px] text-ink-400 leading-relaxed">{t(`tpl.${tp.key}.ex`)}</div>
                 <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-brand-500 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
