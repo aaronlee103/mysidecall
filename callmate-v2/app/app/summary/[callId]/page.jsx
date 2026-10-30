@@ -167,9 +167,9 @@ export default function CallSummaryPage({ params }) {
       {/* Actions */}
       <div className="grid md:grid-cols-2 gap-3 stagger">
         {call.recordingUrl && (
-          <a href={`/api/calls/${callId}/recording`} target="_blank" rel="noopener noreferrer" className="btn-secondary py-3">
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            {t("sum.listen")}
+          <a href={`/api/calls/${callId}/recording?download=1`} className="btn-secondary py-3">
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            {t("sum.download")}
           </a>
         )}
         <Link href="/app/new" className="btn-primary py-3">

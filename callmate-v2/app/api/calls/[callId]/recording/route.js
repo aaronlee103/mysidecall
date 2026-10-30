@@ -18,7 +18,9 @@ export async function GET(req, { params }) {
   const { callId } = params;
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "sign in required" }, { status: 401 });
-  const kind = new URL(req.url).searchParams.get("kind") === "stereo" ? "stereo" : "mono";
+  const sp = new URL(req.url).searchParams;
+  const kind = sp.get("kind") === "stereo" ? "stereo" : "mono";
+  const download = sp.get("download") === "1";
 
   try {
     const call = await getCall(callId);
@@ -40,7 +42,7 @@ export async function GET(req, { params }) {
       status: 200,
       headers: {
         "Content-Type": type,
-        "Content-Disposition": `inline; filename="mysidecall-${callId.slice(0, 8)}.${ext}"`,
+        "Content-Disposition": `${download ? "attachment" : "inline"}; filename="mysidecall-call-${(call.startedAt || call.createdAt || "").slice(0, 10) || "recording"}-${callId.slice(0, 8)}.${ext}"`,
         "Cache-Control": "private, no-store",
         ...(upstream.headers.get("content-length") ? { "Content-Length": upstream.headers.get("content-length") } : {}),
       },
