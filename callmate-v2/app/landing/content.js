@@ -66,30 +66,30 @@ footer a:hover{color:var(--ink)}
 }
 @media(prefers-reduced-motion:reduce){.dial,.q,.pill{transition:none}.dial:hover,.q:hover,.pill:hover{transform:none}}
 
-/* ── intro: a draggable sticker cube ─────────────────────── */
-.intro{position:fixed;inset:0;z-index:60;background:var(--ink);color:var(--paper);display:grid;grid-template-rows:auto 1fr auto;align-items:center;justify-items:center;padding:26px 28px 30px;overflow:hidden;touch-action:none;user-select:none}
+/* ── intro: a white sticker cube drifting in space ─────────── */
+.intro{position:fixed;inset:0;z-index:60;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;user-select:none}
 .intro.hide{display:none}
-.intro-copy{margin:0;justify-self:start;font-size:clamp(28px,4vw,52px);line-height:1;font-weight:600;letter-spacing:-.02em}
-.stage{perspective:1400px;width:min(44vmin,340px);height:min(44vmin,340px);position:relative;cursor:grab;--h:calc(min(44vmin,340px)/2)}
+.intro-copy{position:absolute;left:28px;top:26px;margin:0;font-size:clamp(28px,4vw,52px);line-height:1;font-weight:600;letter-spacing:-.02em;z-index:2;pointer-events:none}
+.stage{position:absolute;left:0;top:0;perspective:1400px;width:var(--s,300px);height:var(--s,300px);--h:calc(var(--s,300px)/2);cursor:grab;will-change:transform;z-index:1}
 .stage.grabbing{cursor:grabbing}
-.cube{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(-18deg) rotateY(28deg);will-change:transform}
-.face{position:absolute;inset:0;background:#3B47D6;border-radius:22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:8%;backface-visibility:hidden;box-shadow:inset 0 0 0 3px #2E39B5}
-.f1{transform:translateZ(var(--h))}
-.f2{transform:rotateY(90deg) translateZ(var(--h))}
-.f3{transform:rotateY(180deg) translateZ(var(--h))}
-.f4{transform:rotateY(-90deg) translateZ(var(--h))}
-.f5{transform:rotateX(90deg) translateZ(var(--h))}
-.f6{transform:rotateX(-90deg) translateZ(var(--h))}
-.stk{display:inline-flex;align-items:center;justify-content:center;border:4px solid #fff;border-radius:999px;padding:.35em .9em;font-weight:600;font-size:clamp(16px,3.2vmin,26px);letter-spacing:-.01em;color:var(--ink);transform:rotate(var(--r,-6deg));box-shadow:0 6px 0 rgba(0,0,0,.18)}
-.s-yellow{background:#F3E34A;--r:-8deg}.s-cyan{background:#9FE4E6;--r:6deg}.s-pink{background:#F0A6D8;--r:-5deg}.s-green{background:#B6E08E;--r:9deg}.s-red{background:var(--red);color:#fff;--r:-10deg}.s-ink{background:var(--paper);--r:4deg}
-.stk-mascot{background:#fff;border-radius:22px;padding:6%;width:84%;--r:-7deg}.stk-mascot img{width:100%;height:auto;display:block}
-.stk-phone{width:46%;aspect-ratio:1;border-radius:28px;padding:14%}.stk-phone svg{width:100%;height:100%;fill:#fff}
-.shadow{position:absolute;left:10%;right:10%;bottom:-14%;height:10%;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(10px)}
-.intro .dial.intro-go{justify-self:center;background:var(--red);color:#fff;box-shadow:0 0 0 3px var(--ink),0 0 0 6px var(--paper);font-size:22px;padding:16px 28px 16px 22px;border:0}
-.intro-skip{position:absolute;top:22px;right:24px;border:2px solid var(--paper);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;color:var(--paper);background:transparent;opacity:.8}
+.cube{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.face{position:absolute;inset:0;background:#FFFDF8;border-radius:22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:center;gap:10px;padding:9%;backface-visibility:hidden;box-shadow:inset 0 0 0 3px #E8E2D6}
+.f1{transform:translateZ(var(--h))}.f2{transform:rotateY(90deg) translateZ(var(--h))}.f3{transform:rotateY(180deg) translateZ(var(--h))}.f4{transform:rotateY(-90deg) translateZ(var(--h))}.f5{transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg)}.f6{transform:rotateX(-90deg) translateZ(var(--h))}
+.stk{display:inline-flex;align-items:center;justify-content:center;border:4px solid #fff;border-radius:999px;padding:.32em .85em;font-weight:600;font-size:clamp(15px,3vmin,24px);letter-spacing:-.01em;color:var(--ink);transform:rotate(var(--r,-6deg));box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap}
+.s-yellow{background:#F3E34A;--r:-8deg}.s-cyan{background:#9FE4E6;--r:6deg}.s-pink{background:#F0A6D8;--r:-5deg}.s-green{background:#B6E08E;--r:9deg}.s-red{background:var(--red);color:#fff;--r:-10deg}
+.stk-logo{background:var(--ink);color:var(--paper);--r:-4deg;font-size:clamp(18px,3.6vmin,28px)}.stk-logo b{color:var(--red);font-weight:600;margin-left:.3ch}
+.stk-mascot{background:#fff;border-radius:22px;padding:6%;width:84%;--r:-7deg;border-color:#E8E2D6}.stk-mascot img{width:100%;height:auto;display:block}
+.intro .dial.intro-go{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);background:var(--red);color:#fff;box-shadow:0 0 0 3px var(--ink),0 0 0 6px var(--paper);font-size:22px;padding:16px 28px 16px 22px;border:0;z-index:3}
+.intro .dial.intro-go:hover{transform:translateX(-50%) translateY(-2px)}
+.intro-skip{position:absolute;top:22px;right:24px;border:2px solid var(--paper);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;color:var(--paper);background:transparent;opacity:.8;z-index:3}
 .intro-skip:hover{opacity:1}
-@media(max-width:820px){.intro{padding:18px 18px 26px}.intro-copy{font-size:clamp(30px,10vw,44px)}.stage{width:min(62vw,260px);height:min(62vw,260px);--h:calc(min(62vw,260px)/2)}}
-@media(prefers-reduced-motion:reduce){.cube{transition:none!important}}
+/* greeting pops */
+.pops{position:absolute;inset:0;pointer-events:none;z-index:0}
+.pop{position:absolute;font-weight:600;font-size:clamp(18px,3.4vw,44px);letter-spacing:-.01em;color:var(--paper);opacity:0;transform:translate(-50%,-50%) scale(.6) rotate(var(--pr,0deg));animation:pop 1.6s cubic-bezier(.2,.9,.2,1) forwards}
+.pop.c1{color:#F3E34A}.pop.c2{color:#9FE4E6}.pop.c3{color:#F0A6D8}.pop.c4{color:#B6E08E}.pop.c5{color:var(--red)}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5) rotate(var(--pr))}12%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(var(--pr))}22%{transform:translate(-50%,-50%) scale(1) rotate(var(--pr))}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(1) rotate(var(--pr))}}
+@media(max-width:820px){.intro-copy{left:18px;top:18px;font-size:clamp(28px,9vw,40px)}.intro .dial.intro-go{bottom:26px}}
+@media(prefers-reduced-motion:reduce){.pop{animation:none;opacity:.9}}
 
 `;
 
@@ -97,17 +97,17 @@ export const LANDING_HTML = `<div class="msc-landing" id="top">
 <header class="nav"><div class="navin"><a href="/" class="brand" aria-label="My Side Call home"><span>My Side <b>Call</b></span></a><div class="navr"><button class="lang" id="lang" type="button" aria-label="Switch language"><span data-lang="en">EN</span><span data-lang="ko">한국어</span></button><button class="help" id="help" type="button" aria-haspopup="dialog" aria-controls="sheet" data-i18n="nav.help">What is this?</button></div></div></header>
 
 <div class="intro" id="intro" aria-label="Intro">
-  <p class="intro-copy" data-i18n-html="intro.copy">Drag the box.<br>It's friendly.</p>
+  <div class="pops" id="pops" aria-hidden="true"></div>
+  <p class="intro-copy" data-i18n-html="intro.copy">Say hi.<br>In any language.</p>
   <div class="stage" id="stage">
     <div class="cube" id="cube">
-      <div class="face f1"><span class="stk stk-mascot"><img src="/brand/mascot.png" alt=""></span></div>
-      <div class="face f2"><span class="stk s-yellow">HELLO</span><span class="stk s-cyan" data-i18n="intro.s1">안녕하세요</span></div>
-      <div class="face f3"><span class="stk s-red stk-phone"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span></div>
-      <div class="face f4"><span class="stk s-pink" data-i18n="intro.s2">ANY LANGUAGE</span><span class="stk s-green">AI</span></div>
-      <div class="face f5" style="transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg)"><span class="stk s-cyan">Hola</span><span class="stk s-yellow">こんにちは</span><span class="stk s-pink">你好</span></div>
-      <div class="face f6"><span class="stk s-ink" data-i18n="intro.s3">YOUR CALL</span></div>
+      <div class="face f1"><span class="stk stk-logo">My Side <b>Call</b></span><span class="stk s-red">HELLO</span></div>
+      <div class="face f2"><span class="stk s-yellow">안녕하세요</span><span class="stk s-cyan">Hola</span><span class="stk s-pink">Bonjour</span></div>
+      <div class="face f3"><span class="stk stk-mascot"><img src="/brand/mascot.png" alt=""></span></div>
+      <div class="face f4"><span class="stk s-green">こんにちは</span><span class="stk s-red">你好</span><span class="stk s-yellow">Olá</span></div>
+      <div class="face f5"><span class="stk s-pink">Ciao</span><span class="stk s-cyan">Hallo</span><span class="stk s-green">नमस्ते</span></div>
+      <div class="face f6"><span class="stk s-yellow">مرحبا</span><span class="stk s-red">Xin chào</span><span class="stk s-cyan">Привет</span></div>
     </div>
-    <div class="shadow"></div>
   </div>
   <button class="dial intro-go" id="intro-go" type="button"><span data-i18n="intro.go">Let's go</span></button>
   <button class="intro-skip" id="intro-skip" type="button" data-i18n="intro.skip">Skip</button>
@@ -156,7 +156,7 @@ export const LANDING_HTML = `<div class="msc-landing" id="top">
 export const LANDING_JS = `(function(){
 var KO={
 "nav.help":"뭐 하는 곳이에요?",
-"intro.copy":"상자를 돌려 보세요.<br>착해요.","intro.s1":"안녕하세요","intro.s2":"어떤 언어든","intro.s3":"당신의 전화","intro.go":"들어가기","intro.skip":"건너뛰기",
+"intro.copy":"인사해 보세요.<br>어떤 언어로든.","intro.go":"들어가기","intro.skip":"건너뛰기",
 "hero.h1":"영어 전화,<br>AI가 대신 겁니다.",
 "hero.cta":"전화 걸기",
 "hero.whisper":"한국어로 부탁하면, 영어로 통화합니다.",
@@ -198,29 +198,70 @@ sheet.addEventListener('click',function(e){if(e.target===sheet)shut();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)shut();});
 if(location.hash==='#about')open();
 
-// ── intro cube ──
+// ── intro: a white cube drifting through space, then following the mouse ──
 (function(){
-  var intro=document.getElementById('intro'),stage=document.getElementById('stage'),cube=document.getElementById('cube');
+  var intro=document.getElementById('intro'),stage=document.getElementById('stage'),cube=document.getElementById('cube'),pops=document.getElementById('pops');
   if(!intro) return;
   var seen=null; try{seen=sessionStorage.getItem('msc_intro');}catch(e){}
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(seen||location.hash==='#about'){intro.classList.add('hide');return;}
   document.body.style.overflow='hidden';
-  var rx=-18,ry=28,vx=0,vy=0.25,drag=false,lx=0,ly=0,raf;
-  function render(){cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';}
+
+  // size
+  var S=Math.min(Math.min(innerWidth,innerHeight)*0.42,340); stage.style.setProperty('--s',S+'px');
+  // position & drift (space): slow velocity, soft bounce off walls
+  var px=innerWidth*0.6-S/2, py=innerHeight*0.5-S/2, pvx=0.35, pvy=0.22;
+  // rotation: free tumble
+  var rx=-18, ry=28, wx=0.18, wy=0.32, drag=false, lx=0, ly=0, raf, following=false, mx=0, my=0;
+  function render(){
+    stage.style.transform='translate3d('+px+'px,'+py+'px,0)';
+    cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';
+  }
   function tick(){
-    if(!drag){ry+=vy;rx+=vx;vx*=0.96;vy=vy*0.96+(Math.abs(vy)<0.25?0.01*Math.sign(vy||1):0);}
+    if(!drag){
+      if(following){
+        // ease toward the pointer, keep tumbling gently
+        px+=((mx-S/2)-px)*0.04; py+=((my-S/2)-py)*0.04;
+        px=Math.max(24,Math.min(innerWidth-S-24,px)); py=Math.max(110,Math.min(innerHeight-S-110,py));
+        wx*=0.985; wy*=0.985; if(Math.abs(wy)<0.12) wy=0.12*Math.sign(wy||1);
+      } else {
+        px+=pvx; py+=pvy;
+        var minX=24, maxX=innerWidth-S-24, minY=110, maxY=innerHeight-S-110;
+        if(px<minX){px=minX;pvx=Math.abs(pvx);} if(px>maxX){px=maxX;pvx=-Math.abs(pvx);}
+        if(py<minY){py=minY;pvy=Math.abs(pvy);} if(py>maxY){py=maxY;pvy=-Math.abs(pvy);}
+      }
+      rx+=wx; ry+=wy;
+    }
     render(); raf=requestAnimationFrame(tick);
   }
-  if(!reduce) raf=requestAnimationFrame(tick); else render();
-  function down(e){drag=true;stage.classList.add('grabbing');var p=e.touches?e.touches[0]:e;lx=p.clientX;ly=p.clientY;vx=vy=0;}
-  function move(e){if(!drag)return;var p=e.touches?e.touches[0]:e;var dx=p.clientX-lx,dy=p.clientY-ly;lx=p.clientX;ly=p.clientY;ry+=dx*0.5;rx-=dy*0.5;rx=Math.max(-80,Math.min(80,rx));vy=dx*0.5;vx=-dy*0.5;render();}
+  render(); if(!reduce) raf=requestAnimationFrame(tick);
+
+  // pointer: first movement switches to "follow"; drag spins
+  function pt(e){var p=e.touches?e.touches[0]:e;return {x:p.clientX,y:p.clientY};}
+  window.addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY; following=true;
+    if(drag){var dx=mx-lx,dy=my-ly;lx=mx;ly=my;ry+=dx*0.5;rx-=dy*0.5;wy=dx*0.4;wx=-dy*0.4;render();}
+  });
+  function down(e){drag=true;stage.classList.add('grabbing');var p=pt(e);lx=p.x;ly=p.y;}
   function up(){drag=false;stage.classList.remove('grabbing');}
-  stage.addEventListener('mousedown',down);window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
-  stage.addEventListener('touchstart',down,{passive:true});window.addEventListener('touchmove',move,{passive:true});window.addEventListener('touchend',up);
-  // gentle follow of the mouse when not dragging
-  window.addEventListener('mousemove',function(e){if(drag)return;var cx=innerWidth/2,cy=innerHeight/2;vy=vy*0.9+((e.clientX-cx)/cx)*0.15;vx=vx*0.9+(-(e.clientY-cy)/cy)*0.08;});
-  function go(){try{sessionStorage.setItem('msc_intro','1');}catch(e){}cancelAnimationFrame(raf);intro.classList.add('hide');document.body.style.overflow='';}
+  stage.addEventListener('mousedown',down); window.addEventListener('mouseup',up);
+  stage.addEventListener('touchstart',function(e){down(e);},{passive:true});
+  window.addEventListener('touchmove',function(e){var p=pt(e);mx=p.x;my=p.y;following=true;if(drag){var dx=mx-lx,dy=my-ly;lx=mx;ly=my;ry+=dx*0.5;rx-=dy*0.5;wy=dx*0.4;wx=-dy*0.4;render();}},{passive:true});
+  window.addEventListener('touchend',up);
+  window.addEventListener('resize',function(){S=Math.min(Math.min(innerWidth,innerHeight)*0.42,340);stage.style.setProperty('--s',S+'px');});
+
+  // greeting pops: a word bursts somewhere every ~450ms
+  var HI=['Hello','안녕하세요','Hola','Bonjour','こんにちは','你好','Olá','Ciao','Hallo','नमस्ते','مرحبا','Xin chào','Привет','Merhaba','Sawubona','Hej','Halo','Γεια','שלום','Salam','สวัสดี','Jambo','Kia ora','Aloha'];
+  var i=0, popTimer=null;
+  function pop(){
+    if(reduce) return;
+    var el=document.createElement('span'); el.className='pop c'+(1+(i%5)); el.textContent=HI[i%HI.length]; i++;
+    el.style.left=(8+Math.random()*84)+'%'; el.style.top=(10+Math.random()*78)+'%'; el.style.setProperty('--pr',(Math.random()*24-12)+'deg');
+    pops.appendChild(el); setTimeout(function(){el.remove();},1700);
+    popTimer=setTimeout(pop, 380+Math.random()*320);
+  }
+  setTimeout(pop,500);
+
+  function go(){try{sessionStorage.setItem('msc_intro','1');}catch(e){}cancelAnimationFrame(raf);clearTimeout(popTimer);intro.classList.add('hide');document.body.style.overflow='';}
   document.getElementById('intro-go').addEventListener('click',go);
   document.getElementById('intro-skip').addEventListener('click',go);
   document.addEventListener('keydown',function(e){if(!intro.classList.contains('hide')&&(e.key==='Enter'||e.key==='Escape'))go();});

@@ -2,17 +2,17 @@
 <header class="nav"><div class="navin"><a href="/" class="brand" aria-label="My Side Call home"><span>My Side <b>Call</b></span></a><div class="navr"><button class="lang" id="lang" type="button" aria-label="Switch language"><span data-lang="en">EN</span><span data-lang="ko">한국어</span></button><button class="help" id="help" type="button" aria-haspopup="dialog" aria-controls="sheet" data-i18n="nav.help">What is this?</button></div></div></header>
 
 <div class="intro" id="intro" aria-label="Intro">
-  <p class="intro-copy" data-i18n-html="intro.copy">Drag the box.<br>It's friendly.</p>
+  <div class="pops" id="pops" aria-hidden="true"></div>
+  <p class="intro-copy" data-i18n-html="intro.copy">Say hi.<br>In any language.</p>
   <div class="stage" id="stage">
     <div class="cube" id="cube">
-      <div class="face f1"><span class="stk stk-mascot"><img src="/brand/mascot.png" alt=""></span></div>
-      <div class="face f2"><span class="stk s-yellow">HELLO</span><span class="stk s-cyan" data-i18n="intro.s1">안녕하세요</span></div>
-      <div class="face f3"><span class="stk s-red stk-phone"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span></div>
-      <div class="face f4"><span class="stk s-pink" data-i18n="intro.s2">ANY LANGUAGE</span><span class="stk s-green">AI</span></div>
-      <div class="face f5" style="transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg)"><span class="stk s-cyan">Hola</span><span class="stk s-yellow">こんにちは</span><span class="stk s-pink">你好</span></div>
-      <div class="face f6"><span class="stk s-ink" data-i18n="intro.s3">YOUR CALL</span></div>
+      <div class="face f1"><span class="stk stk-logo">My Side <b>Call</b></span><span class="stk s-red">HELLO</span></div>
+      <div class="face f2"><span class="stk s-yellow">안녕하세요</span><span class="stk s-cyan">Hola</span><span class="stk s-pink">Bonjour</span></div>
+      <div class="face f3"><span class="stk stk-mascot"><img src="/brand/mascot.png" alt=""></span></div>
+      <div class="face f4"><span class="stk s-green">こんにちは</span><span class="stk s-red">你好</span><span class="stk s-yellow">Olá</span></div>
+      <div class="face f5"><span class="stk s-pink">Ciao</span><span class="stk s-cyan">Hallo</span><span class="stk s-green">नमस्ते</span></div>
+      <div class="face f6"><span class="stk s-yellow">مرحبا</span><span class="stk s-red">Xin chào</span><span class="stk s-cyan">Привет</span></div>
     </div>
-    <div class="shadow"></div>
   </div>
   <button class="dial intro-go" id="intro-go" type="button"><span data-i18n="intro.go">Let's go</span></button>
   <button class="intro-skip" id="intro-skip" type="button" data-i18n="intro.skip">Skip</button>

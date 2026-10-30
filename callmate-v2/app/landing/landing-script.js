@@ -1,7 +1,7 @@
 (function(){
 var KO={
 "nav.help":"뭐 하는 곳이에요?",
-"intro.copy":"상자를 돌려 보세요.<br>착해요.","intro.s1":"안녕하세요","intro.s2":"어떤 언어든","intro.s3":"당신의 전화","intro.go":"들어가기","intro.skip":"건너뛰기",
+"intro.copy":"인사해 보세요.<br>어떤 언어로든.","intro.go":"들어가기","intro.skip":"건너뛰기",
 "hero.h1":"영어 전화,<br>AI가 대신 겁니다.",
 "hero.cta":"전화 걸기",
 "hero.whisper":"한국어로 부탁하면, 영어로 통화합니다.",
@@ -43,29 +43,70 @@ sheet.addEventListener('click',function(e){if(e.target===sheet)shut();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)shut();});
 if(location.hash==='#about')open();
 
-// ── intro cube ──
+// ── intro: a white cube drifting through space, then following the mouse ──
 (function(){
-  var intro=document.getElementById('intro'),stage=document.getElementById('stage'),cube=document.getElementById('cube');
+  var intro=document.getElementById('intro'),stage=document.getElementById('stage'),cube=document.getElementById('cube'),pops=document.getElementById('pops');
   if(!intro) return;
   var seen=null; try{seen=sessionStorage.getItem('msc_intro');}catch(e){}
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(seen||location.hash==='#about'){intro.classList.add('hide');return;}
   document.body.style.overflow='hidden';
-  var rx=-18,ry=28,vx=0,vy=0.25,drag=false,lx=0,ly=0,raf;
-  function render(){cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';}
+
+  // size
+  var S=Math.min(Math.min(innerWidth,innerHeight)*0.42,340); stage.style.setProperty('--s',S+'px');
+  // position & drift (space): slow velocity, soft bounce off walls
+  var px=innerWidth*0.6-S/2, py=innerHeight*0.5-S/2, pvx=0.35, pvy=0.22;
+  // rotation: free tumble
+  var rx=-18, ry=28, wx=0.18, wy=0.32, drag=false, lx=0, ly=0, raf, following=false, mx=0, my=0;
+  function render(){
+    stage.style.transform='translate3d('+px+'px,'+py+'px,0)';
+    cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';
+  }
   function tick(){
-    if(!drag){ry+=vy;rx+=vx;vx*=0.96;vy=vy*0.96+(Math.abs(vy)<0.25?0.01*Math.sign(vy||1):0);}
+    if(!drag){
+      if(following){
+        // ease toward the pointer, keep tumbling gently
+        px+=((mx-S/2)-px)*0.04; py+=((my-S/2)-py)*0.04;
+        px=Math.max(24,Math.min(innerWidth-S-24,px)); py=Math.max(110,Math.min(innerHeight-S-110,py));
+        wx*=0.985; wy*=0.985; if(Math.abs(wy)<0.12) wy=0.12*Math.sign(wy||1);
+      } else {
+        px+=pvx; py+=pvy;
+        var minX=24, maxX=innerWidth-S-24, minY=110, maxY=innerHeight-S-110;
+        if(px<minX){px=minX;pvx=Math.abs(pvx);} if(px>maxX){px=maxX;pvx=-Math.abs(pvx);}
+        if(py<minY){py=minY;pvy=Math.abs(pvy);} if(py>maxY){py=maxY;pvy=-Math.abs(pvy);}
+      }
+      rx+=wx; ry+=wy;
+    }
     render(); raf=requestAnimationFrame(tick);
   }
-  if(!reduce) raf=requestAnimationFrame(tick); else render();
-  function down(e){drag=true;stage.classList.add('grabbing');var p=e.touches?e.touches[0]:e;lx=p.clientX;ly=p.clientY;vx=vy=0;}
-  function move(e){if(!drag)return;var p=e.touches?e.touches[0]:e;var dx=p.clientX-lx,dy=p.clientY-ly;lx=p.clientX;ly=p.clientY;ry+=dx*0.5;rx-=dy*0.5;rx=Math.max(-80,Math.min(80,rx));vy=dx*0.5;vx=-dy*0.5;render();}
+  render(); if(!reduce) raf=requestAnimationFrame(tick);
+
+  // pointer: first movement switches to "follow"; drag spins
+  function pt(e){var p=e.touches?e.touches[0]:e;return {x:p.clientX,y:p.clientY};}
+  window.addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY; following=true;
+    if(drag){var dx=mx-lx,dy=my-ly;lx=mx;ly=my;ry+=dx*0.5;rx-=dy*0.5;wy=dx*0.4;wx=-dy*0.4;render();}
+  });
+  function down(e){drag=true;stage.classList.add('grabbing');var p=pt(e);lx=p.x;ly=p.y;}
   function up(){drag=false;stage.classList.remove('grabbing');}
-  stage.addEventListener('mousedown',down);window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
-  stage.addEventListener('touchstart',down,{passive:true});window.addEventListener('touchmove',move,{passive:true});window.addEventListener('touchend',up);
-  // gentle follow of the mouse when not dragging
-  window.addEventListener('mousemove',function(e){if(drag)return;var cx=innerWidth/2,cy=innerHeight/2;vy=vy*0.9+((e.clientX-cx)/cx)*0.15;vx=vx*0.9+(-(e.clientY-cy)/cy)*0.08;});
-  function go(){try{sessionStorage.setItem('msc_intro','1');}catch(e){}cancelAnimationFrame(raf);intro.classList.add('hide');document.body.style.overflow='';}
+  stage.addEventListener('mousedown',down); window.addEventListener('mouseup',up);
+  stage.addEventListener('touchstart',function(e){down(e);},{passive:true});
+  window.addEventListener('touchmove',function(e){var p=pt(e);mx=p.x;my=p.y;following=true;if(drag){var dx=mx-lx,dy=my-ly;lx=mx;ly=my;ry+=dx*0.5;rx-=dy*0.5;wy=dx*0.4;wx=-dy*0.4;render();}},{passive:true});
+  window.addEventListener('touchend',up);
+  window.addEventListener('resize',function(){S=Math.min(Math.min(innerWidth,innerHeight)*0.42,340);stage.style.setProperty('--s',S+'px');});
+
+  // greeting pops: a word bursts somewhere every ~450ms
+  var HI=['Hello','안녕하세요','Hola','Bonjour','こんにちは','你好','Olá','Ciao','Hallo','नमस्ते','مرحبا','Xin chào','Привет','Merhaba','Sawubona','Hej','Halo','Γεια','שלום','Salam','สวัสดี','Jambo','Kia ora','Aloha'];
+  var i=0, popTimer=null;
+  function pop(){
+    if(reduce) return;
+    var el=document.createElement('span'); el.className='pop c'+(1+(i%5)); el.textContent=HI[i%HI.length]; i++;
+    el.style.left=(8+Math.random()*84)+'%'; el.style.top=(10+Math.random()*78)+'%'; el.style.setProperty('--pr',(Math.random()*24-12)+'deg');
+    pops.appendChild(el); setTimeout(function(){el.remove();},1700);
+    popTimer=setTimeout(pop, 380+Math.random()*320);
+  }
+  setTimeout(pop,500);
+
+  function go(){try{sessionStorage.setItem('msc_intro','1');}catch(e){}cancelAnimationFrame(raf);clearTimeout(popTimer);intro.classList.add('hide');document.body.style.overflow='';}
   document.getElementById('intro-go').addEventListener('click',go);
   document.getElementById('intro-skip').addEventListener('click',go);
   document.addEventListener('keydown',function(e){if(!intro.classList.contains('hide')&&(e.key==='Enter'||e.key==='Escape'))go();});
