@@ -72,14 +72,12 @@ footer a:hover{color:var(--ink)}
 .stage.grabbing{cursor:grabbing}
 .cube{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
 .face{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:center;gap:1% 5%;padding:4%;backface-visibility:hidden;transform-style:preserve-3d;overflow:hidden;
-  background-color:#FFFDF8;
-  background-image:radial-gradient(circle at 50% 50%,#F6D468 0 17%,#DDAA22 18% 23%,transparent 24%),radial-gradient(circle at 50% 50%,#F6D468 0 17%,#DDAA22 18% 23%,transparent 24%);
-  background-size:24% 24%,24% 24%;background-position:0 0,12% 12%}
+  background:#FBF7EE;background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:5px 5px}
 .f1{transform:translateZ(var(--h))}.f2{transform:rotateY(90deg) translateZ(var(--h));filter:brightness(.93)}.f3{transform:rotateY(180deg) translateZ(var(--h));filter:brightness(.88)}.f4{transform:rotateY(-90deg) translateZ(var(--h));filter:brightness(.93)}.f5{transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg);filter:brightness(1.03)}.f6{transform:rotateX(-90deg) translateZ(var(--h));filter:brightness(.82)}
-.wd{display:inline-block;font-weight:600;color:var(--ink);font-size:calc(clamp(20px,5.2vmin,46px)*var(--sz,1));letter-spacing:-.01em;transform:rotate(var(--r,0deg));white-space:nowrap;line-height:1.05;text-shadow:0 0 6px #FFFDF8,0 0 2px #FFFDF8,0 0 2px #FFFDF8}
+.wd{display:inline-block;font-weight:600;color:var(--ink);font-size:calc(clamp(20px,5.2vmin,46px)*var(--sz,1));letter-spacing:-.01em;transform:rotate(var(--r,0deg));white-space:nowrap;line-height:1.05;}
 .wd.k1{color:var(--ink)}.wd.k2{color:var(--red)}.wd.k3{color:#2F6FD6}.wd.k4{color:#1F9E6E}.wd.k5{color:#C04FA8}
-.plate{display:flex;align-items:center;justify-content:center;background:#FFFDF8;border-radius:999px;padding:5% 9%;box-shadow:0 0 0 2px #FFFDF8;flex:0 0 auto;max-width:94%}
-.plate-m{border-radius:50%;width:78%;aspect-ratio:1;padding:6%}
+.plate{display:flex;align-items:center;justify-content:center;flex:0 0 auto;max-width:94%}
+.plate-m{width:92%}
 .wd-logo{--sz:1.55;--r:-4deg;text-shadow:none}.wd-logo b{color:var(--red);font-weight:600}
 .wd-mascot{width:100%;height:auto;display:block;transform:rotate(-5deg)}
 .intro .dial.intro-go{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);background:var(--red);color:#fff;box-shadow:0 0 0 3px var(--ink),0 0 0 6px var(--paper);font-size:22px;padding:16px 28px 16px 22px;border:0;z-index:3}
