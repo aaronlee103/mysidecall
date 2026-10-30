@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/app/components/Lang";
 import { SUMMARY_LANGS } from "@/lib/i18n";
+import Mascot from "@/app/components/Mascot";
 
 const Spinner = () => <span className="h-3 w-3 animate-spin rounded-full border-2 border-line border-t-brand-500" />;
 
@@ -96,7 +97,10 @@ export default function CallSummaryPage({ params }) {
             </span>
             <span className="eyebrow">{outcomeLabel}</span>
           </div>
-          <h1 className="text-2xl font-bold text-ink-100 tracking-tight mb-1">{t("sum.title")}</h1>
+          <div className="flex items-end justify-between gap-4">
+            <h1 className="text-2xl font-bold text-ink-100 tracking-tight mb-1">{t("sum.title")}</h1>
+            <Mascot mood="nod" className="w-[120px] sm:w-[170px] shrink-0 -mb-2" />
+          </div>
           <p className="text-sm text-ink-500">
             <span className="font-mono">{call?.customer?.number}</span> · <span className="font-mono">{fmt(duration)}</span>
             {call.cost != null && <> · <span className="font-mono">${Number(call.cost).toFixed(2)}</span></>}

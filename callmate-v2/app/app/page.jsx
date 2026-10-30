@@ -4,6 +4,7 @@ import Link from "next/link";
 import RecentCalls from "@/app/components/RecentCalls";
 import { useLang } from "@/app/components/Lang";
 import { QUICK_ICONS } from "@/app/components/ScribbleIcons";
+import Mascot from "@/app/components/Mascot";
 
 const TEMPLATES = ["restaurant", "isp", "landlord", "travel"];
 
@@ -11,7 +12,8 @@ export default function Dashboard() {
   const { t } = useLang();
   return (
     <div className="space-y-12">
-      <section className="flex flex-col items-center text-center gap-6 pt-6 sm:pt-10">
+      <section className="flex flex-col items-center text-center gap-6 pt-2 sm:pt-4">
+        <Mascot mood="wave" className="w-[260px] sm:w-[360px]" />
         <h1 className="text-[40px] sm:text-[56px] leading-[1] font-semibold tracking-tight text-ink-100 max-w-[14ch]">{t("dash.title1")}</h1>
         <Link href="/app/new" className="btn-primary text-[22px] sm:text-[26px] px-8 py-5 gap-3">
           <svg className="h-[1em] w-[1em]" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>

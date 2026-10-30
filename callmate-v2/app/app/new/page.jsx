@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useLang } from "@/app/components/Lang";
 import { SUMMARY_LANGS, readSummaryLang } from "@/lib/i18n";
 import DocumentPhoto from "@/app/components/DocumentPhoto";
+import Mascot from "@/app/components/Mascot";
 
 // ElevenLabs voices (billed through Vapi — no extra key). Natural, conversational.
 // Ids are ElevenLabs' premade library voices; previews come from /api/voices when available.
@@ -115,7 +116,10 @@ function NewCallForm() {
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           {t("new.back")}
         </Link>
-        <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink-100">{t("new.title")}</h1>
+        <div className="mt-4 flex items-end justify-between gap-4">
+          <h1 className="text-3xl font-bold tracking-tight text-ink-100">{t("new.title")}</h1>
+          <Mascot mood="ring" className="w-[120px] sm:w-[160px] shrink-0" />
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-7 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>

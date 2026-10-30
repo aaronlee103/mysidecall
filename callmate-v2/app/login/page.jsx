@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import Mascot from "@/app/components/Mascot";
 
 const T = {
   en: {
@@ -54,7 +55,7 @@ function LoginInner() {
         {lang === "ko" ? <>EN · <b>한국어</b></> : <><b>EN</b> · 한국어</>}
       </button>
       <div className="card">
-        <img src="/brand/logo-lockup.png" alt="My Side Call" />
+        <div className="mood-bounce" style={{ width: 240, margin: "0 auto 6px" }}><Mascot mood="bounce" /></div><div style={{ fontWeight: 600, fontSize: 24, marginBottom: 14 }}>My Side <span style={{ color: "#E2603F" }}>Call</span></div>
         <h1>{t.title}</h1>
         <p>{t.sub}</p>
         {error && <div className="err">{error === "OAuthCallback" || error === "Callback" ? "Facebook sign-in was cancelled or failed. Please try again." : `Sign-in error: ${error}`}</div>}

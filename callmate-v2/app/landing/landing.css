@@ -20,7 +20,7 @@ main{flex:1;max-width:1120px;width:100%;margin:auto;padding:0 28px}
 
 /* hero: the drawing and one button */
 .hero{display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:24px;min-height:min(72vh,640px);padding:24px 0 8px}
-.mascot{width:100%;max-width:560px;height:auto;display:block;justify-self:center}
+.mascot{width:100%;max-width:560px;height:auto;display:block;justify-self:center;overflow:visible}
 .say{display:flex;flex-direction:column;align-items:flex-start;gap:26px}
 .hero h1{font-size:clamp(44px,6.2vw,88px);line-height:.98;letter-spacing:-.02em;font-weight:600;margin:0}
 .dial{display:inline-flex;align-items:center;gap:14px;background:var(--red);color:#fff;border-radius:999px;padding:20px 34px 20px 26px;font-size:clamp(22px,2.4vw,30px);font-weight:600;line-height:1;transition:transform .15s;box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--ink)}

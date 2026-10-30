@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/app/components/Lang";
+import Mascot from "@/app/components/Mascot";
 
 const TOOL_LABEL = {
   place_call: { en: "Calling", ko: "전화 거는 중" },
@@ -62,7 +63,7 @@ export default function MusePage() {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink-100">{t("muse.title")}</h1>
             
           </div>
-          <span className="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-[10px] font-mono text-brand-700">Muse Spark</span>
+          <Mascot mood={busy ? "think" : "idle"} className="w-[110px] sm:w-[150px] shrink-0" />
         </div>
         {!phone && <p className="mt-2 text-[12px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{t("muse.nophone")} <Link href="/app/agents" className="underline">{t("muse.nophone.link")}</Link></p>}
       </div>
