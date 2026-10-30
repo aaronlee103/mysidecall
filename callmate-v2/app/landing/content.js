@@ -1,123 +1,183 @@
 // Generated from landing-body.html / landing-script.js / landing.css — edit those, then run: node scripts/build-landing.mjs
 export const LANDING_CSS = `
+:root{--paper:#F7F2E8;--ink:#1E1915;--red:#E2603F;--pencil:#9A9088;--rule:#DED5C6}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+.msc-landing{min-height:100vh;background:var(--paper);color:var(--ink);font-family:Fredoka,"Pretendard",system-ui,sans-serif;font-weight:400;line-height:1.35;display:flex;flex-direction:column}
+.msc-landing a{color:inherit;text-decoration:none}
+.msc-landing button{font:inherit;cursor:pointer;background:none;border:0;color:inherit}
 
-:root{--cream:#faf6ef;--paper:#fffdf9;--ink:#28211d;--muted:#746d66;--orange:#df6b46;--line:#e9ded2;--soft:#f5e8dc}*{box-sizing:border-box}html{scroll-behavior:smooth}.msc-landing{min-height:100vh;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.container{width:min(1160px,calc(100% - 44px));margin:auto}.nav{position:sticky;top:0;z-index:20;background:rgba(250,246,239,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.navin{height:78px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px;font-weight:850;font-size:21px;letter-spacing:-.8px}.brand-icon{width:44px;height:44px;border-radius:13px;background:var(--orange);display:grid;place-items:center;color:white;font-size:25px}.brand span span{color:var(--orange)}.links{display:flex;align-items:center;gap:29px;font-size:14px;font-weight:650}.links a:hover{color:var(--orange)}.btn{border:0;border-radius:999px;padding:14px 22px;font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .2s,background .2s}.btn:hover{transform:translateY(-2px)}.primary{background:var(--orange);color:#fff}.dark{background:var(--ink);color:#fff}.outline{border:1px solid #b8aa9c;background:transparent;color:var(--ink)}.small{padding:11px 17px;font-size:13px}.mobile-toggle{display:none;background:none;border:0;font-size:25px}.hero{padding:78px 0 90px;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:52px}.eyebrow{display:inline-block;color:#b85538;font-size:12px;font-weight:850;letter-spacing:2.2px;text-transform:uppercase}.hero h1{font-size:clamp(48px,5.6vw,83px);line-height:1.04;letter-spacing:-4.5px;margin:20px 0 22px}.hero h1 em{font-style:normal;color:var(--orange)}.lead{font-size:18px;line-height:1.75;color:#625a52;max-width:530px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0}.micro{font-size:12px;color:#8b8177}.visual{position:relative;min-height:490px;display:flex;align-items:center;justify-content:center}.halo{position:absolute;width:460px;height:460px;border-radius:50%;background:#f3e6d9}.hero-logo{position:relative;z-index:1;width:min(380px,90%);background:#fffaf3;border:1px solid #eaded1;box-shadow:0 28px 65px #61412b18;border-radius:30px;padding:28px;transform:rotate(-3deg)}.hero-logo img{width:100%;display:block}.float{position:absolute;z-index:2;background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px #5b402518;padding:13px 16px;font-size:13px;font-weight:700}.float.one{left:0;top:50px}.float.two{right:0;bottom:35px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#6db18a;margin-right:7px}.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:23px 0;background:#fffaf5}.stripin{display:flex;justify-content:space-around;gap:22px;flex-wrap:wrap;font-size:14px;font-weight:750;color:#71675e}.section{padding:96px 0}.section.alt{background:#fffaf5}.center{text-align:center}.section h2{font-size:clamp(32px,4vw,51px);letter-spacing:-2px;line-height:1.13;margin:13px 0 16px}.sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:630px;margin:0 auto 40px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:white;border:1px solid var(--line);border-radius:22px;padding:30px}.card .symbol{display:grid;place-items:center;width:52px;height:52px;border-radius:15px;background:var(--soft);color:#c65a38;font-size:25px}.card h3{font-size:20px;margin:24px 0 9px}.card p{color:var(--muted);line-height:1.7;margin:0;font-size:14px}.demo{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}.demo-info{padding:28px 20px 0 0}.demo-info h2{font-size:clamp(35px,4vw,52px)}.demo-info p{line-height:1.8;color:var(--muted)}.panel{background:white;border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 20px 60px #68462910}.panel h3{margin:0 0 20px;font-size:22px}.field{display:block;margin:16px 0 7px;font-size:13px;font-weight:750}.control{width:100%;border:1px solid #ded4ca;border-radius:12px;background:#fffdfa;color:var(--ink);padding:13px 14px;outline:none}.control:focus{border-color:var(--orange);box-shadow:0 0 0 3px #df6b4620}textarea.control{min-height:105px;resize:vertical}.panel .btn{width:100%;margin-top:18px}.status{display:none;background:#fff7ee;border:1px solid #f0d9c8;border-radius:15px;padding:17px;margin-top:18px;font-size:14px;line-height:1.65}.status.show{display:block}.status strong{color:#b65334}.status .btn{margin-top:12px}.api{background:var(--ink);color:white;border-radius:28px;padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}.api p{color:#d7cac0;line-height:1.8}.api h2{margin-top:12px}.code{position:relative;background:#181411;border:1px solid #51433b;border-radius:17px;padding:25px;overflow:auto}.code pre{font-size:13px;line-height:1.9;color:#f2d5bf;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.copy{position:absolute;right:12px;top:12px;background:#4b3930;border:0;border-radius:8px;color:white;padding:7px 11px;font-size:12px}.faq{max-width:790px;margin:auto}.faq details{border-bottom:1px solid var(--line);padding:20px 0}.faq summary{cursor:pointer;font-weight:750;font-size:17px}.faq p{color:var(--muted);line-height:1.8}.cta{background:#f2e5d7;text-align:center;border-radius:30px;padding:65px 25px}.cta h2{margin:0 0 14px}.cta-mascot{width:min(260px,60%);height:auto;display:block;margin:0 auto 10px}footer{padding:35px 0;border-top:1px solid var(--line);color:#81776f;font-size:13px}.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.tag{display:inline-flex;gap:7px;align-items:center;border-radius:99px;background:#fff;border:1px solid var(--line);padding:8px 12px;font-size:12px;font-weight:750}.tag i{width:7px;height:7px;background:var(--orange);border-radius:50%}.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:white;padding:13px 20px;border-radius:12px;display:none;z-index:40;font-size:14px}.toast.show{display:block}@media(max-width:800px){.links{display:none;position:absolute;top:78px;left:0;right:0;background:var(--cream);padding:25px;flex-direction:column;border-bottom:1px solid var(--line)}.links.open{display:flex}.mobile-toggle{display:block}.hero{padding:50px 0}.hero-grid,.demo,.api{grid-template-columns:1fr}.hero h1{letter-spacing:-2.5px}.visual{min-height:390px}.halo{width:330px;height:330px}.hero-logo{width:300px}.cards{grid-template-columns:1fr}.section{padding:65px 0}.api{padding:27px}.float.one{left:0;top:10px}.float.two{right:0;bottom:12px}}@media(max-width:400px){.hero h1{font-size:45px}.float{font-size:11px;padding:10px}.hero-logo{width:250px}.visual{min-height:320px}.halo{width:280px;height:280px}}
- .brand-image{width:46px;height:46px;object-fit:contain}.brand{gap:9px}.hero-logo img{mix-blend-mode:normal} 
-html:has(.msc-landing) body{background:var(--cream)!important;color:var(--ink)!important}
-.msc-landing .lang{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:#fffdf9;font-size:12px;font-weight:700;color:#8b8177}
-.msc-landing .lang .sep{opacity:.5}.msc-landing .lang .on{color:var(--orange)}
-.msc-landing .panel .micro{line-height:1.5}
+/* nav: two things only */
+.nav{padding:18px 28px}
+.navin{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:auto}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:20px}
+.brand img{width:40px;height:40px;object-fit:contain}
+.brand b{color:var(--red);font-weight:600}
+.navr{display:flex;align-items:center;gap:8px}
+.lang,.help{border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:500;font-size:14px;background:var(--paper)}
+.lang span{color:var(--pencil)}.lang span.on{color:var(--ink)}.lang span+span::before{content:" / ";color:var(--pencil)}
+.msc-landing button.help{background:var(--ink);color:var(--paper)}
+.lang:focus-visible,.help:focus-visible,.dial:focus-visible,.q:focus-visible,.pill:focus-visible,.close:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+
+main{flex:1;max-width:1120px;width:100%;margin:auto;padding:0 28px}
+
+/* hero: the drawing and one button */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:24px;min-height:min(72vh,640px);padding:24px 0 8px}
+.mascot{width:100%;max-width:560px;height:auto;display:block;justify-self:center}
+.say{display:flex;flex-direction:column;align-items:flex-start;gap:26px}
+.hero h1{font-size:clamp(44px,6.2vw,88px);line-height:.98;letter-spacing:-.02em;font-weight:600;margin:0}
+.dial{display:inline-flex;align-items:center;gap:14px;background:var(--red);color:#fff;border-radius:999px;padding:20px 34px 20px 26px;font-size:clamp(22px,2.4vw,30px);font-weight:600;line-height:1;transition:transform .15s;box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--ink)}
+.dial svg{width:1.05em;height:1.05em;fill:#fff}
+.dial:hover{transform:translateY(-2px) rotate(-1.5deg)}
+.dial.small{font-size:18px;padding:14px 24px 14px 20px;margin-top:28px}
+.whisper{margin:0;color:var(--pencil);font-size:17px}
+
+/* quick actions: four doodles on a line, no boxes */
+.quick{display:flex;justify-content:space-between;gap:16px;padding:42px 0 10px;border-top:2px dashed var(--rule);margin-top:24px}
+.q{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;color:var(--ink);font-weight:500;font-size:17px;text-align:center;padding:10px 6px;border-radius:18px;transition:transform .15s}
+.q svg{width:78px;height:78px;color:var(--ink)}
+.q:hover{transform:translateY(-3px) rotate(-2deg)}
+.q:hover svg{color:var(--red)}
+
+/* agents */
+.agents{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding:40px 0 56px}
+.msc-landing a.pill{border:2px solid var(--ink);border-radius:999px;padding:13px 22px;font-weight:500;font-size:17px;background:var(--ink);color:var(--paper)}
+.msc-landing a.pill.ghost{background:transparent;color:var(--ink)}
+.msc-landing a.dial{color:#fff}
+.pill:hover{transform:translateY(-2px)}
+
+footer{max-width:1120px;width:100%;margin:auto;padding:18px 28px 28px;display:flex;gap:18px;flex-wrap:wrap;color:var(--pencil);font-size:13px;border-top:2px dashed var(--rule)}
+footer a:hover{color:var(--ink)}
+
+/* the explainer sheet */
+.sheet{position:fixed;inset:0;background:rgba(30,25,21,.35);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+.sheet[hidden]{display:none}
+.sheetin{position:relative;width:min(720px,100%);max-height:88vh;overflow:auto;background:var(--paper);border:3px solid var(--ink);border-bottom:0;border-radius:28px 28px 0 0;padding:34px 34px 40px}
+.close{position:absolute;right:16px;top:14px;width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);font-size:16px;background:var(--paper)}
+.sheet h2{font-size:30px;font-weight:600;margin:0 0 20px;line-height:1.1}
+.sheet dl{margin:0;display:grid;gap:18px}
+.sheet dt{font-weight:600;font-size:18px;margin:0 0 4px}
+.sheet dd{margin:0;color:#4b443e;font-size:16px;max-width:58ch}
+@media(min-width:720px){.sheet{align-items:center;padding:24px}.sheetin{border-bottom:3px solid var(--ink);border-radius:28px}}
+
+@media(max-width:820px){
+  .nav{padding:14px 18px}.brand span{display:none}
+  main{padding:0 18px}
+  .hero{grid-template-columns:1fr;text-align:center;min-height:0;padding-top:4px;gap:10px}
+  .mascot{max-width:340px}
+  .say{align-items:center;gap:20px}
+  .hero h1{font-size:clamp(38px,11vw,54px)}
+  .dial{font-size:22px;padding:18px 28px 18px 22px}
+  .quick{flex-wrap:wrap;gap:6px 0;padding-top:28px}
+  .q{flex:0 0 50%;font-size:15px}.q svg{width:64px;height:64px}
+  .agents{padding:28px 0 40px}
+  footer{padding:16px 18px 24px}
+}
+@media(prefers-reduced-motion:reduce){.dial,.q,.pill{transition:none}.dial:hover,.q:hover,.pill:hover{transform:none}}
 
 `;
 
 export const LANDING_HTML = `<div class="msc-landing" id="top">
-<header class="nav"><div class="container navin"><a href="/" class="brand" aria-label="My Side Call home"><img class="brand-image" src="/brand/logo-icon.png" alt="My Side Call"><span>My Side <span>Call</span></span></a><button class="mobile-toggle" id="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button><nav class="links" id="links"><a href="#how" data-i18n="nav.how">How it works</a><a href="#demo" data-i18n="nav.try">Make a call</a><a href="#meta" data-i18n="nav.meta">Built on Meta</a><a href="#developers" data-i18n="nav.dev">For agents</a><a href="#faq">FAQ</a><button class="lang" id="lang" type="button" aria-label="Switch language"><span data-lang="en">EN</span><span class="sep">·</span><span data-lang="ko">한국어</span></button><a class="btn primary small" href="/app/new" data-i18n="nav.cta">Make a call ↗</a></nav></div></header>
+<header class="nav"><div class="navin"><a href="/" class="brand" aria-label="My Side Call home"><img src="/brand/logo-icon.png" alt=""><span>My Side <b>Call</b></span></a><div class="navr"><button class="lang" id="lang" type="button" aria-label="Switch language"><span data-lang="en">EN</span><span data-lang="ko">한국어</span></button><button class="help" id="help" type="button" aria-haspopup="dialog" aria-controls="sheet" data-i18n="nav.help">What is this?</button></div></div></header>
+
 <main>
-<section class="hero"><div class="container hero-grid"><div><span class="eyebrow" data-i18n="hero.eyebrow">Your voice, anywhere</span><h1 data-i18n-html="hero.h1">Let AI make<br>the <em>call.</em></h1><p class="lead" data-i18n="hero.lead">Need to make a phone call in English — or any language you'd rather not speak on the phone? Tell us what you need in your own words. Your AI makes the real call, checks back with you when something comes up, and hands you a summary when it's done.</p><div class="actions"><a class="btn primary" href="/app/new" data-i18n="hero.cta1">Make a real call ↗</a><a class="btn outline" href="#how" data-i18n="hero.cta2">See how it works →</a></div><p class="micro" data-i18n="hero.micro">Real phone calls in the U.S. · Built for people and for AI agents · Built on Meta Muse Spark &amp; Muse Voice</p></div><div class="visual"><div class="halo"></div><div class="float one" data-i18n="hero.float1">🌎 Ask in your language</div><div class="hero-logo"><img src="/brand/logo-lockup.png" alt="My Side Call — Your AI. Your Call. Any Language."></div><div class="float two"><span class="dot"></span> <span data-i18n="hero.float2">Your AI handles the conversation</span></div></div></div></section>
-<div class="strip"><div class="container stripin"><span data-i18n="strip.1">✦ You ask</span><span data-i18n="strip.2">☎ We call</span><span data-i18n="strip.3">↔ We check back</span><span data-i18n="strip.4">✓ You stay in control</span></div></div>
-<section class="section" id="how"><div class="container"><div class="center"><span class="eyebrow" data-i18n="how.eyebrow">Simple by design</span><h2 data-i18n="how.h2">One request. A real conversation.</h2><p class="sub" data-i18n="how.sub">From a dentist appointment to a cable-company refund, My Side Call does the part you dread — the phone call — and keeps you in charge of every decision.</p></div><div class="cards"><article class="card"><div class="symbol">💬</div><h3 data-i18n="how.1h">01. Tell us what you need</h3><p data-i18n="how.1p">Type it in the language you think in. Snap a photo of the bill or letter and we'll pull out the account number and amounts for you.</p></article><article class="card"><div class="symbol">☎</div><h3 data-i18n="how.2h">02. Your AI makes the call</h3><p data-i18n="how.2p">A real phone call, in natural English. The AI knows your goal, your limits, and what it is not allowed to agree to.</p></article><article class="card"><div class="symbol">↔</div><h3 data-i18n="how.3h">03. You stay in the loop</h3><p data-i18n="how.3p">When the other side proposes something new — a different time, an extra fee — the AI pauses, asks you on your screen in your language, then continues the call with your answer.</p></article></div></div></section>
-<section class="section alt" id="demo"><div class="container demo"><div class="demo-info"><span class="eyebrow" data-i18n="demo.eyebrow">Start here</span><h2 data-i18n="demo.h2">What would you like us to call about?</h2><p data-i18n="demo.p">Write your request the way you'd tell a friend. On the next screen you add the phone number, and the call starts within seconds. You'll see the live transcript and any questions the AI has for you.</p><div class="tag"><i></i> <span data-i18n="demo.tag">Live calls · U.S. numbers · Summary in your language</span></div></div><div class="panel"><h3 data-i18n="demo.panel">Draft your request</h3><label class="field" for="language" data-i18n="demo.lang">Your language</label><select class="control" id="language"><option value="en">English</option><option value="ko">한국어 (Korean)</option><option value="es">Español (Spanish)</option><option value="ja">日本語 (Japanese)</option><option value="zh">中文 (Chinese)</option></select><label class="field" for="topic" data-i18n="demo.topic">What is the call about?</label><select class="control" id="topic"><option value="appointment" data-i18n="demo.t1">Book or change an appointment</option><option value="restaurant" data-i18n="demo.t2">Make a restaurant reservation</option><option value="support" data-i18n="demo.t3">Customer support (bill, refund, cancellation)</option><option value="other" data-i18n="demo.t4">Something else</option></select><label class="field" for="request" data-i18n="demo.req">Describe your request</label><textarea class="control" id="request" data-i18n-ph="demo.ph" placeholder="Example: Call my dentist and move my cleaning from Tuesday to any afternoon next week. If they offer a time, ask me first."></textarea><button class="btn primary" id="simulate" data-i18n="demo.btn">Continue to the call →</button><p class="micro" style="margin-top:12px" data-i18n="demo.note">Emergency (911), medical and legal advice calls are not supported.</p></div></div></section>
-<section class="section" id="meta"><div class="container"><div class="center"><span class="eyebrow" data-i18n="meta.eyebrow">Built on Meta</span><h2 data-i18n="meta.h2">Three Meta models, one phone call.</h2><p class="sub" data-i18n="meta.sub">My Side Call runs on the Meta Model API end to end — the voice on the line, the summary you read, the bill it reads for you — and signs you in with the account you already have.</p></div><div class="cards"><article class="card"><div class="symbol">✦</div><h3>Muse Spark</h3><p data-i18n="meta.1p">The brain of the call. It talks to the other party in English, decides when to pause and ask you, and writes your summary and to-do list in your language. It also reads the bill or letter you photograph.</p></article><article class="card"><div class="symbol">♪</div><h3>Muse Voice Transcribe</h3><p data-i18n="meta.2p">After the call, the recording goes through Meta's speech model for a clean, punctuated transcript you can keep and search.</p></article><article class="card"><div class="symbol">f</div><h3>Facebook Login</h3><p data-i18n="meta.3p">One tap to sign in. Your calls, transcripts and summaries are tied to your account and nobody else's — no new password to remember.</p></article></div></div></section>
-<section class="section" id="developers"><div class="container"><div class="api"><div><span class="eyebrow" style="color:#eaa17f" data-i18n="dev.eyebrow">Built for agents, too</span><h2 data-i18n="dev.h2">Give your AI agent a phone.</h2><p data-i18n="dev.p">My Side Call is also a connector (MCP server). Any AI agent — Claude, Muse, your own — can place a real call, get the transcript, answer a mid-call question, or call its owner for a wake-up or check-in. Same safety rules apply.</p><a class="btn primary" href="https://github.com/aaronlee103/mysidecall" target="_blank" rel="noopener" data-i18n="dev.cta">Read the docs on GitHub →</a></div><div class="code"><button class="copy" id="copy">Copy</button><pre id="code">// MCP tools exposed by My Side Call
-place_call({
-  to: "+1 201 555 0142",
-  goal: "Move my dental cleaning to next week, afternoons only",
-  owner_language: "ko",
-  ask_owner_before_agreeing: true
-})
-get_call_status({ call_id })        // live transcript, pending question
-answer_question({ call_id, answer }) // your reply goes into the call
-call_owner({ message: "Your 9am meeting moved to 10." }) // the agent phones you</pre></div></div></div></section>
-<section class="section" id="roadmap"><div class="container"><div class="center"><span class="eyebrow" data-i18n="road.eyebrow">Where this goes</span><h2 data-i18n="road.h2">Any language. Any direction. Any country.</h2><p class="sub" data-i18n="road.sub">We started with one hard moment — an English phone call you'd rather not make. The same call, the same AI, points the other way too.</p></div><div class="cards"><article class="card"><div class="symbol">①</div><span class="tag"><i></i><span data-i18n="road.1tag">Live now</span></span><h3 data-i18n="road.1h">Your language → English calls</h3><p data-i18n="road.1p">In the U.S. today. Ask in Korean, Spanish, Japanese, Chinese or English; the AI makes the English call, checks with you in your language, and sums it up the same way.</p></article><article class="card"><div class="symbol">②</div><span class="tag"><i></i><span data-i18n="road.2tag">Next</span></span><h3 data-i18n="road.2h">English → any language, anywhere</h3><p data-i18n="road.2p">The hotel in Paris, your parents' clinic in Seoul, the car rental in Mexico City. Same brain, same summary — the AI just speaks the other side's language. Local numbers and call rules per country come first.</p></article><article class="card"><div class="symbol">③</div><span class="tag"><i></i><span data-i18n="road.3tag">Exploring</span></span><h3 data-i18n="road.3h">Two people, two languages, one call</h3><p data-i18n="road.3p">You and a friend who don't share a language, talking live with the AI translating in between. A different product with harder latency problems — but the same promise: your voice, anywhere.</p></article></div></div></section>
-<section class="section alt" id="faq"><div class="container"><div class="center"><span class="eyebrow" data-i18n="faq.eyebrow">Good to know</span><h2 data-i18n="faq.h2">Frequently asked questions</h2></div><div class="faq"><details><summary data-i18n="faq.1q">Does it make real phone calls?</summary><p data-i18n="faq.1a">Yes. My Side Call dials real U.S. phone numbers and holds a real conversation. You watch the transcript live and can end the call at any time.</p></details><details><summary data-i18n="faq.2q">What is the AI behind the call?</summary><p data-i18n="faq.2a">The conversation, the mid-call questions and the summary are run by Meta's Muse Spark model through the Meta Model API. Speech-to-text and the phone line come from Vapi.</p></details><details><summary data-i18n="faq.3q">Will the AI agree to something without asking me?</summary><p data-i18n="faq.3a">No. Anything that wasn't in your request — a new time, a fee, a change of plan — is sent to your screen as a question in your language. The AI keeps the line open until you answer.</p></details><details><summary data-i18n="faq.4q">Can other AI agents use My Side Call?</summary><p data-i18n="faq.4a">Yes, through the MCP connector. An agent can place calls on your behalf and can also call you — for example a morning wake-up call that reads your schedule.</p></details><details><summary data-i18n="faq.5q">What won't it do?</summary><p data-i18n="faq.5a">Emergency calls (911), medical or legal judgment calls, and anything that requires impersonating you in a legally binding way. Calls are recorded for your summary; the other party is told they are speaking with an assistant when asked.</p></details></div></div></section>
-<section class="section"><div class="container"><div class="cta"><img class="cta-mascot" src="/brand/mascot.png" alt=""><span class="eyebrow">My Side Call</span><h2>Your AI. Your Call. Any Language.</h2><p class="sub" style="margin-bottom:26px" data-i18n="cta.sub">A more connected world starts with a conversation.</p><a href="/app/new" class="btn dark" data-i18n="cta.btn">Make a call ↗</a></div></div></section>
+<section class="hero">
+  <img class="mascot" src="/brand/mascot.png" alt="A scribble character talking on a red phone">
+  <div class="say">
+    <h1 data-i18n-html="hero.h1">Your AI<br>makes the call.</h1>
+    <a class="dial" href="/app/new"><svg viewBox="0 0 24 24" aria-hidden><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg><span data-i18n="hero.cta">Make a call</span></a>
+    <p class="whisper" data-i18n="hero.whisper">Ask in your language. We talk in theirs.</p>
+  </div>
+</section>
+
+<section class="quick" aria-label="Common calls">
+  <a href="/app/new?template=Restaurant%20reservation" class="q"><svg viewBox="0 0 48 48"><use href="#i-plate"/></svg><span data-i18n="q.1">Book a table</span></a>
+  <a href="/app/new?template=Internet%20%2F%20cable%20support" class="q"><svg viewBox="0 0 48 48"><use href="#i-router"/></svg><span data-i18n="q.2">Customer service</span></a>
+  <a href="/app/new?template=Landlord%20%2F%20building%20office" class="q"><svg viewBox="0 0 48 48"><use href="#i-house"/></svg><span data-i18n="q.3">Landlord</span></a>
+  <a href="/app/new?template=Airline%20%2F%20hotel" class="q"><svg viewBox="0 0 48 48"><use href="#i-plane"/></svg><span data-i18n="q.4">Travel</span></a>
+</section>
+
+<section class="agents">
+  <a class="pill" href="/app/muse" data-i18n="a.muse">Ask Muse to call</a>
+  <a class="pill ghost" href="/app/agents" data-i18n="a.mcp">Connect your own agent</a>
+</section>
 </main>
-<footer><div class="container foot"><span>© 2026 HARUDAOL LLC · My Side Call</span><span data-i18n="foot.r">Built with Meta Muse Spark &amp; Muse Voice · Meta Model API · Cresskill, NJ</span></div></footer>
-<div class="toast" id="toast" role="status"></div>
+
+<footer><span>© 2026 HARUDAOL LLC</span><span data-i18n="foot.meta">Built on Meta Muse Spark &amp; Muse Voice</span><a href="/privacy" data-i18n="foot.privacy">Privacy</a><a href="/terms" data-i18n="foot.terms">Terms</a></footer>
+
+<!-- Everything explanatory lives here, behind the "?" -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h" hidden>
+  <div class="sheetin">
+    <button class="close" id="close" type="button" aria-label="Close">✕</button>
+    <h2 id="sheet-h" data-i18n="s.h">What My Side Call does</h2>
+    <dl>
+      <dt data-i18n="s.1t">You write what you need</dt><dd data-i18n="s.1d">In Korean, Spanish, Japanese, Chinese or English. Snap a photo of a bill and it reads the account number and amount for you.</dd>
+      <dt data-i18n="s.2t">The AI makes a real phone call</dt><dd data-i18n="s.2d">In natural English, to any US number. It says it is an AI assistant in its first sentence and that the call may be recorded.</dd>
+      <dt data-i18n="s.3t">It asks you before deciding</dt><dd data-i18n="s.3d">A new time, an extra fee — anything not in your request comes to your screen as a question in your language. The AI keeps the line open until you answer.</dd>
+      <dt data-i18n="s.4t">You get a summary in your language</dt><dd data-i18n="s.4d">What was agreed, what is still open, what to put on your calendar — plus the recording and a clean transcript.</dd>
+      <dt data-i18n="s.5t">Your other AI can use it too</dt><dd data-i18n="s.5d">Muse, Claude or any agent can connect and place calls for you, or call you — a wake-up call, a reminder, a result.</dd>
+      <dt data-i18n="s.6t">Built with Meta</dt><dd data-i18n="s.6d">Muse Spark runs the conversation, the summary and the bill reading. Muse Voice Transcribe re-transcribes the recording. Facebook Login signs you in.</dd>
+      <dt data-i18n="s.7t">What it will not do</dt><dd data-i18n="s.7d">Emergency calls (911), medical or legal judgment calls, or agreeing to anything you did not approve.</dd>
+      <dt data-i18n="s.8t">Where this goes</dt><dd data-i18n="s.8d">Today: your language to English, in the US. Next: English to any language, in any country. Later: two people, two languages, one live call.</dd>
+    </dl>
+    <a class="dial small" href="/app/new"><span data-i18n="hero.cta">Make a call</span></a>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden>
+  <defs>
+    <g id="i-plate" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 25.6c-.3-6 4.9-11 10.6-10.9 5.9.1 10.7 5 10.3 11-.4 5.9-5.3 9.8-11 9.6-5.6-.2-9.7-4-9.9-9.7z"/><path stroke-width="2.2" d="M20.4 24.2v1.2M27.8 24.2v1.2"/><path stroke-width="2" d="M21.4 27.8c2.5 1.4 4.9 1.4 5.4 0"/><path stroke="#E2603F" d="M7 16v17M4.6 16v4.8c0 1.7 1 2.7 2.4 2.7s2.4-1 2.4-2.7V16"/><path d="M41 16c2.2 2.8 2.2 6.6 0 9v8"/></g>
+    <g id="i-router" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 29.4c-.2-2.1 1.2-3.5 3.3-3.6l25.6-.2c2.1 0 3.4 1.3 3.4 3.3v5.3c0 2-1.3 3.3-3.3 3.3H11.4c-2.1 0-3.3-1.3-3.4-3.2z"/><path stroke-width="2.2" d="M16.5 30.8v1.2M22.5 30.8v1.2"/><path stroke-width="2" d="M17.5 34.4c1.8 1.4 4.2 1.4 4 0"/><circle cx="32.5" cy="32.7" r="1.4" fill="#E2603F" stroke="none"/><circle cx="36.8" cy="32.7" r="1.4" fill="#E2603F" stroke="none"/><path d="M36 25.5v-7"/><circle cx="36" cy="16" r="2.1" fill="#E2603F" stroke="none"/><path stroke="#E2603F" stroke-width="2.4" d="M16 17.6c4.4-4 11.6-4 16 0M19.8 13.4c2.3-2 6.1-2 8.4 0"/></g>
+    <g id="i-house" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 23.5 23.4 9.9c.4-.3.9-.3 1.2 0L39.5 23.3"/><path d="M13 20.5v16.4c0 1.5 1 2.5 2.5 2.5h17c1.5 0 2.5-1 2.5-2.5V20.7"/><path stroke="#E2603F" d="M20.6 39.4v-8.2c0-1.4.9-2.3 2.3-2.3h2.2c1.4 0 2.3.9 2.3 2.3v8.2"/><path stroke-width="2.2" d="M19.6 23.8v1.2M28.4 23.8v1.2"/><path stroke-width="2" d="M20.6 27.4c3.2 1.4 6.8 1.4 6.8 0"/><path stroke="#E2603F" stroke-width="2.4" d="M38.8 27.8c-1 1.4-1 2.8 0 3.5 1-.7 1-2.1 0-3.5z"/></g>
+    <g id="i-plane" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 22.8 38.2 11.2c.8-.3 1.5.4 1.2 1.2L28.9 36.8c-.3.7-1.3.8-1.7.1l-5.4-8.7-11.6-3.6c-.9-.3-.9-1.4-.7-1.8z"/><path stroke-width="2.2" d="M21.8 28.2 38.6 12.1"/><path stroke-width="2.2" d="M21.8 28.2l-1.1 7 4.2-4.9"/><path stroke-width="2.2" d="M27.8 19.4v1.2M33.2 19.4v1.2"/><path stroke-width="2" d="M28.8 23c1.5 1.4 3.9 1.4 3.4 0"/><path stroke="#E2603F" stroke-width="2.4" d="M5.5 31.5h6.5M7.5 36.5h4.5"/></g>
+  </defs>
+</svg>
 </div>
 `;
 
 export const LANDING_JS = `(function(){
 var KO={
-"nav.how":"이용 방법","nav.meta":"Meta 기반","nav.try":"전화 걸기","nav.dev":"에이전트용","nav.cta":"전화 걸기 ↗",
-"hero.eyebrow":"당신의 목소리, 어디서나",
-"hero.h1":"영어 전화,<br>AI가 <em>대신</em> 겁니다.",
-"hero.lead":"영어로 전화하는 게 부담스러우세요? 하고 싶은 말을 한국어로 적어 주세요. AI가 실제로 전화를 걸어 영어로 대화하고, 중간에 결정할 일이 생기면 화면으로 물어본 뒤, 끝나면 한국어 요약을 드립니다.",
-"hero.cta1":"실제 전화 걸기 ↗","hero.cta2":"이용 방법 보기 →",
-"hero.micro":"미국 전화번호로 실제 통화 · 사람과 AI 에이전트 모두를 위해 · Meta Muse Spark · Muse Voice 기반",
-"road.eyebrow":"앞으로의 방향","road.h2":"어떤 언어로든, 어느 방향으로든, 어느 나라든.",
-"road.sub":"'하기 싫은 영어 전화 한 통'에서 시작했습니다. 같은 전화, 같은 AI가 반대 방향으로도 갑니다.",
-"road.1tag":"지금 가능","road.1h":"내 언어 → 영어 전화","road.1p":"지금 미국에서. 한국어·스페인어·일본어·중국어·영어로 부탁하면 AI가 영어로 전화하고, 내 언어로 확인하고, 내 언어로 정리해 줍니다.",
-"road.2tag":"다음","road.2h":"영어 → 어떤 언어든, 어디서든","road.2p":"파리의 호텔, 서울의 부모님 병원, 멕시코시티의 렌터카. 두뇌도 요약도 그대로, AI가 상대 쪽 언어로 말할 뿐입니다. 나라별 전화번호와 통화 규정부터 맞춥니다.",
-"road.3tag":"탐색 중","road.3h":"두 사람, 두 언어, 한 통화","road.3p":"언어가 다른 친구와 통화할 때 AI가 중간에서 실시간으로 바꿔 주는 것. 지연 문제가 더 어려운 별개의 제품이지만, 약속은 같습니다 — 당신의 목소리, 어디서나.",
-"meta.eyebrow":"Meta 모델로 만들었습니다","meta.h2":"전화 한 통에 Meta 모델 셋.",
-"meta.sub":"My Side Call은 처음부터 끝까지 Meta Model API 위에서 돌아갑니다 — 전화기 너머의 대화, 당신이 읽는 요약, 대신 읽어 주는 고지서까지. 로그인은 이미 쓰는 계정으로.",
-"meta.1p":"통화의 두뇌. 상대와 영어로 대화하고, 언제 멈춰서 당신에게 물어볼지 판단하고, 끝나면 요약과 할 일을 당신의 언어로 씁니다. 사진으로 올린 고지서·편지도 읽어 줍니다.",
-"meta.2p":"통화가 끝나면 녹음을 Meta의 음성 모델로 다시 받아써, 문장부호까지 정리된 깨끗한 전사본을 보관·검색할 수 있습니다.",
-"meta.3p":"한 번 눌러 로그인. 통화 기록·대화 내용·요약은 내 계정에만 묶이고, 새로 외울 비밀번호가 없습니다.",
-"hero.float1":"🌎 한국어로 부탁하세요","hero.float2":"대화는 AI가 맡습니다",
-"strip.1":"✦ 부탁하면","strip.2":"☎ 전화하고","strip.3":"↔ 중간에 물어보고","strip.4":"✓ 결정은 당신이",
-"how.eyebrow":"단순하게","how.h2":"부탁 한 번. 실제 대화 한 통.",
-"how.sub":"치과 예약부터 케이블 요금 환불까지, 가장 하기 싫은 '전화'만 My Side Call이 맡고 결정은 전부 당신이 합니다.",
-"how.1h":"01. 필요한 걸 말해 주세요","how.1p":"생각나는 언어로 그대로 적으세요. 고지서나 편지를 사진으로 올리면 계정번호·금액을 알아서 읽어 둡니다.",
-"how.2h":"02. AI가 전화를 겁니다","how.2p":"자연스러운 영어로 실제 통화. 목표와 한도, 합의하면 안 되는 것까지 알고 전화합니다.",
-"how.3h":"03. 중간에 꼭 물어봅니다","how.3p":"상대가 다른 시간, 추가 요금처럼 새로운 제안을 하면 AI가 잠시 멈추고 화면으로 한국어로 묻습니다. 답하시면 그대로 이어서 통화합니다.",
-"demo.eyebrow":"여기서 시작","demo.h2":"어떤 전화를 대신 걸어 드릴까요?",
-"demo.p":"친구에게 말하듯 적어 주세요. 다음 화면에서 전화번호만 넣으면 몇 초 안에 통화가 시작되고, 실시간 대화 내용과 AI의 질문을 화면에서 보실 수 있습니다.",
-"demo.tag":"실제 통화 · 미국 번호 · 한국어 요약",
-"demo.panel":"부탁 내용 적기","demo.lang":"내 언어","demo.topic":"어떤 전화인가요?",
-"demo.t1":"예약 잡기·변경","demo.t2":"식당 예약","demo.t3":"고객센터 (요금·환불·해지)","demo.t4":"기타",
-"demo.req":"부탁 내용","demo.ph":"예: 치과에 전화해서 화요일 스케일링을 다음 주 오후로 옮겨 줘. 시간을 제안하면 나한테 먼저 물어봐.",
-"demo.btn":"전화 걸러 가기 →","demo.note":"응급(911)·의료·법률 판단이 필요한 전화는 지원하지 않습니다.",
-"dev.eyebrow":"에이전트를 위해서도","dev.h2":"AI 에이전트에게 전화를 주세요.",
-"dev.p":"My Side Call은 커넥터(MCP 서버)이기도 합니다. Claude, Muse, 직접 만든 에이전트 어느 것이든 실제 전화를 걸고, 대화 내용을 받고, 중간 질문에 답하고, 주인에게 모닝콜이나 안부 전화를 걸 수 있습니다. 안전 규칙은 동일합니다.",
-"dev.cta":"GitHub에서 문서 보기 →",
-"faq.eyebrow":"알아 두세요","faq.h2":"자주 묻는 질문",
-"faq.1q":"정말 전화가 걸리나요?","faq.1a":"네. 실제 미국 전화번호로 걸어 실제 대화를 합니다. 대화 내용을 실시간으로 보고 언제든 끊을 수 있습니다.",
-"faq.2q":"통화하는 AI는 무엇인가요?","faq.2a":"대화, 중간 질문, 요약은 Meta의 Muse Spark 모델이 Meta Model API를 통해 수행합니다. 음성 인식과 전화선은 Vapi를 씁니다.",
-"faq.3q":"AI가 저한테 안 묻고 합의해 버리지 않나요?","faq.3a":"아니요. 부탁에 없던 것(새 시간, 요금, 계획 변경)은 모두 화면에 한국어 질문으로 올라옵니다. 답하실 때까지 AI가 통화를 유지합니다.",
-"faq.4q":"다른 AI 에이전트도 쓸 수 있나요?","faq.4a":"네, MCP 커넥터로 가능합니다. 에이전트가 당신 대신 전화를 걸 수도, 당신에게 전화를 걸 수도 있습니다 — 예를 들어 일정을 읽어 주는 아침 모닝콜처럼요.",
-"faq.5q":"하지 않는 일은요?","faq.5a":"응급 전화(911), 의료·법률 판단, 법적 효력이 있는 본인 사칭은 하지 않습니다. 통화는 요약을 위해 녹음되며, 상대가 물으면 어시스턴트임을 밝힙니다.",
-"cta.sub":"더 연결된 세상은 대화 한 통에서 시작합니다.","cta.btn":"전화 걸기 ↗",
-"foot.r":"Meta Muse Spark · Muse Voice로 만들었습니다 · Meta Model API · 뉴저지 크레스킬"
+"nav.help":"뭐 하는 곳이에요?",
+"hero.h1":"영어 전화,<br>AI가 대신 겁니다.",
+"hero.cta":"전화 걸기",
+"hero.whisper":"한국어로 부탁하면, 영어로 통화합니다.",
+"q.1":"식당 예약","q.2":"고객센터","q.3":"집주인","q.4":"여행",
+"a.muse":"Muse에게 전화 부탁","a.mcp":"내 에이전트 연결",
+"foot.meta":"Meta Muse Spark · Muse Voice로 만들었습니다","foot.privacy":"개인정보","foot.terms":"약관",
+"s.h":"My Side Call은 이런 것",
+"s.1t":"필요한 걸 적습니다","s.1d":"한국어·스페인어·일본어·중국어·영어 아무거나. 고지서 사진을 찍으면 계좌번호와 금액을 대신 읽어 둡니다.",
+"s.2t":"AI가 실제로 전화를 겁니다","s.2d":"미국 번호 어디든, 자연스러운 영어로. 첫 문장에서 AI 비서임과 녹음될 수 있음을 밝힙니다.",
+"s.3t":"결정은 물어보고 합니다","s.3d":"다른 시간, 추가 요금처럼 부탁에 없던 건 화면에 한국어로 질문이 옵니다. 답할 때까지 AI가 전화를 붙들고 있습니다.",
+"s.4t":"끝나면 한국어 요약","s.4d":"합의된 것, 남은 것, 달력에 적을 것 — 녹음과 깨끗한 전사본까지.",
+"s.5t":"다른 AI도 쓸 수 있습니다","s.5d":"Muse, Claude, 어떤 에이전트든 연결해서 대신 전화를 걸게 하거나 — 모닝콜·알림·결과 보고처럼 나에게 걸게 할 수 있습니다.",
+"s.6t":"Meta로 만들었습니다","s.6d":"대화·요약·고지서 읽기는 Muse Spark, 녹음 재전사는 Muse Voice Transcribe, 로그인은 Facebook Login.",
+"s.7t":"하지 않는 것","s.7d":"응급(911), 의료·법률 판단 통화, 그리고 승인하지 않은 어떤 것에도 동의하지 않습니다.",
+"s.8t":"앞으로","s.8d":"지금: 내 언어 → 영어, 미국 안에서. 다음: 영어 → 어떤 언어든, 어느 나라든. 나중: 두 사람, 두 언어, 한 통화."
 };
 var EN={};
-document.querySelectorAll('[data-i18n],[data-i18n-html],[data-i18n-ph]').forEach(function(el){
-  var k=el.getAttribute('data-i18n')||el.getAttribute('data-i18n-html')||el.getAttribute('data-i18n-ph');
-  EN[k]=el.hasAttribute('data-i18n-html')?el.innerHTML:el.hasAttribute('data-i18n-ph')?el.getAttribute('placeholder'):el.textContent;
+document.querySelectorAll('[data-i18n],[data-i18n-html]').forEach(function(el){
+  var k=el.getAttribute('data-i18n')||el.getAttribute('data-i18n-html');
+  if(!(k in EN)) EN[k]=el.hasAttribute('data-i18n-html')?el.innerHTML:el.textContent;
 });
 function apply(lang){
   var D=lang==='ko'?KO:EN;
   document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(D[k]!=null)el.textContent=D[k];});
   document.querySelectorAll('[data-i18n-html]').forEach(function(el){var k=el.getAttribute('data-i18n-html');if(D[k]!=null)el.innerHTML=D[k];});
-  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){var k=el.getAttribute('data-i18n-ph');if(D[k]!=null)el.setAttribute('placeholder',D[k]);});
   document.querySelectorAll('#lang [data-lang]').forEach(function(s){s.classList.toggle('on',s.getAttribute('data-lang')===lang);});
   document.documentElement.lang=lang;
-  var sel=document.getElementById('language'); if(sel&&!sel.dataset.touched) sel.value=lang;
   try{localStorage.setItem('msc_lang',lang);}catch(e){}
 }
 var saved=null; try{saved=localStorage.getItem('msc_lang');}catch(e){}
-var initial=saved||((navigator.language||'').toLowerCase().indexOf('ko')===0?'ko':'en');
-apply(initial);
+apply(saved||((navigator.language||'').toLowerCase().indexOf('ko')===0?'ko':'en'));
 document.getElementById('lang').addEventListener('click',function(){apply(document.documentElement.lang==='ko'?'en':'ko');});
-var sel=document.getElementById('language'); sel.addEventListener('change',function(){sel.dataset.touched='1';});
 
-var menu=document.getElementById('menu'),links=document.getElementById('links');
-menu.addEventListener('click',function(){var open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'✕':'☰';});
-links.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';});});
-
-// Hand the draft to the real app (sessionStorage, nothing in the URL).
-document.getElementById('simulate').addEventListener('click',function(){
-  var req=document.getElementById('request').value.trim();
-  if(!req){document.getElementById('request').focus();return;}
-  try{sessionStorage.setItem('msc_draft',JSON.stringify({lang:sel.value,topic:document.getElementById('topic').value,briefing:req,at:Date.now()}));}catch(e){}
-  window.location.href='/app/new';
-});
-
-document.getElementById('copy').addEventListener('click',function(){
-  var value=document.getElementById('code').textContent;
-  navigator.clipboard.writeText(value).then(function(){showToast('Copied');},function(){showToast('Select and copy the code');});
-});
-function showToast(s){var t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2300);}
+// explainer sheet
+var sheet=document.getElementById('sheet'),help=document.getElementById('help'),close=document.getElementById('close');
+function open(){sheet.hidden=false;document.body.style.overflow='hidden';close.focus();}
+function shut(){sheet.hidden=true;document.body.style.overflow='';help.focus();}
+help.addEventListener('click',open);close.addEventListener('click',shut);
+sheet.addEventListener('click',function(e){if(e.target===sheet)shut();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)shut();});
+if(location.hash==='#about')open();
 })();
 `;

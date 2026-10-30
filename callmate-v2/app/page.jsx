@@ -11,6 +11,9 @@ export const metadata = {
 export default function Landing() {
   return (
     <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" />
       <style dangerouslySetInnerHTML={{ __html: LANDING_CSS }} />
       <div dangerouslySetInnerHTML={{ __html: LANDING_HTML }} />
       <script dangerouslySetInnerHTML={{ __html: LANDING_JS }} />
