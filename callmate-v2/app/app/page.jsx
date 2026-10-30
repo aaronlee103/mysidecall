@@ -3,10 +3,7 @@
 import Link from "next/link";
 import RecentCalls from "@/app/components/RecentCalls";
 import { useLang } from "@/app/components/Lang";
-import { QUICK_ICONS } from "@/app/components/ScribbleIcons";
 import Mascot from "@/app/components/Mascot";
-
-const TEMPLATES = ["restaurant", "isp", "landlord", "travel"];
 
 export default function Dashboard() {
   const { t } = useLang();
@@ -21,21 +18,7 @@ export default function Dashboard() {
         </Link>
       </section>
 
-      <section className="border-t-2 border-dashed border-line pt-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {TEMPLATES.map((key) => {
-            const Icon = QUICK_ICONS[key];
-            return (
-              <Link key={key} href={`/app/new?template=${encodeURIComponent(t(`tpl.${key}`))}`} className="group flex flex-col items-center gap-2 rounded-3xl px-2 py-4 text-[16px] font-medium text-ink-100 transition-transform hover:-translate-y-1 hover:-rotate-2 [&_svg]:text-ink-100 hover:[&_svg]:text-brand-500">
-                <Icon size={68} />
-                <span>{t(`q.${key}`)}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="flex flex-wrap justify-center gap-3">
+      <section className="flex flex-wrap justify-center gap-3 border-t-2 border-dashed border-line pt-8">
         <Link href="/app/muse" className="rounded-full border-2 border-ink-100 bg-ink-100 px-6 py-3 text-[16px] font-medium text-ink-950 transition-transform hover:-translate-y-0.5">{t("a.muse")}</Link>
         <Link href="/app/agents" className="btn-secondary text-[16px]">{t("a.mcp")}</Link>
       </section>

@@ -1,10 +1,10 @@
 (function(){
 var KO={
 "nav.help":"뭐 하는 곳이에요?",
+"intro.copy":"상자를 돌려 보세요.<br>착해요.","intro.s1":"안녕하세요","intro.s2":"어떤 언어든","intro.s3":"당신의 전화","intro.go":"들어가기","intro.skip":"건너뛰기",
 "hero.h1":"영어 전화,<br>AI가 대신 겁니다.",
 "hero.cta":"전화 걸기",
 "hero.whisper":"한국어로 부탁하면, 영어로 통화합니다.",
-"q.1":"식당 예약","q.2":"고객센터","q.3":"집주인","q.4":"여행",
 "a.muse":"Muse에게 전화 부탁","a.mcp":"내 에이전트 연결",
 "foot.meta":"Meta Muse Spark · Muse Voice로 만들었습니다","foot.privacy":"개인정보","foot.terms":"약관",
 "s.h":"My Side Call은 이런 것",
@@ -42,4 +42,32 @@ help.addEventListener('click',open);close.addEventListener('click',shut);
 sheet.addEventListener('click',function(e){if(e.target===sheet)shut();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)shut();});
 if(location.hash==='#about')open();
+
+// ── intro cube ──
+(function(){
+  var intro=document.getElementById('intro'),stage=document.getElementById('stage'),cube=document.getElementById('cube');
+  if(!intro) return;
+  var seen=null; try{seen=sessionStorage.getItem('msc_intro');}catch(e){}
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(seen||location.hash==='#about'){intro.classList.add('hide');return;}
+  document.body.style.overflow='hidden';
+  var rx=-18,ry=28,vx=0,vy=0.25,drag=false,lx=0,ly=0,raf;
+  function render(){cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';}
+  function tick(){
+    if(!drag){ry+=vy;rx+=vx;vx*=0.96;vy=vy*0.96+(Math.abs(vy)<0.25?0.01*Math.sign(vy||1):0);}
+    render(); raf=requestAnimationFrame(tick);
+  }
+  if(!reduce) raf=requestAnimationFrame(tick); else render();
+  function down(e){drag=true;stage.classList.add('grabbing');var p=e.touches?e.touches[0]:e;lx=p.clientX;ly=p.clientY;vx=vy=0;}
+  function move(e){if(!drag)return;var p=e.touches?e.touches[0]:e;var dx=p.clientX-lx,dy=p.clientY-ly;lx=p.clientX;ly=p.clientY;ry+=dx*0.5;rx-=dy*0.5;rx=Math.max(-80,Math.min(80,rx));vy=dx*0.5;vx=-dy*0.5;render();}
+  function up(){drag=false;stage.classList.remove('grabbing');}
+  stage.addEventListener('mousedown',down);window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
+  stage.addEventListener('touchstart',down,{passive:true});window.addEventListener('touchmove',move,{passive:true});window.addEventListener('touchend',up);
+  // gentle follow of the mouse when not dragging
+  window.addEventListener('mousemove',function(e){if(drag)return;var cx=innerWidth/2,cy=innerHeight/2;vy=vy*0.9+((e.clientX-cx)/cx)*0.15;vx=vx*0.9+(-(e.clientY-cy)/cy)*0.08;});
+  function go(){try{sessionStorage.setItem('msc_intro','1');}catch(e){}cancelAnimationFrame(raf);intro.classList.add('hide');document.body.style.overflow='';}
+  document.getElementById('intro-go').addEventListener('click',go);
+  document.getElementById('intro-skip').addEventListener('click',go);
+  document.addEventListener('keydown',function(e){if(!intro.classList.contains('hide')&&(e.key==='Enter'||e.key==='Escape'))go();});
+})();
 })();
