@@ -73,23 +73,22 @@ footer a:hover{color:var(--ink)}
 .stage{position:absolute;left:0;top:0;perspective:1400px;width:var(--s,300px);height:var(--s,300px);--h:calc(var(--s,300px)/2);cursor:grab;will-change:transform;z-index:1}
 .stage.grabbing{cursor:grabbing}
 .cube{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
-.face{position:absolute;inset:0;background:#FFFDF8;border-radius:22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:center;gap:10px;padding:9%;backface-visibility:hidden;box-shadow:inset 0 0 0 3px #E8E2D6}
-.f1{transform:translateZ(var(--h))}.f2{transform:rotateY(90deg) translateZ(var(--h))}.f3{transform:rotateY(180deg) translateZ(var(--h))}.f4{transform:rotateY(-90deg) translateZ(var(--h))}.f5{transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg)}.f6{transform:rotateX(-90deg) translateZ(var(--h))}
-.stk{display:inline-flex;align-items:center;justify-content:center;border:4px solid #fff;border-radius:999px;padding:.32em .85em;font-weight:600;font-size:clamp(15px,3vmin,24px);letter-spacing:-.01em;color:var(--ink);transform:rotate(var(--r,-6deg));box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap}
-.s-yellow{background:#F3E34A;--r:-8deg}.s-cyan{background:#9FE4E6;--r:6deg}.s-pink{background:#F0A6D8;--r:-5deg}.s-green{background:#B6E08E;--r:9deg}.s-red{background:var(--red);color:#fff;--r:-10deg}
-.stk-logo{background:var(--ink);color:var(--paper);--r:-4deg;font-size:clamp(18px,3.6vmin,28px)}.stk-logo b{color:var(--red);font-weight:600;margin-left:.3ch}
-.stk-mascot{background:#fff;border-radius:22px;padding:6%;width:84%;--r:-7deg;border-color:#E8E2D6}.stk-mascot img{width:100%;height:auto;display:block}
+.face{position:absolute;inset:0;background:#FBF7EE;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:center;gap:4% 7%;padding:9%;backface-visibility:hidden;background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:5px 5px;transform-style:preserve-3d}
+.f1{transform:translateZ(var(--h))}.f2{transform:rotateY(90deg) translateZ(var(--h));filter:brightness(.93)}.f3{transform:rotateY(180deg) translateZ(var(--h));filter:brightness(.88)}.f4{transform:rotateY(-90deg) translateZ(var(--h));filter:brightness(.93)}.f5{transform:rotateX(90deg) translateZ(var(--h)) rotateZ(180deg);filter:brightness(1.03)}.f6{transform:rotateX(-90deg) translateZ(var(--h));filter:brightness(.82)}
+.wd{display:inline-block;font-weight:600;color:var(--ink);font-size:calc(clamp(15px,3.1vmin,25px)*var(--sz,1));letter-spacing:-.01em;transform:rotate(var(--r,0deg));white-space:nowrap;line-height:1.1}
+.wd-logo{--sz:1.15;--r:-4deg}.wd-logo b{color:var(--red);font-weight:600}
+.wd-mascot{width:86%;height:auto;display:block;transform:rotate(-5deg)}
 .intro .dial.intro-go{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);background:var(--red);color:#fff;box-shadow:0 0 0 3px var(--ink),0 0 0 6px var(--paper);font-size:22px;padding:16px 28px 16px 22px;border:0;z-index:3}
 .intro .dial.intro-go:hover{transform:translateX(-50%) translateY(-2px)}
 .intro-skip{position:absolute;top:22px;right:24px;border:2px solid var(--paper);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;color:var(--paper);background:transparent;opacity:.8;z-index:3}
 .intro-skip:hover{opacity:1}
 /* greeting pops */
 .pops{position:absolute;inset:0;pointer-events:none;z-index:0}
-.pop{position:absolute;font-weight:600;font-size:clamp(18px,3.4vw,44px);letter-spacing:-.01em;color:var(--paper);opacity:0;transform:translate(-50%,-50%) scale(.6) rotate(var(--pr,0deg));animation:pop 1.6s cubic-bezier(.2,.9,.2,1) forwards}
+.pop{position:absolute;font-weight:600;font-size:calc(clamp(14px,2.6vw,34px)*var(--ps,1));letter-spacing:-.01em;color:var(--paper);opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(var(--pr,0deg));animation:pop var(--pd,1.6s) cubic-bezier(.2,.9,.2,1) forwards;white-space:nowrap}
 .pop.c1{color:#F3E34A}.pop.c2{color:#9FE4E6}.pop.c3{color:#F0A6D8}.pop.c4{color:#B6E08E}.pop.c5{color:var(--red)}
 @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5) rotate(var(--pr))}12%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(var(--pr))}22%{transform:translate(-50%,-50%) scale(1) rotate(var(--pr))}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(1) rotate(var(--pr))}}
 @media(max-width:820px){.intro-copy{left:18px;top:18px;font-size:clamp(28px,9vw,40px)}.intro .dial.intro-go{bottom:26px}}
-@media(prefers-reduced-motion:reduce){.pop{animation:none;opacity:.9}}
+@media(prefers-reduced-motion:reduce){.pop{position:absolute;font-weight:600;font-size:calc(clamp(14px,2.6vw,34px)*var(--ps,1));letter-spacing:-.01em;color:var(--paper);opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(var(--pr,0deg));animation:pop var(--pd,1.6s) cubic-bezier(.2,.9,.2,1) forwards;white-space:nowrap}}
 
 `;
 
@@ -101,12 +100,12 @@ export const LANDING_HTML = `<div class="msc-landing" id="top">
   <p class="intro-copy" data-i18n-html="intro.copy">Say hi.<br>In any language.</p>
   <div class="stage" id="stage">
     <div class="cube" id="cube">
-      <div class="face f1"><span class="stk stk-logo">My Side <b>Call</b></span><span class="stk s-red">HELLO</span></div>
-      <div class="face f2"><span class="stk s-yellow">안녕하세요</span><span class="stk s-cyan">Hola</span><span class="stk s-pink">Bonjour</span></div>
-      <div class="face f3"><span class="stk stk-mascot"><img src="/brand/mascot.png" alt=""></span></div>
-      <div class="face f4"><span class="stk s-green">こんにちは</span><span class="stk s-red">你好</span><span class="stk s-yellow">Olá</span></div>
-      <div class="face f5"><span class="stk s-pink">Ciao</span><span class="stk s-cyan">Hallo</span><span class="stk s-green">नमस्ते</span></div>
-      <div class="face f6"><span class="stk s-yellow">مرحبا</span><span class="stk s-red">Xin chào</span><span class="stk s-cyan">Привет</span></div>
+      <div class="face f1"><span class="wd wd-logo">My Side <b>Call</b></span><span class="wd" style="--r:-7deg;--sz:1.1">HELLO</span></div>
+      <div class="face f2"><span class="wd" style="--r:-6deg;--sz:1.25">안녕하세요</span><span class="wd" style="--r:8deg;--sz:.9">Hola</span><span class="wd" style="--r:-3deg;--sz:1">Bonjour</span></div>
+      <div class="face f3"><img class="wd-mascot" src="/brand/mascot.png" alt=""></div>
+      <div class="face f4"><span class="wd" style="--r:5deg;--sz:1.15">こんにちは</span><span class="wd" style="--r:-9deg;--sz:1.4">你好</span><span class="wd" style="--r:4deg;--sz:.95">Olá</span></div>
+      <div class="face f5"><span class="wd" style="--r:-5deg;--sz:1.2">Ciao</span><span class="wd" style="--r:7deg;--sz:1">Hallo</span><span class="wd" style="--r:-4deg;--sz:1.3">नमस्ते</span></div>
+      <div class="face f6"><span class="wd" style="--r:6deg;--sz:1.3">مرحبا</span><span class="wd" style="--r:-6deg;--sz:1">Xin chào</span><span class="wd" style="--r:3deg;--sz:1.1">Привет</span></div>
     </div>
   </div>
   <button class="dial intro-go" id="intro-go" type="button"><span data-i18n="intro.go">Let's go</span></button>
@@ -255,9 +254,10 @@ if(location.hash==='#about')open();
   function pop(){
     if(reduce) return;
     var el=document.createElement('span'); el.className='pop c'+(1+(i%5)); el.textContent=HI[i%HI.length]; i++;
-    el.style.left=(8+Math.random()*84)+'%'; el.style.top=(10+Math.random()*78)+'%'; el.style.setProperty('--pr',(Math.random()*24-12)+'deg');
-    pops.appendChild(el); setTimeout(function(){el.remove();},1700);
-    popTimer=setTimeout(pop, 380+Math.random()*320);
+    el.style.left=(6+Math.random()*88)+'%'; el.style.top=(10+Math.random()*78)+'%'; el.style.setProperty('--pr',(Math.random()*24-12)+'deg');
+    var big=Math.random()<0.22; el.style.setProperty('--ps', big?(2.2+Math.random()*1.6).toFixed(2):(0.6+Math.random()*1.0).toFixed(2)); el.style.setProperty('--pd',(1.2+Math.random()*1.2).toFixed(2)+'s');
+    pops.appendChild(el); setTimeout(function(){el.remove();},2500);
+    popTimer=setTimeout(pop, 260+Math.random()*300);
   }
   setTimeout(pop,500);
 

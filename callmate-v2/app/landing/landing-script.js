@@ -100,9 +100,10 @@ if(location.hash==='#about')open();
   function pop(){
     if(reduce) return;
     var el=document.createElement('span'); el.className='pop c'+(1+(i%5)); el.textContent=HI[i%HI.length]; i++;
-    el.style.left=(8+Math.random()*84)+'%'; el.style.top=(10+Math.random()*78)+'%'; el.style.setProperty('--pr',(Math.random()*24-12)+'deg');
-    pops.appendChild(el); setTimeout(function(){el.remove();},1700);
-    popTimer=setTimeout(pop, 380+Math.random()*320);
+    el.style.left=(6+Math.random()*88)+'%'; el.style.top=(10+Math.random()*78)+'%'; el.style.setProperty('--pr',(Math.random()*24-12)+'deg');
+    var big=Math.random()<0.22; el.style.setProperty('--ps', big?(2.2+Math.random()*1.6).toFixed(2):(0.6+Math.random()*1.0).toFixed(2)); el.style.setProperty('--pd',(1.2+Math.random()*1.2).toFixed(2)+'s');
+    pops.appendChild(el); setTimeout(function(){el.remove();},2500);
+    popTimer=setTimeout(pop, 260+Math.random()*300);
   }
   setTimeout(pop,500);
 
