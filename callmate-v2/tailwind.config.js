@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
+          "Fredoka",
           "Pretendard",
           "Inter",
           "system-ui",
@@ -14,14 +15,14 @@ module.exports = {
           "Apple SD Gothic Neo",
           "sans-serif",
         ],
-        display: ["Inter", "Pretendard", "system-ui", "sans-serif"],
+        display: ["Fredoka", "Pretendard", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "SF Mono", "Menlo", "monospace"],
       },
       colors: {
         ink: {
           // Warm neutral scale (cream → ink). Dark-first names kept so existing
           // class names keep working: ink-950 = page background, ink-100 = text.
-          950: "#faf6ef",
+          950: "#F7F2E8",
           900: "#f4ede2",
           850: "#efe6d8",
           800: "#e9ded2",
@@ -31,11 +32,11 @@ module.exports = {
           400: "#746d66",
           300: "#5a524c",
           200: "#3d3531",
-          100: "#28211d",
+          100: "#1E1915",
           50: "#1a1512",
         },
-        paper: "#fffdf9",
-        line: "#e9ded2",
+        paper: "#F7F2E8",
+        line: "#DED5C6",
         brand: {
           // Terracotta
           50: "#fdf1ec",
@@ -43,7 +44,7 @@ module.exports = {
           200: "#f6c2ad",
           300: "#eea083",
           400: "#e6845f",
-          500: "#df6b46",
+          500: "#E2603F",
           600: "#c9573a",
           700: "#a8462f",
           800: "#873a29",
@@ -56,11 +57,11 @@ module.exports = {
         },
       },
       boxShadow: {
-        soft: "0 1px 2px rgba(97,65,43,0.08), 0 0 0 1px rgba(233,222,210,1)",
+        soft: "none",
         glow: "0 0 0 1px rgba(223,107,70,0.3), 0 8px 32px -8px rgba(223,107,70,0.4)",
-        card: "0 0 0 1px #e9ded2, 0 1px 2px rgba(97,65,43,0.06)",
+        card: "none",
         "card-hover":
-          "0 0 0 1px #d9cbbb, 0 12px 32px -12px rgba(97,65,43,0.18)",
+          "none",
       },
       keyframes: {
         "fade-in": {

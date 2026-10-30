@@ -85,8 +85,8 @@ export default function CallSummaryPage({ params }) {
       </Link>
 
       {/* Outcome card */}
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-paper p-8 shadow-soft animate-fade-in-up">
-        <div aria-hidden className="aurora-bg opacity-70" />
+      <div className="relative animate-fade-in-up">
+        
         <div className="relative">
           <div className="flex items-center gap-3 mb-3">
             <span className={`flex h-10 w-10 items-center justify-center rounded-full ring-1 ring-inset animate-scale-in ${ok ? "bg-emerald-50 ring-emerald-200 text-emerald-700" : "bg-amber-50 ring-amber-200 text-amber-700"}`}>
@@ -105,7 +105,7 @@ export default function CallSummaryPage({ params }) {
       </div>
 
       {/* Brief — Muse Spark (Meta Model API), in the client's language */}
-      <div className="rounded-2xl border border-brand-200 bg-brand-50/60 p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+      <div className="border-t-2 border-dashed border-line pt-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h3 className="text-[11px] font-semibold text-brand-700 uppercase tracking-wider">{t("sum.brief")}</h3>
           <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export default function CallSummaryPage({ params }) {
       {call.recordingUrl && (
         <div className="space-y-3 animate-fade-in-up">
           <audio controls preload="none" src={`/api/calls/${callId}/recording`} className="w-full h-10 rounded-full" />
-          <div className="rounded-2xl border border-line bg-paper p-4 shadow-soft">
+          <div className="border-t-2 border-dashed border-line pt-4">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <div className="text-sm font-semibold text-ink-100">{t("sum.retranscribe")}</div>
@@ -205,12 +205,12 @@ export default function CallSummaryPage({ params }) {
       )}
 
       {/* Full transcript */}
-      <div className="rounded-2xl border border-line bg-paper shadow-soft animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-        <div className="px-5 py-3 border-b border-line flex items-center justify-between">
+      <div className="border-t-2 border-dashed border-line animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+        <div className="pt-4 pb-2 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-ink-100">{t("sum.transcript")}</h3>
           <span className="text-[10px] font-mono text-ink-500">{spoken.length} {t("sum.msgs")}</span>
         </div>
-        <div className="p-5 space-y-3 text-sm max-h-96 overflow-y-auto">
+        <div className="py-2 space-y-3 text-sm max-h-96 overflow-y-auto">
           {spoken.map((m, i) => {
             const isAI = m.role === "assistant" || m.role === "bot";
             return (

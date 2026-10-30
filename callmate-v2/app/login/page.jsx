@@ -35,8 +35,8 @@ function LoginInner() {
   return (
     <div className="msc-auth">
       <style>{`
-        .msc-auth{min-height:100vh;background:#faf6ef;color:#28211d;font-family:Inter,ui-sans-serif,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
-        .msc-auth .card{width:min(420px,100%);background:#fffdf9;border:1px solid #e9ded2;border-radius:24px;padding:36px 32px;box-shadow:0 24px 60px #61412b14;text-align:center}
+        .msc-auth{min-height:100vh;background:#F7F2E8;color:#1E1915;font-family:Fredoka,Pretendard,ui-sans-serif,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
+        .msc-auth .card{width:min(420px,100%);text-align:center}
         .msc-auth img{width:200px;height:auto;margin:0 auto 10px;display:block}
         .msc-auth h1{font-size:24px;letter-spacing:-.8px;margin:6px 0 8px}
         .msc-auth p{color:#746d66;font-size:14px;line-height:1.6;margin:0 0 22px}
@@ -47,7 +47,7 @@ function LoginInner() {
         .msc-auth .links a{color:#8b8177;text-decoration:none}
         .msc-auth .links a:hover{color:#df6b46}
         .msc-auth .err{background:#fdecec;color:#8a2a2a;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:14px}
-        .msc-auth .lang{position:absolute;top:18px;right:20px;border:1px solid #e9ded2;background:#fffdf9;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;color:#8b8177;cursor:pointer}
+        .msc-auth .lang{position:absolute;top:18px;right:20px;border:2px solid #1E1915;background:transparent;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;color:#8b8177;cursor:pointer}
         .msc-auth .lang b{color:#df6b46}
       `}</style>
       <button className="lang" onClick={() => { const n = lang === "ko" ? "en" : "ko"; setLang(n); try { localStorage.setItem("msc_lang", n); } catch {} }}>

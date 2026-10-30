@@ -60,19 +60,19 @@ export default function MusePage() {
         <div className="mt-3 flex items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink-100">{t("muse.title")}</h1>
-            <p className="mt-1 text-sm text-ink-400">{t("muse.sub")}</p>
+            
           </div>
           <span className="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-[10px] font-mono text-brand-700">Muse Spark</span>
         </div>
         {!phone && <p className="mt-2 text-[12px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{t("muse.nophone")} <Link href="/app/agents" className="underline">{t("muse.nophone.link")}</Link></p>}
       </div>
 
-      <div className="flex-1 rounded-2xl border border-line bg-paper shadow-soft p-4 sm:p-5 space-y-3 overflow-y-auto">
+      <div className="flex-1 border-t-2 border-dashed border-line pt-4 space-y-3 overflow-y-auto">
         {view.length === 0 && (
           <div className="space-y-2">
             <p className="text-[13px] text-ink-500">{t("muse.try")}</p>
             {examples.map((ex) => (
-              <button key={ex} type="button" onClick={() => send(ex)} className="block w-full text-left rounded-xl border border-line bg-ink-950 px-3.5 py-2.5 text-[13px] text-ink-200 hover:border-brand-300 hover:bg-brand-50 transition-colors">{ex}</button>
+              <button key={ex} type="button" onClick={() => send(ex)} className="block w-full text-left rounded-2xl border-2 border-line px-4 py-3 text-[14px] text-ink-100 hover:border-ink-100 transition-colors">{ex}</button>
             ))}
           </div>
         )}
@@ -88,7 +88,7 @@ export default function MusePage() {
           </div>
         ) : (
           <div key={i} className={`flex ${m.who === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[14px] leading-relaxed whitespace-pre-wrap ${m.who === "user" ? "bg-brand-500 text-white rounded-br-md" : "bg-ink-950 border border-line text-ink-100 rounded-bl-md"}`}>{m.text}</div>
+            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[14px] leading-relaxed whitespace-pre-wrap ${m.who === "user" ? "bg-ink-100 text-ink-950 rounded-br-md" : "border-2 border-line text-ink-100 rounded-bl-md"}`}>{m.text}</div>
           </div>
         ))}
         {busy && <div className="flex items-center gap-2 text-[13px] text-ink-500"><span className="h-3 w-3 animate-spin rounded-full border-2 border-line border-t-brand-500" />{t("muse.thinking")}</div>}

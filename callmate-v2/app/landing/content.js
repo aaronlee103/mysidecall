@@ -11,7 +11,6 @@ html{scroll-behavior:smooth}
 .nav{padding:18px 28px}
 .navin{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:auto}
 .brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:20px}
-.brand img{width:40px;height:40px;object-fit:contain}
 .brand b{color:var(--red);font-weight:600}
 .navr{display:flex;align-items:center;gap:8px}
 .lang,.help{border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:500;font-size:14px;background:var(--paper)}
@@ -61,7 +60,7 @@ footer a:hover{color:var(--ink)}
 @media(min-width:720px){.sheet{align-items:center;padding:24px}.sheetin{border-bottom:3px solid var(--ink);border-radius:28px}}
 
 @media(max-width:820px){
-  .nav{padding:14px 18px}.brand span{display:none}
+  .nav{padding:14px 18px}.brand{font-size:18px}
   main{padding:0 18px}
   .hero{grid-template-columns:1fr;text-align:center;min-height:0;padding-top:4px;gap:10px}
   .mascot{max-width:340px}
@@ -78,7 +77,7 @@ footer a:hover{color:var(--ink)}
 `;
 
 export const LANDING_HTML = `<div class="msc-landing" id="top">
-<header class="nav"><div class="navin"><a href="/" class="brand" aria-label="My Side Call home"><img src="/brand/logo-icon.png" alt=""><span>My Side <b>Call</b></span></a><div class="navr"><button class="lang" id="lang" type="button" aria-label="Switch language"><span data-lang="en">EN</span><span data-lang="ko">한국어</span></button><button class="help" id="help" type="button" aria-haspopup="dialog" aria-controls="sheet" data-i18n="nav.help">What is this?</button></div></div></header>
+<header class="nav"><div class="navin"><a href="/" class="brand" aria-label="My Side Call home"><span>My Side <b>Call</b></span></a><div class="navr"><button class="lang" id="lang" type="button" aria-label="Switch language"><span data-lang="en">EN</span><span data-lang="ko">한국어</span></button><button class="help" id="help" type="button" aria-haspopup="dialog" aria-controls="sheet" data-i18n="nav.help">What is this?</button></div></div></header>
 
 <main>
 <section class="hero">

@@ -118,7 +118,7 @@ function NewCallForm() {
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink-100">{t("new.title")}</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-line bg-paper p-6 md:p-8 shadow-soft animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+      <form onSubmit={handleSubmit} className="space-y-7 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
         <Field label={t("new.brief")} hint={t("new.brief.hint")}>
           <textarea value={briefing} onChange={(e) => setBriefing(e.target.value)} rows={8} placeholder={t("new.brief.ph")} className="input font-normal leading-relaxed" required />
         </Field>
@@ -213,7 +213,7 @@ function NewCallForm() {
           )}
         </div>
 
-        <label className="flex items-start gap-3 rounded-xl border border-line bg-ink-950 p-4 cursor-pointer hover:border-ink-700 transition-colors">
+        <label className="flex items-start gap-3 cursor-pointer">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-4 w-4 rounded border-ink-700 accent-brand-500" />
           <span className="text-sm text-ink-300 leading-relaxed">
             {t("new.consent")}

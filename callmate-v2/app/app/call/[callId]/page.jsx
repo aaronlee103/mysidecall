@@ -164,7 +164,7 @@ export default function CallInProgressPage({ params }) {
   return (
     <div className="max-w-2xl mx-auto">
       {/* Status header */}
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-paper p-6 shadow-soft animate-fade-in-up">
+      <div className="relative overflow-hidden animate-fade-in-up">
         {isLive && (
           <div aria-hidden className="absolute inset-0 pointer-events-none">
             <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-emerald-200/50 blur-3xl animate-aurora-drift" />
@@ -299,7 +299,7 @@ export default function CallInProgressPage({ params }) {
       )}
 
       {/* Latest exchange summary */}
-      <div className="mt-4 rounded-2xl border border-line bg-paper p-5 shadow-soft animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+      <div className="mt-6 border-t-2 border-dashed border-line pt-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
         <h3 className="text-[11px] font-semibold text-ink-500 mb-3 uppercase tracking-wider">
           {t("call.now")}
         </h3>
@@ -334,7 +334,7 @@ export default function CallInProgressPage({ params }) {
 
       {/* Manual intervene (when no pending) */}
       {!pending && (
-        <div className="mt-4 rounded-2xl border border-line bg-paper p-5 shadow-soft animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+        <div className="mt-6 border-t-2 border-dashed border-line pt-5 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
           <h3 className="text-sm font-semibold text-ink-100 mb-1 flex items-center gap-2">
             <span className="text-brand-500">⚡</span>
             {t("call.step.title")}
@@ -366,8 +366,8 @@ export default function CallInProgressPage({ params }) {
       )}
 
       {/* Full transcript */}
-      <div className="mt-4 rounded-2xl border border-line bg-paper shadow-soft animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-        <div className="px-5 py-3 border-b border-line flex items-center justify-between">
+      <div className="mt-6 border-t-2 border-dashed border-line animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+        <div className="pt-4 pb-2 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-ink-100">{t("call.transcript")}</h3>
           <span className="text-[10px] font-mono text-ink-500">
             {visibleMessages.length} {t("call.msgs")}
@@ -375,7 +375,7 @@ export default function CallInProgressPage({ params }) {
         </div>
         <div
           ref={transcriptRef}
-          className="p-5 max-h-80 overflow-y-auto space-y-3 text-sm"
+          className="py-2 max-h-80 overflow-y-auto space-y-3 text-sm"
         >
           {visibleMessages.length === 0 && (
             <div className="text-ink-500 italic text-xs">

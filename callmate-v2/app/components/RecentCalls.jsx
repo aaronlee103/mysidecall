@@ -16,7 +16,7 @@ export default function RecentCalls() {
   if (!data) return <div className="text-sm text-ink-500 flex items-center gap-2"><span className="h-3 w-3 animate-spin rounded-full border-2 border-line border-t-brand-500" />{t("recent.loading")}</div>;
   if (!data.calls.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-ink-700 bg-paper/60 px-6 py-10 text-center">
+      <div className="px-2 py-8 text-center">
         <p className="text-[14px] text-ink-300 mb-1">{t("recent.empty")}</p>
         <p className="text-xs text-ink-500">{t("recent.empty.sub")}</p>
       </div>
@@ -24,14 +24,14 @@ export default function RecentCalls() {
   }
   const locale = lang === "ko" ? "ko-KR" : "en-US";
   return (
-    <ul className="divide-y divide-line rounded-2xl border border-line bg-paper shadow-soft">
+    <ul className="divide-y-2 divide-dashed divide-line">
       {data.calls.map((c) => {
         const live = c.status && c.status !== "ended";
         const href = live ? `/app/call/${c.id}` : `/app/summary/${c.id}`;
         const when = new Date(c.createdAt).toLocaleString(locale, { timeZone: "America/New_York", month: "short", day: "numeric", weekday: "short", hour: "numeric", minute: "2-digit" });
         return (
           <li key={c.id}>
-            <Link href={href} className="flex items-start gap-4 px-5 py-4 hover:bg-ink-900/70 transition-colors first:rounded-t-2xl last:rounded-b-2xl">
+            <Link href={href} className="flex items-start gap-4 px-1 py-4 transition-transform hover:translate-x-1">
               <span className={`mt-1.5 h-2 w-2 rounded-full ${live ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" : "bg-ink-700"}`} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 text-[13px] text-ink-500">

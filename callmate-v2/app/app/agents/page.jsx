@@ -40,10 +40,10 @@ export default function AgentsPage() {
           {t("new.back")}
         </Link>
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink-100">{t("agents.title")}</h1>
-        <p className="mt-2 text-sm text-ink-400">{t("agents.sub")}</p>
+        
       </div>
 
-      <div className="rounded-2xl border border-line bg-paper p-6 shadow-soft space-y-5 animate-fade-in-up">
+      <div className="space-y-5 animate-fade-in-up">
         <div className="space-y-2">
           <label className="text-[13px] font-medium text-ink-200">{t("agents.phone")}</label>
           <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+1 201 555 0123" className="input font-mono" />
@@ -62,7 +62,7 @@ export default function AgentsPage() {
       </div>
 
       {out && (
-        <div className="rounded-2xl border border-brand-200 bg-brand-50/60 p-6 space-y-5 animate-fade-in-up">
+        <div className="border-t-2 border-dashed border-line pt-6 space-y-5 animate-fade-in-up">
           <div>
             <div className="text-[11px] font-semibold text-brand-700 uppercase tracking-wider mb-1.5">{t("agents.key")}</div>
             <div className="flex gap-2">
