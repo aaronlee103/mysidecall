@@ -32,6 +32,7 @@ function NewCallForm() {
   const [lang, setLang] = useState("en");          // summary / mid-call question language
   const [langTouched, setLangTouched] = useState(false);
   const [attachments, setAttachments] = useState("");   // document summary that rides along on the call
+  const [more, setMore] = useState(false);              // options disclosure (name, photo, language, voice)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { data: session } = useSession();
@@ -115,16 +116,26 @@ function NewCallForm() {
           {t("new.back")}
         </Link>
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink-100">{t("new.title")}</h1>
-        <p className="mt-2 text-sm text-ink-400">{t("new.sub")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-line bg-paper p-6 md:p-8 shadow-soft animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-        <Field label={t("new.name")} hint={t("new.name.hint")}>
-          <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder={t("new.name.ph")} className="input" required />
-        </Field>
-
         <Field label={t("new.brief")} hint={t("new.brief.hint")}>
           <textarea value={briefing} onChange={(e) => setBriefing(e.target.value)} rows={8} placeholder={t("new.brief.ph")} className="input font-normal leading-relaxed" required />
+        </Field>
+
+        <Field label={t("new.phone")} hint={t("new.phone.hint")}>
+          <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="+1 415 555 1234" className="input font-mono" required />
+        </Field>
+
+        <div className="rounded-xl border border-dashed border-line">
+          <button type="button" onClick={() => setMore((m) => !m)} className="flex w-full items-center justify-between px-4 py-3 text-[13px] font-medium text-ink-300" aria-expanded={more}>
+            <span>{t("new.options")}{!more && <span className="ml-2 font-normal text-ink-500">· {userName || t("new.name")} · {SUMMARY_LANGS.find((l) => l.code === lang)?.native} · {VOICES.find((v) => v.id === voiceId)?.name}</span>}</span>
+            <span className="text-ink-500">{more ? "−" : "+"}</span>
+          </button>
+          {more && (
+            <div className="space-y-6 border-t border-dashed border-line px-4 pb-5 pt-4">
+        <Field label={t("new.name")} hint={t("new.name.hint")}>
+          <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder={t("new.name.ph")} className="input" required />
         </Field>
 
         {/* Photo of a bill / letter → Muse Spark reads it → fills briefing + phone */}
@@ -138,10 +149,6 @@ function NewCallForm() {
             setAttachments(`Document (${doc.docType}): ${facts}. ${doc.keyPoints?.join(" ") || ""}`.trim());
           }}
         />
-
-        <Field label={t("new.phone")} hint={t("new.phone.hint")}>
-          <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="+1 415 555 1234" className="input font-mono" required />
-        </Field>
 
         {/* My language → mid-call questions + summary language */}
         <Field label={t("new.lang")} hint={t("new.lang.hint")}>
@@ -201,6 +208,10 @@ function NewCallForm() {
             })}
           </div>
         </Field>
+
+            </div>
+          )}
+        </div>
 
         <label className="flex items-start gap-3 rounded-xl border border-line bg-ink-950 p-4 cursor-pointer hover:border-ink-700 transition-colors">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-4 w-4 rounded border-ink-700 accent-brand-500" />
