@@ -57,25 +57,29 @@ if(location.hash==='#about')open();
   // position & drift (space): slow velocity, soft bounce off walls
   var px=innerWidth*0.6-S/2, py=innerHeight*0.5-S/2, pvx=0.35, pvy=0.22;
   // rotation: free tumble
-  var rx=-18, ry=28, wx=0.18, wy=0.32, drag=false, lx=0, ly=0, raf, following=false, mx=0, my=0;
+  var rx=-18, ry=28, rz=0, wx=0.55, wy=0.9, wz=0.25, t0=performance.now(), drag=false, lx=0, ly=0, raf, following=false, mx=0, my=0;
   function render(){
     stage.style.transform='translate3d('+px+'px,'+py+'px,0)';
-    cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';
+    cube.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg) rotateZ('+rz+'deg)';
   }
   function tick(){
+    var t=performance.now()-t0;
     if(!drag){
       if(following){
         // ease toward the pointer, keep tumbling gently
         px+=((mx-S/2)-px)*0.04; py+=((my-S/2)-py)*0.04;
         px=Math.max(24,Math.min(innerWidth-S-24,px)); py=Math.max(110,Math.min(innerHeight-S-110,py));
-        wx*=0.985; wy*=0.985; if(Math.abs(wy)<0.12) wy=0.12*Math.sign(wy||1);
+        wx+=(0.45*Math.sin(t*0.00031)-wx)*0.02; wy+=(0.8*Math.cos(t*0.00023)+0.5-wy)*0.02;
       } else {
         px+=pvx; py+=pvy;
         var minX=24, maxX=innerWidth-S-24, minY=110, maxY=innerHeight-S-110;
         if(px<minX){px=minX;pvx=Math.abs(pvx);} if(px>maxX){px=maxX;pvx=-Math.abs(pvx);}
         if(py<minY){py=minY;pvy=Math.abs(pvy);} if(py>maxY){py=maxY;pvy=-Math.abs(pvy);}
       }
-      rx+=wx; ry+=wy;
+      // free tumble: speeds wander slowly so it never looks mechanical
+      if(!following){wx+=(0.7*Math.sin(t*0.00037)-wx)*0.01; wy+=(1.0*Math.cos(t*0.00029)+0.4-wy)*0.01;}
+      wz+=(0.3*Math.sin(t*0.00019)-wz)*0.01;
+      rx+=wx; ry+=wy; rz+=wz;
     }
     render(); raf=requestAnimationFrame(tick);
   }
