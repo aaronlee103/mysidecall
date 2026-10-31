@@ -44,7 +44,7 @@ function LoginInner() {
         .msc-auth .fb{width:100%;border:0;box-shadow:0 0 0 3px #F7F2E8,0 0 0 5px #1E1915;border-radius:999px;padding:14px 20px;background:#1877F2;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
         .msc-auth .fb:hover{background:#166fe0}
         .msc-auth .note{font-size:12px;color:#8b8177;margin:14px 0 0}
-        .msc-auth .links{display:flex;justify-content:space-between;margin-top:26px;font-size:12px}
+        .msc-auth .links{display:flex;justify-content:center;margin-top:26px;font-size:12px}
         .msc-auth .links a{color:#8b8177;text-decoration:none}
         .msc-auth .links a:hover{color:#df6b46}
         .msc-auth .err{background:#fdecec;color:#8a2a2a;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:14px}
@@ -66,7 +66,6 @@ function LoginInner() {
         <p className="note">{t.note}</p>
         <div className="links">
           <a href="/">{t.back}</a>
-          <a href={`/admin-login?redirect=${encodeURIComponent(redirect)}`}>{t.admin}</a>
         </div>
       </div>
     </div>
