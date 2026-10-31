@@ -125,3 +125,10 @@ Next.js 14 (App Router, JS) · Tailwind · Vapi (telephony, STT/TTS) · **Meta M
 ## License
 
 MIT for the code in this repository. "My Side Call" name and logo belong to HARUDAOL LLC.
+
+## Free beta limits
+
+- Each signed-in user gets **3 calls / 10 minutes total**, enforced server-side from Vapi call metadata (no database). A call ends itself when the remaining minutes run out (`maxDurationSeconds`).
+- The beta closes to new users after **100 people** have placed a call; existing users keep their remaining quota.
+- The owner account is unlimited. Tunable with `FREE_CALLS`, `FREE_SECONDS`, `FREE_USERS`.
+- Planned pricing after the hackathon: prepaid minutes (e.g. 10 min for $5) via Stripe. Google/Apple sign-in to follow; Facebook Login is the only provider for now.

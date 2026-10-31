@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createOutboundCall, listCalls } from "@/lib/vapi";
 import { getViewer } from "@/lib/viewer";
+import { checkQuota, quotaMessage } from "@/lib/quota";
 
 export async function GET() {
   const viewer = await getViewer();
@@ -21,7 +22,8 @@ export async function GET() {
       summary: c.summary || null,
       cost: c.cost ?? null,
     }));
-    return NextResponse.json({ calls: rows, viewer: { id: viewer.id, name: viewer.name, isAdmin: viewer.isAdmin } });
+    const quota = await checkQuota(viewer).catch(() => null);
+    return NextResponse.json({ calls: rows, viewer: { id: viewer.id, name: viewer.name, isAdmin: viewer.isAdmin }, quota });
   } catch (err) {
     console.error("Call list failed:", err);
     return NextResponse.json({ error: err.message || "통화 목록 실패" }, { status: 500 });
@@ -42,6 +44,9 @@ export async function POST(req) {
       );
     }
 
+    const quota = await checkQuota(viewer);
+    if (!quota.ok) return NextResponse.json({ error: quotaMessage(quota, clientLang), quota }, { status: 402 });
+
     // E.164 포맷으로 정규화 (+1 prefix가 없으면 붙임)
     let normalized = phoneNumber.replace(/[^\d+]/g, "");
     if (!normalized.startsWith("+")) {
@@ -56,6 +61,8 @@ export async function POST(req) {
       clientLang,
       attachmentSummaries: typeof attachments === "string" ? attachments.slice(0, 4000) : "",
       metadata: { userId: viewer.id, userName: userName || viewer.name || "", app: "mysidecall", lang: clientLang },
+      // Free tier: the call ends itself when the remaining minutes run out.
+      ...(quota.maxDurationSeconds ? { assistantOverridesExtra: { maxDurationSeconds: Math.max(60, Math.round(quota.maxDurationSeconds)) } } : {}),
     });
 
     return NextResponse.json({ callId: call.id });

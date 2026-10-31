@@ -8,6 +8,7 @@
 // Safety rules live here too: no emergency / medical / legal-judgment calls, US numbers
 // only, owner calls go to the owner's verified number only.
 
+import { checkQuota, quotaMessage } from "@/lib/quota";
 import { createOutboundCall, getCall, injectMessage, endCall, listCalls, getAssistant } from "@/lib/vapi";
 import { getPending, clearPending } from "@/lib/pendingStore";
 
@@ -114,12 +115,15 @@ export async function runTool(name, args, owner) {
       if (BLOCKED.test(`${a.phone_number} ${a.briefing}`)) throw new Error("My Side Call does not place emergency, medical-advice or legal-judgment calls.");
       const number = normalizeUS(a.phone_number);
       const lang = LANGS.includes(a.language) ? a.language : owner.lang || "en";
+      const quota = await checkQuota({ id: owner.uid, isAdmin: owner.uid === "admin" });
+      if (!quota.ok) throw new Error(quotaMessage(quota, lang === "ko" ? "ko" : "en"));
       const call = await createOutboundCall({
         phoneNumber: number,
         userName: owner.name || "my client",
         briefing: String(a.briefing || "").slice(0, 6000),
         clientLang: lang,
         metadata: { userId: owner.uid, userName: owner.name || "", app: "mysidecall", lang, via: "agent", kind: "outbound" },
+        ...(quota.maxDurationSeconds ? { assistantOverridesExtra: { maxDurationSeconds: Math.max(60, Math.round(quota.maxDurationSeconds)) } } : {}),
       });
       return { ok: true, callId: call.id, status: call.status, to: number, watchUrl: `${baseUrl()}/app/call/${call.id}`, note: "Poll get_call every ~10 s. If pendingQuestion appears, answer it with answer_question." };
     }
