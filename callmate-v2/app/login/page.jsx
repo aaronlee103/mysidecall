@@ -37,11 +37,11 @@ function LoginInner() {
     <div className="msc-auth">
       <style>{`
         .msc-auth{min-height:100vh;background:#F7F2E8;color:#1E1915;font-family:Fredoka,Pretendard,ui-sans-serif,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
-        .msc-auth .card{width:min(420px,100%);text-align:center}
+        .msc-auth .box{width:min(420px,100%);text-align:center}
         .msc-auth img{width:200px;height:auto;margin:0 auto 10px;display:block}
-        .msc-auth h1{font-size:24px;letter-spacing:-.8px;margin:6px 0 8px}
+        .msc-auth h1{font-size:30px;letter-spacing:-.8px;font-weight:600;margin:4px 0 8px}
         .msc-auth p{color:#746d66;font-size:14px;line-height:1.6;margin:0 0 22px}
-        .msc-auth .fb{width:100%;border:0;border-radius:999px;padding:14px 20px;background:#1877F2;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+        .msc-auth .fb{width:100%;border:0;box-shadow:0 0 0 3px #F7F2E8,0 0 0 5px #1E1915;border-radius:999px;padding:14px 20px;background:#1877F2;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
         .msc-auth .fb:hover{background:#166fe0}
         .msc-auth .note{font-size:12px;color:#8b8177;margin:14px 0 0}
         .msc-auth .links{display:flex;justify-content:space-between;margin-top:26px;font-size:12px}
@@ -54,8 +54,8 @@ function LoginInner() {
       <button className="lang" onClick={() => { const n = lang === "ko" ? "en" : "ko"; setLang(n); try { localStorage.setItem("msc_lang", n); } catch {} }}>
         {lang === "ko" ? <>EN · <b>한국어</b></> : <><b>EN</b> · 한국어</>}
       </button>
-      <div className="card">
-        <div className="mood-bounce" style={{ width: 240, margin: "0 auto 6px" }}><Mascot mood="bounce" /></div><div style={{ fontWeight: 600, fontSize: 24, marginBottom: 14 }}>My Side <span style={{ color: "#E2603F" }}>Call</span></div>
+      <div className="box">
+        <div className="mood-bounce" style={{ width: 240, margin: "0 auto 6px" }}><Mascot mood="bounce" /></div><div style={{ fontWeight: 600, fontSize: 22, marginBottom: 28, color: "#9A9088" }}>My Side <span style={{ color: "#E2603F" }}>Call</span></div>
         <h1>{t.title}</h1>
         <p>{t.sub}</p>
         {error && <div className="err">{error === "OAuthCallback" || error === "Callback" ? "Facebook sign-in was cancelled or failed. Please try again." : `Sign-in error: ${error}`}</div>}
