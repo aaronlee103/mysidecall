@@ -11,7 +11,7 @@ export default function AppFooter() {
         <Chip>Muse Spark</Chip>
         <Chip>Muse Voice Transcribe</Chip>
         <Chip>Facebook Login</Chip>
-        <span className="ml-auto">© 2026 HARUDAOL LLC · <a href="/privacy" className="hover:text-ink-100">Privacy</a> · <a href="/terms" className="hover:text-ink-100">Terms</a> · <a href="mailto:hello@mysidecall.com" className="hover:text-ink-100">hello@mysidecall.com</a></span>
+        <span className="ml-auto">© 2026 HARUDAOL LLC · <a href="/privacy" className="hover:text-ink-100">Privacy</a> · <a href="/terms" className="hover:text-ink-100">Terms</a> · <a href="/contact" className="hover:text-ink-100">Contact</a></span>
       </div>
     </footer>
   );

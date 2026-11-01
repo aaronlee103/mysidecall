@@ -6,7 +6,7 @@ var KO={
 "hero.cta":"전화 걸기",
 "hero.whisper":"한국어로 부탁하면, 영어로 통화합니다.",
 "a.muse":"Muse에게 전화 부탁","a.mcp":"내 에이전트 연결",
-"foot.meta":"Meta Muse Spark · Muse Voice로 만들었습니다","foot.privacy":"개인정보","foot.terms":"약관",
+"foot.meta":"Meta Muse Spark · Muse Voice로 만들었습니다","foot.privacy":"개인정보","foot.terms":"약관","foot.contact":"문의",
 "s.h":"My Side Call은 이런 것",
 "s.1t":"필요한 걸 적습니다","s.1d":"한국어·스페인어·일본어·중국어·영어 아무거나. 고지서 사진을 찍으면 계좌번호와 금액을 대신 읽어 둡니다.",
 "s.2t":"AI가 실제로 전화를 겁니다","s.2d":"미국 번호 어디든, 자연스러운 영어로. 첫 문장에서 AI 비서임과 녹음될 수 있음을 밝힙니다.",

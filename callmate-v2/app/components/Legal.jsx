@@ -12,7 +12,7 @@ export function LegalPage({ title, updated, children }) {
         <p style={{ color: "#9A9088", fontSize: 14, margin: "0 0 28px" }}>Last updated {updated} · {COMPANY} · <a href={`mailto:${CONTACT}`} style={{ color: "#E2603F" }}>{CONTACT}</a></p>
         <style>{`.legal h2{font-size:22px;font-weight:600;margin:34px 0 8px;letter-spacing:-.01em}.legal p,.legal li{margin:0 0 10px;color:#3a332d}.legal ul{padding-left:20px;margin:0 0 10px}.legal a{color:#E2603F}.legal hr{border:0;border-top:2px dashed #DED5C6;margin:40px 0}.legal .ko{color:#4b443e}`}</style>
         <div className="legal">{children}</div>
-        <p style={{ marginTop: 48, fontSize: 13, color: "#9A9088" }}>© 2026 HARUDAOL LLC · <a href="/privacy" style={{ color: "#9A9088" }}>Privacy</a> · <a href="/terms" style={{ color: "#9A9088" }}>Terms</a> · <a href={`mailto:${CONTACT}`} style={{ color: "#9A9088" }}>Contact</a></p>
+        <p style={{ marginTop: 48, fontSize: 13, color: "#9A9088" }}>© 2026 HARUDAOL LLC · <a href="/privacy" style={{ color: "#9A9088" }}>Privacy</a> · <a href="/terms" style={{ color: "#9A9088" }}>Terms</a> · <a href="/contact" style={{ color: "#9A9088" }}>Contact</a></p>
       </main>
     </div>
   );
