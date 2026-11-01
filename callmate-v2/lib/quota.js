@@ -41,8 +41,8 @@ export async function checkQuota(viewer) {
 
 export function quotaMessage(q, lang = "en") {
   const ko = lang === "ko";
-  if (q.reason === "calls") return ko ? `무료 통화 ${q.freeCalls}회를 모두 쓰셨어요. 정식 출시 때 알려드릴게요.` : `You've used all ${q.freeCalls} free calls. We'll let you know when paid plans launch.`;
-  if (q.reason === "closed") return ko ? "무료 체험 인원이 다 찼어요. 정식 출시 때 알려드릴게요." : "The free beta is full. We'll let you know when we open up again.";
-  if (q.reason === "minutes") return ko ? `무료 통화 시간 ${Math.round(q.freeSeconds / 60)}분을 모두 쓰셨어요. 정식 출시 때 알려드릴게요.` : `You've used your ${Math.round(q.freeSeconds / 60)} free minutes. We'll let you know when paid plans launch.`;
+  if (q.reason === "calls") return ko ? `무료 통화 ${q.freeCalls}회를 모두 쓰셨어요. 정식 출시 소식은 hello@mysidecall.com으로 문의해 주세요.` : `You've used all ${q.freeCalls} free calls. Email hello@mysidecall.com to hear when paid plans launch.`;
+  if (q.reason === "closed") return ko ? "무료 체험 인원이 다 찼어요. 정식 출시 소식은 hello@mysidecall.com으로 문의해 주세요." : "The free beta is full. Email hello@mysidecall.com to hear when we open up again.";
+  if (q.reason === "minutes") return ko ? `무료 통화 시간 ${Math.round(q.freeSeconds / 60)}분을 모두 쓰셨어요. 정식 출시 소식은 hello@mysidecall.com으로 문의해 주세요.` : `You've used your ${Math.round(q.freeSeconds / 60)} free minutes. Email hello@mysidecall.com to hear when paid plans launch.`;
   return "";
 }

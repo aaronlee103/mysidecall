@@ -12,7 +12,7 @@ export default function QuotaBadge({ className = "" }) {
   const used = q.usage?.calls ?? 0, min = Math.floor((q.remainingSeconds ?? 0) / 60);
   if (!q.ok) {
     const msg = q.reason === "closed" ? (ko ? "무료 체험 인원이 다 찼어요." : "The free beta is full.") : (ko ? "무료 체험이 끝났어요." : "Your free trial is used up.");
-    return <p className={`text-[15px] text-ink-400 ${className}`}>{msg} {ko ? "정식 출시 때 알려드릴게요." : "We'll let you know when paid plans launch."}</p>;
+    return <p className={`text-[15px] text-ink-400 ${className}`}>{msg} {ko ? "정식 출시 소식을 받고 싶으시면 " : "Want to hear when paid plans launch? "}<a href="mailto:hello@mysidecall.com?subject=My%20Side%20Call%20launch" className="underline text-ink-100">hello@mysidecall.com</a>{ko ? "으로 메일 주세요." : ""}</p>;
   }
   return (
     <p className={`text-[14px] text-ink-500 ${className}`}>

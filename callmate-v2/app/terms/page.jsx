@@ -1,136 +1,37 @@
-import Link from 'next/link'
+import { LegalPage, CONTACT } from "@/app/components/Legal";
+export const metadata = { title: "Terms of Service — My Side Call" };
 
-export const metadata = {
-  title: '이용약관 · My Side Call',
-  description: 'My Side Call 서비스 이용약관입니다.',
-}
-
-export default function TermsPage() {
+export default function Terms() {
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
-      <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
-        <header className="mb-12">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
-          >
-            <span aria-hidden>←</span>
-            <span>홈으로</span>
-          </Link>
-          <h1 className="mt-6 text-4xl sm:text-5xl font-semibold tracking-tight gradient-text">
-            이용약관
-          </h1>
-          <p className="mt-3 text-sm text-zinc-500">
-            시행일 : 2026년 4월 18일
-          </p>
-        </header>
+    <LegalPage title="Terms of Service" updated="October 31, 2026">
+      <h2>1. The service</h2>
+      <p>My Side Call ("the service"), operated by HARUDAOL LLC ("we"), places phone calls in the United States on your behalf using an AI assistant. By signing in you agree to these terms and to our <a href="/privacy">Privacy Policy</a>.</p>
 
-        <article className="prose-legal space-y-10 text-zinc-300 leading-relaxed">
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 1 조 (목적)</h2>
-            <p>
-              이 약관은 harudaol LLC(이하 “회사”)가 제공하는 My Side Call(이하 “서비스”)의
-              이용과 관련하여 회사와 이용자(이하 “회원”)의 권리·의무 및 책임사항, 기타
-              필요한 사항을 규정함을 목적으로 합니다.
-            </p>
-          </section>
+      <h2>2. Free beta</h2>
+      <p>The service is currently a free beta. Each account includes <b>3 calls and 10 minutes of talk time in total</b>; a call ends automatically when the included minutes run out. The beta may close to new users, change limits, or pause at any time. Paid plans will be announced before any charge applies, and nothing is charged without your explicit purchase.</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 2 조 (정의)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>“서비스”란 회사가 AI 음성 에이전트를 통해 회원의 요청을 대행하여 영어 전화 통화를 수행하고, 그 결과를 한국어로 요약 제공하는 일체의 서비스를 말합니다.</li>
-              <li>“회원”이란 본 약관에 동의하고 서비스를 이용하는 자를 말합니다.</li>
-              <li>“콘텐츠”란 서비스 내에서 생성, 제공되는 통화 녹음·전사·요약 등 일체의 정보를 말합니다.</li>
-            </ol>
-          </section>
+      <h2>3. What you may ask for</h2>
+      <p>You may only request calls that you yourself would be allowed to make to that number: reservations, appointments, customer service, questions, and similar everyday calls. You must have the right to share any phone number, name or document you give us.</p>
+      <p>You may <b>not</b> use the service for: emergency services (911), medical or legal advice, debt collection, telemarketing or sales calls, harassment or threats, impersonating a specific real person, calls to numbers on a do-not-call list, or anything unlawful. We block such requests and may suspend accounts that attempt them.</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 3 조 (약관의 효력 및 변경)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>본 약관은 서비스 내 공지 또는 회원에게 통지함으로써 효력을 발생합니다.</li>
-              <li>회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있으며, 변경 시 변경사유와 적용일자를 명시하여 최소 7일 전에 공지합니다. 회원에게 불리한 변경의 경우 30일 전에 공지합니다.</li>
-              <li>회원이 변경된 약관에 동의하지 않을 경우 이용계약을 해지할 수 있으며, 공지된 적용일 이후에도 서비스를 계속 이용하는 경우 변경된 약관에 동의한 것으로 봅니다.</li>
-            </ol>
-          </section>
+      <h2>4. How the assistant behaves</h2>
+      <p>The assistant introduces itself as an AI assistant calling on your behalf, states that the call may be recorded, follows your request, and asks you before agreeing to anything you did not mention (a different time, an extra fee, personal details). You stay responsible for what you ask it to do and for the decisions you make when it asks you.</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 4 조 (서비스의 제공)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>회사는 회원에게 다음과 같은 서비스를 제공합니다.
-                <ul className="list-disc pl-5 mt-2 space-y-1 text-zinc-400">
-                  <li>AI 음성 에이전트를 통한 영어 전화 대행</li>
-                  <li>통화 내용의 한국어 요약 및 스크립트 제공</li>
-                  <li>실시간 통화 모니터링 및 개입 기능</li>
-                  <li>기타 회사가 추가 개발 또는 제휴를 통해 회원에게 제공하는 서비스</li>
-                </ul>
-              </li>
-              <li>서비스는 연중무휴 24시간 제공함을 원칙으로 하나, 시스템 점검·교체, 통신두절, 제 3 자(예 : 통신사, 음성 AI 제공사)의 장애 등 불가피한 사유로 일시 중단될 수 있습니다.</li>
-            </ol>
-          </section>
+      <h2>5. Recording</h2>
+      <p>Every call is recorded and transcribed so we can give you a summary. Recording laws vary by state; the assistant discloses recording at the start of every call. Do not ask us to call a party who has told you they do not consent to recording.</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 5 조 (이용 요금)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>베타 기간 중 일부 서비스는 무료로 제공될 수 있으며, 회사는 서비스 정식 출시와 함께 유료 요금제를 도입할 수 있습니다.</li>
-              <li>유료 서비스 이용 시 회원은 회사가 정한 요금을 결제하여야 하며, 결제 수단·청구 주기·환불 기준 등 세부 사항은 서비스 내 별도의 결제 안내에 따릅니다.</li>
-              <li>전자상거래 등에서의 소비자보호에 관한 법률 등 관계 법령에서 정한 청약 철회 및 환불 규정이 적용됩니다.</li>
-            </ol>
-          </section>
+      <h2>6. Accuracy and liability</h2>
+      <p>The assistant is an AI and can mishear, misunderstand, or be given wrong information by the other party. Summaries are a convenience, not a record you should rely on without checking. The service is provided "as is". To the fullest extent permitted by law, HARUDAOL LLC is not liable for missed appointments, failed reservations, charges agreed on a call, or any indirect or consequential loss. Our total liability for any claim is limited to the amount you paid us in the 12 months before the claim (currently $0).</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 6 조 (회원의 의무)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>회원은 서비스 이용 시 다음 각 호의 행위를 하여서는 아니 됩니다.
-                <ul className="list-disc pl-5 mt-2 space-y-1 text-zinc-400">
-                  <li>타인의 정보를 도용하거나 허위 정보를 입력하는 행위</li>
-                  <li>서비스를 이용하여 불법·기망·괴롭힘 목적의 통화를 요청하는 행위</li>
-                  <li>서비스의 정상적인 운영을 고의로 방해하는 행위</li>
-                  <li>회사의 지식재산권, 제 3 자의 권리를 침해하는 행위</li>
-                  <li>관계 법령 및 본 약관이 금지하는 행위</li>
-                </ul>
-              </li>
-              <li>회원은 자신이 요청한 통화의 목적과 상대방에 대해 적법한 권한과 정당한 사유를 가져야 하며, 그로 인한 분쟁의 책임은 회원에게 있습니다.</li>
-            </ol>
-          </section>
+      <h2>7. Accounts and agents</h2>
+      <p>You are responsible for your Facebook account and for any agent key you issue; treat keys like passwords. We may suspend accounts that break these terms. You can delete your account and data at any time as described in the Privacy Policy.</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 7 조 (서비스 이용 제한 및 계약 해지)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>회원이 본 약관 또는 관계 법령을 위반하는 경우 회사는 사전 통지 없이 서비스 이용을 제한하거나 계약을 해지할 수 있습니다.</li>
-              <li>회원은 언제든지 서비스 내 탈퇴 기능 또는 문의 채널을 통해 이용계약을 해지할 수 있습니다.</li>
-            </ol>
-          </section>
+      <h2>8. Changes and law</h2>
+      <p>We may update these terms; the date at the top shows the current version and continued use means acceptance. These terms are governed by the laws of the State of New Jersey, USA. Questions: <a href={`mailto:${CONTACT}`}>{CONTACT}</a>.</p>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 8 조 (책임의 제한)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>회사는 AI의 특성상 통화 결과가 회원의 의도와 완전히 일치하지 않을 수 있음을 사전에 고지하며, 회원의 최종 확인과 판단을 전제로 서비스를 제공합니다.</li>
-              <li>회사는 천재지변, 전시, 통신사·AI 공급자 등 제 3 자의 장애, 회원의 귀책사유로 인한 손해에 대하여 책임을 지지 않습니다.</li>
-              <li>회사의 고의 또는 중과실이 없는 한, 서비스 이용과 관련하여 회원에게 발생한 간접적·특별한·결과적 손해에 대해서는 책임을 지지 않습니다.</li>
-            </ol>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">제 9 조 (준거법 및 분쟁 해결)</h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>본 약관은 대한민국 법령 및 회사 소재지인 미국 뉴저지주 법령에 따라 해석·적용됩니다.</li>
-              <li>서비스 이용과 관련하여 분쟁이 발생한 경우 양 당사자는 우선 상호 협의를 통해 해결하도록 노력하며, 협의가 이루어지지 않을 경우 민사소송법상 관할 법원을 제 1 심 관할 법원으로 합니다.</li>
-            </ol>
-          </section>
-
-          <section className="pt-6 border-t border-zinc-800">
-            <h2 className="text-xl font-semibold text-white mb-3">부칙</h2>
-            <p className="text-zinc-400">본 약관은 2026년 4월 18일부터 적용됩니다.</p>
-          </section>
-        </article>
-
-        <footer className="mt-16 pt-8 border-t border-zinc-800 flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-500">
-          <Link href="/" className="hover:text-zinc-300 transition-colors">홈</Link>
-          <Link href="/privacy" className="hover:text-zinc-300 transition-colors">개인정보처리방침</Link>
-          <Link href="/contact" className="hover:text-zinc-300 transition-colors">문의</Link>
-          <span className="ml-auto">© 2026 harudaol LLC</span>
-        </footer>
-      </div>
-    </main>
-  )
+      <hr />
+      <h2>한국어 요약</h2>
+      <p className="ko">My Side Call은 HARUDAOL LLC가 운영하는 AI 대리 전화 서비스입니다. 현재 무료 베타로 계정당 <b>3통·총 10분</b>이 제공되며, 유료 전환 시 사전에 안내하고 동의 없이는 결제되지 않습니다. 응급(911)·의료·법률 자문·채권 추심·영업 전화·괴롭힘·특정인 사칭 등은 금지됩니다. AI는 통화 첫 문장에서 AI임과 녹음 사실을 밝히고, 부탁에 없던 결정은 반드시 사용자에게 먼저 묻습니다. 모든 통화는 녹음·전사되며, AI 요약은 참고용이므로 중요한 내용은 직접 확인하세요. 서비스는 "있는 그대로" 제공되고, 예약 실패·통화 중 발생한 비용 등에 대해 당사는 책임지지 않습니다. 준거법은 미국 뉴저지주 법이며, 문의는 <a href={`mailto:${CONTACT}`}>{CONTACT}</a>로 주세요.</p>
+    </LegalPage>
+  );
 }

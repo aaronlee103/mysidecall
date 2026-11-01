@@ -132,7 +132,7 @@ export const LANDING_HTML = `<div class="msc-landing" id="top">
 </section>
 </main>
 
-<footer><span>© 2026 HARUDAOL LLC</span><span data-i18n="foot.meta">Built on Meta Muse Spark &amp; Muse Voice</span><a href="/privacy" data-i18n="foot.privacy">Privacy</a><a href="/terms" data-i18n="foot.terms">Terms</a></footer>
+<footer><span>© 2026 HARUDAOL LLC</span><span data-i18n="foot.meta">Built on Meta Muse Spark &amp; Muse Voice</span><a href="/privacy" data-i18n="foot.privacy">Privacy</a><a href="/terms" data-i18n="foot.terms">Terms</a><a href="mailto:hello@mysidecall.com">hello@mysidecall.com</a></footer>
 
 <!-- Everything explanatory lives here, behind the "?" -->
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h" hidden>
