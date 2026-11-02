@@ -4,7 +4,13 @@
 
 A Korean-speaking immigrant in New Jersey types what they need in Korean ("cancel my Comcast appointment, ask for a refund of the $40 fee"). My Side Call dials the number, talks to the human on the other end in English, pauses to ask the client (in their language, on their screen) when something comes up that wasn't in the briefing, and ends with a summary and action items in their language — Korean, Spanish, Japanese, Chinese or English. Live at **[mysidecall.com](https://mysidecall.com)**.
 
-> Meta Global AI Developer Hackathon · Oct 26 – Nov 4, 2026 · Theme: *Build for Your World* · Solo: Aaron Lee (Cresskill, NJ)
+> Meta Global AI Developer Hackathon · Oct 26 – Nov 4, 2026 · Track: Indie Developer · Theme: *Build for Your World* · Solo: Aaron Lee (Cresskill, NJ)
+>
+> **Demo video:** _YouTube link goes here_ · **Try it:** [mysidecall.com](https://mysidecall.com) (Facebook Login, free beta: 3 calls / 10 min)
+
+## The call that made this real
+
+On Sunday Nov 1, 2026 a solar company's consultant was due at the author's house at 2 pm. He asked **Meta Muse**, in Korean, to call them back and cancel. Muse used the My Side Call connector (MCP), the AI waited through two minutes of hold music, pressed 1 for a voicemail queue, got a human agent, identified itself as an AI calling on behalf of Aaron Lee, gave the phone number on file, and got the appointment canceled with email confirmation. Muse then reported back in Korean: *"Canceled. The agent confirmed it herself. No need to pretend you're not home."* The demo video is that recording (address and phone number bleeped).
 
 ---
 
@@ -26,6 +32,11 @@ The hackathon rules ask us to be explicit. Everything in the **New** column was 
 | **Ask Muse** | — | **Muse Spark as the owner's agent with a phone** (`/app/muse`, `app/api/muse/chat`): "move my dentist appointment to 4 pm" → it places the call, polls, relays the AI's mid-call question, reports back. Same tools as the MCP server |
 | Owner calls | — | `call_owner`: the agent phones its own owner — wake-up calls, reminders, results. Future times use Vapi `schedulePlan`, no cron needed; the owner-call prompt swaps in via `assistantOverrides.model.messages` (still Muse Spark through our proxy) |
 | Recordings | Vapi transcript only; `recordingUrl` public | Recording proxy with Vapi auth (`/api/calls/:id/recording`) + **re-transcription with Muse Voice Transcribe** (`lib/museVoice.js`, `/api/calls/:id/transcribe`): WAV → PCM16 16 kHz → `wss://api.meta.ai/v1/asr/realtime` native protocol (JSON handshake, binary frames, `speechComplete`) |
+
+| **Meta Muse app** | — | The MCP server registered as a **custom connector in the Meta Muse app** ("Build a custom connector for my MCP server at https://mysidecall.com/api/mcp…"). Muse places and follows real calls from a Korean chat — used in the field on Nov 1 (see above) |
+| Brand & product design | — | Hand-drawn scribble mascot (layered SVG, blinking), Fredoka type, paper palette, button-first screens with almost no copy, 3D "say hi in any language" intro cube on first visit, EN/한국어 everywhere |
+| Free beta & guardrails | — | 3 calls / 10 min per account from Vapi metadata (no DB), beta closes at 100 users, calls self-terminate at the quota (`lib/quota.js`); emergency / medical / legal requests blocked; first sentence of every call discloses AI + recording |
+| Legal & contact | — | Rewritten Privacy / Terms (recording, AI disclosure, data deletion for the Meta app), `/contact`, hello@mysidecall.com |
 
 Commits after Oct 26 are the hackathon work; `git log --since=2026-10-26` shows exactly what was added.
 
@@ -104,9 +115,18 @@ No keys are committed. Emergency (911), medical and legal-judgment calls are ref
 
 **Field note on Muse Spark for voice:** left at its default, Muse Spark reasons before it speaks and can spend the whole `max_tokens` budget on reasoning (we saw ~1,500 reasoning tokens and no words on a live call). `reasoning_effort: "minimal"` (`"none"` is rejected with 400) brings first-token latency to ~1.5 s, which is what a phone call needs. We send it from the proxy and from every server-side call.
 
+## Meta products used
+
+| Product | Where |
+|---|---|
+| **Muse Spark 1.3** (Meta Model API) | the voice on every call (custom-LLM endpoint for Vapi), the post-call brief in 5 languages, bill/letter photo reading (vision), and the "Ask Muse" agent loop |
+| **Muse Voice Transcribe** (Meta Model API, realtime ASR) | clean re-transcription of call recordings |
+| **Meta Muse app** | custom MCP connector — Muse places and follows calls from chat |
+| **Facebook Login** | sign-in; calls are scoped per user with no database |
+
 ## Stack
 
-Next.js 14 (App Router, JS) · Tailwind · Vapi (telephony, STT/TTS) · **Meta Model API — Muse Spark 1.3** (call brain, multilingual brief, document vision) · Auth.js (Facebook Login) · Vercel
+Next.js 14 (App Router, JS) · Tailwind · Vapi (telephony, STT/TTS; ElevenLabs voices) · **Meta Model API — Muse Spark 1.3 + Muse Voice Transcribe** · Auth.js (Facebook Login) · Vercel · Namecheap (DNS, mail)
 
 ## Pages
 
@@ -120,7 +140,7 @@ Next.js 14 (App Router, JS) · Tailwind · Vapi (telephony, STT/TTS) · **Meta M
 | `/app/summary/[id]` | brief in your language + recording + Muse Voice clean transcript |
 | `/app/muse` | Ask Muse — Muse Spark with a phone |
 | `/app/agents` | agent key + MCP setup |
-| `/privacy`, `/terms` | policies |
+| `/privacy`, `/terms`, `/contact` | policies, contact |
 
 ## License
 
