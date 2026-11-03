@@ -8,6 +8,15 @@ A Korean-speaking immigrant in New Jersey types what they need in Korean ("cance
 >
 > **Demo video:** _YouTube link goes here_ · **Try it:** [mysidecall.com](https://mysidecall.com) (Facebook Login, free beta: 3 calls / 10 min)
 
+<p align="center"><img src="public/brand/demo.gif" width="800" alt="My Side Call demo"></p>
+
+## Try it in 60 seconds (judges)
+
+1. Open **[mysidecall.com](https://mysidecall.com)** → *Make a call* → sign in with Facebook (free beta: 3 calls / 10 min, no card).
+2. Easiest first call: put **your own US mobile number** as the number to call and type, in any language, something like *"Ask if they have a table for two tomorrow at 7 pm; if not, ask what time is free."* Your phone rings; you hear the AI introduce itself and ask — answer it like a restaurant would and try naming a different time, and watch the question land on your screen in your language.
+3. When you hang up, the summary page shows the brief, the recording and the Muse Voice transcript.
+4. Agents: `/app/agents` → create a key → paste the MCP config into Claude Desktop or add it as a custom connector in the Meta Muse app, then ask the agent to make a call or to call you.
+
 ## The call that made this real
 
 On Sunday Nov 1, 2026 a solar company's consultant was due at the author's house at 2 pm. He asked **Meta Muse**, in Korean, to call them back and cancel. Muse used the My Side Call connector (MCP), the AI waited through two minutes of hold music, pressed 1 for a voicemail queue, got a human agent, identified itself as an AI calling on behalf of Aaron Lee, gave the phone number on file, and got the appointment canceled with email confirmation. Muse then reported back in Korean: *"Canceled. The agent confirmed it herself. No need to pretend you're not home."* The demo video is that recording (address and phone number bleeped).
