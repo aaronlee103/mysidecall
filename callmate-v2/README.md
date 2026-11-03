@@ -6,9 +6,9 @@ A Korean-speaking immigrant in New Jersey types what they need in Korean ("cance
 
 > Meta Global AI Developer Hackathon · Oct 26 – Nov 4, 2026 · Track: Indie Developer · Theme: *Build for Your World* · Solo: Aaron Lee (Cresskill, NJ)
 >
-> **Demo video:** [youtube.com/watch?v=QeQAXuQpGEA](https://www.youtube.com/watch?v=QeQAXuQpGEA) · **Try it:** [mysidecall.com](https://mysidecall.com) (Facebook Login, free beta: 3 calls / 10 min)
+> **Demo video:** [youtube.com/watch?v=4KDxVJ1CeRg](https://www.youtube.com/watch?v=4KDxVJ1CeRg) · **Try it:** [mysidecall.com](https://mysidecall.com) (Facebook Login, free beta: 3 calls / 10 min)
 
-<p align="center"><a href="https://www.youtube.com/watch?v=QeQAXuQpGEA"><img src="public/brand/demo.gif" width="800" alt="My Side Call demo — click for the full video"></a></p>
+<p align="center"><a href="https://www.youtube.com/watch?v=4KDxVJ1CeRg"><img src="public/brand/demo.gif" width="800" alt="My Side Call demo — click for the full video"></a></p>
 
 ## Try it in 60 seconds (judges)
 
