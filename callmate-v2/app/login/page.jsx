@@ -31,7 +31,7 @@ function LoginInner() {
   const [code, setCode] = useState("");
   const [jErr, setJErr] = useState(null);
   const [jBusy, setJBusy] = useState(false);
-  useEffect(() => { if (judgeParam) setCode(judgeParam); }, [judgeParam]);
+  useEffect(() => { if (judgeParam && judgeParam.length > 2) setCode(judgeParam); }, [judgeParam]);
   const judgeIn = async (e) => {
     e.preventDefault(); setJBusy(true); setJErr(null);
     try {
