@@ -27,6 +27,20 @@ function LoginInner() {
   const params = useSearchParams();
   const redirect = params.get("redirect") || "/app";
   const error = params.get("error");
+  const judgeParam = params.get("judge");
+  const [code, setCode] = useState("");
+  const [jErr, setJErr] = useState(null);
+  const [jBusy, setJBusy] = useState(false);
+  useEffect(() => { if (judgeParam) setCode(judgeParam); }, [judgeParam]);
+  const judgeIn = async (e) => {
+    e.preventDefault(); setJBusy(true); setJErr(null);
+    try {
+      const r = await fetch("/api/judge-login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || "Could not sign in");
+      window.location.href = redirect;
+    } catch (err) { setJErr(err.message); setJBusy(false); }
+  };
   const [lang, setLang] = useState("en");
   useEffect(() => {
     try { const s = localStorage.getItem("msc_lang"); if (s === "ko" || s === "en") setLang(s); } catch {}
@@ -64,6 +78,17 @@ function LoginInner() {
           {t.fb}
         </button>
         <p className="note">{t.note}</p>
+        {judgeParam != null && (
+          <form onSubmit={judgeIn} style={{ marginTop: 26, textAlign: "left" }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1E1915", marginBottom: 6 }}>{lang === "ko" ? "심사위원·게스트 접속 코드" : "Judge / guest access code"}</div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="access code" style={{ flex: 1, border: "2px solid #1E1915", borderRadius: 999, padding: "10px 16px", fontSize: 15, background: "#fff", fontFamily: "inherit" }} />
+              <button type="submit" disabled={jBusy || !code} style={{ border: 0, borderRadius: 999, padding: "10px 18px", background: "#1E1915", color: "#F7F2E8", fontWeight: 600, fontSize: 14, cursor: "pointer", opacity: jBusy || !code ? 0.6 : 1 }}>{jBusy ? "…" : (lang === "ko" ? "입장" : "Enter")}</button>
+            </div>
+            {jErr && <div className="err" style={{ marginTop: 10 }}>{jErr}</div>}
+            <p className="note" style={{ textAlign: "left" }}>{lang === "ko" ? "Facebook 없이 체험용으로 들어갑니다. 무료 3통·10분 동일 적용." : "Try it without Facebook. Same free beta limits: 3 calls, 10 minutes."}</p>
+          </form>
+        )}
         <div className="links">
           <a href="/">{t.back}</a>
         </div>

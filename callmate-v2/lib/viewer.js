@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import { authOptions } from "@/lib/auth";
+import { JUDGE_COOKIE, verifyJudgeCookie } from "@/lib/judge";
 
 async function sha256(text) {
   const enc = new TextEncoder().encode(text);
@@ -19,6 +20,8 @@ export async function getViewer() {
     const c = cookies().get("mysidecall_admin")?.value;
     if (c && c === (await sha256(pw))) return { id: "admin", name: "Admin", image: null, isAdmin: true };
   }
+  const j = await verifyJudgeCookie(cookies().get(JUDGE_COOKIE)?.value);
+  if (j) return { id: `judge-${j}`, name: "Hackathon judge", image: null, isAdmin: false, isJudge: true };
   return null;
 }
 

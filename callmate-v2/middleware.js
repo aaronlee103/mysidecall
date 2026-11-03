@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { JUDGE_COOKIE, verifyJudgeCookie } from "@/lib/judge";
 
 const ADMIN_COOKIE = "mysidecall_admin";
 
@@ -28,6 +29,8 @@ export async function middleware(req) {
     const expected = await sha256(adminPassword);
     if (req.cookies.get(ADMIN_COOKIE)?.value === expected) return NextResponse.next();
   }
+
+  if (await verifyJudgeCookie(req.cookies.get(JUDGE_COOKIE)?.value)) return NextResponse.next();
 
   if (pathname.startsWith("/api/")) {
     return NextResponse.json({ error: "sign in required" }, { status: 401 });

@@ -12,7 +12,7 @@ A Korean-speaking immigrant in New Jersey types what they need in Korean ("cance
 
 ## Try it in 60 seconds (judges)
 
-1. Open **[mysidecall.com](https://mysidecall.com)** → *Make a call* → sign in with Facebook (free beta: 3 calls / 10 min, no card).
+1. Open **[mysidecall.com](https://mysidecall.com)** → *Make a call* → sign in with Facebook (free beta: 3 calls / 10 min, no card). The Meta app is still in development mode while business verification is pending, so **judges: use the guest access code from the submission form** at `mysidecall.com/login?judge=1` — same limits, no Facebook needed.
 2. Easiest first call: put **your own US mobile number** as the number to call and type, in any language, something like *"Ask if they have a table for two tomorrow at 7 pm; if not, ask what time is free."* Your phone rings; you hear the AI introduce itself and ask — answer it like a restaurant would and try naming a different time, and watch the question land on your screen in your language.
 3. When you hang up, the summary page shows the brief, the recording and the Muse Voice transcript.
 4. Agents: `/app/agents` → create a key → paste the MCP config into Claude Desktop or add it as a custom connector in the Meta Muse app, then ask the agent to make a call or to call you.

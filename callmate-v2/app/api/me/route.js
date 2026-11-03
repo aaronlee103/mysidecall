@@ -4,5 +4,5 @@ import { getViewer } from "@/lib/viewer";
 export const dynamic = "force-dynamic";
 export async function GET() {
   const v = await getViewer();
-  return NextResponse.json({ viewer: v ? { id: v.id, name: v.name, image: v.image, isAdmin: v.isAdmin } : null });
+  return NextResponse.json({ viewer: v ? { id: v.id, name: v.name, image: v.image, isAdmin: v.isAdmin, isJudge: !!v.isJudge } : null });
 }
