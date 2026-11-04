@@ -1,6 +1,7 @@
 // Sign-in: Facebook Login (Meta) via Auth.js, JWT sessions — no database.  [NEW — hackathon]
 // The owner's legacy ADMIN_PASSWORD cookie still works as a fallback (see lib/viewer.js).
 import FacebookProvider from "next-auth/providers/facebook";
+import { logLogin } from "@/lib/activity";
 
 export const authOptions = {
   providers: [
@@ -12,6 +13,11 @@ export const authOptions = {
   ],
   session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 30 },
   pages: { signIn: "/login" },
+  events: {
+    async signIn({ profile, account }) {
+      await logLogin({ id: `fb:${profile?.id || account?.providerAccountId}`, name: profile?.name || "", method: "facebook" });
+    },
+  },
   callbacks: {
     async jwt({ token, account, profile }) {
       if (account && profile) {

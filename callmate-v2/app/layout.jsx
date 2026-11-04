@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: "My Side Call — Your AI. Your Call. Any Language.",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen bg-ink-950 text-ink-100 antialiased selection:bg-brand-500/40">
         {children}
+        <Analytics />
       </body>
     </html>
   );
